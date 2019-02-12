@@ -6,7 +6,13 @@
 
   &__path {
     stroke: #232323;
-    stroke-width: 2;
+    stroke-width: 8;
     fill: none;
+  }
+
+  circle {
+    stroke: #232323;
+    stroke-width: 2;
+    fill: #fff;
   }
 }
