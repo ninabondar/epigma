@@ -78,7 +78,6 @@ class Canvas extends Component {
             <Shape
               onSelect={() => this.setState({ editIndex: index })}
               onChange={path => {
-                console.log(path);
                 const id = path.id || getId();
                 return this.setState({
                   shapes: [
