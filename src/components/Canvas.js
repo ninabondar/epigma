@@ -1,13 +1,52 @@
 import React, { Component } from "react";
 import "../styles/canvas.scss";
-import Path from "./Path";
+import Shape from "./Shape";
+
+let counter = 2;
+const getId = () => counter++;
+
+const createShape = point => ({
+  points: [point, point],
+  style: null
+});
 
 class Canvas extends Component {
   constructor(props) {
     super(props);
     this.state = {
       editIndex: null,
-      objects: []
+      shapes: [
+        {
+          id: 1,
+          points: [
+            {
+              x: 139,
+              y: 157.3333282470703
+            },
+            {
+              x: 424,
+              y: 294.3333282470703
+            },
+            {
+              x: 443,
+              y: 42.33332824707031
+            },
+            {
+              x: 186,
+              y: 251.3333282470703
+            },
+            {
+              x: 628,
+              y: 174.3333282470703
+            },
+            {
+              x: 141,
+              y: 155.3333282470703
+            }
+          ],
+          style: null
+        }
+      ]
     };
   }
 
@@ -17,17 +56,17 @@ class Canvas extends Component {
   }
 
   addPath = ({ pageX: x, pageY: y }) => {
-    const { objects, offset } = this.state;
+    const { shapes, offset } = this.state;
     const point = { x: x - offset.x, y: y - offset.y };
 
     this.setState({
-      objects: [...objects, [point, point]],
-      editIndex: objects.length
+      shapes: [...shapes, createShape(point)],
+      editIndex: shapes.length
     });
   };
 
   render() {
-    const { objects, offset, editIndex } = this.state;
+    const { shapes, offset, editIndex } = this.state;
     return (
       <>
         <svg
@@ -35,28 +74,29 @@ class Canvas extends Component {
           className="canvas"
           onClick={editIndex === null ? this.addPath : null}
         >
-          {objects.length >= 1 &&
-            objects.map((path, index) => (
-              <Path
-                onSelect={() => this.setState({ editIndex: index })}
-                key={index}
-                edit={editIndex === index}
-                onChange={path =>
-                  this.setState({
-                    objects: [
-                      ...objects.slice(0, editIndex),
-                      path,
-                      ...objects.slice(editIndex + 1)
-                    ],
-                    editIndex: null
-                  })
-                }
-                offset={offset}
-                path={path}
-              />
-            ))}
+          {shapes.map((shape, index) => (
+            <Shape
+              onSelect={() => this.setState({ editIndex: index })}
+              onChange={path => {
+                console.log(path);
+                const id = path.id || getId();
+                return this.setState({
+                  shapes: [
+                    ...shapes.slice(0, editIndex),
+                    { id, ...path },
+                    ...shapes.slice(editIndex + 1)
+                  ],
+                  editIndex: null
+                });
+              }}
+              key={index}
+              edit={editIndex === index}
+              offset={offset}
+              path={shape}
+            />
+          ))}
 
-          {objects.length < 0 && <text dy={20}>Click to start drawing.</text>}
+          {shapes.length < 0 && <text dy={20}>Click to start drawing.</text>}
         </svg>
       </>
     );

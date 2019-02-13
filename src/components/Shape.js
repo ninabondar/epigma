@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { serializePath } from "../utils/helper";
 import { init } from "ramda";
+import Vertex from "./Vertex";
 
-const PathView = ({ path, onSelect }) => (
+const ShapeView = ({ path, onSelect }) => (
   <g
     onClick={ev => {
       ev.preventDefault();
@@ -10,11 +11,11 @@ const PathView = ({ path, onSelect }) => (
       return onSelect();
     }}
   >
-    <path className={"canvas__path"} d={serializePath(path)} />
+    <path className={"canvas__path"} d={serializePath(path.points)} />
   </g>
 );
 
-class PathEdit extends Component {
+class ShapeEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,9 +39,14 @@ class PathEdit extends Component {
   };
 
   componentDidMount() {
+    const { path } = this.state;
+
     document.addEventListener("keydown", this.keyHandler);
-    document.addEventListener("mousemove", this.editPoint);
-    document.addEventListener("click", this.drawPoint);
+
+    if (path.id === undefined) {
+      document.addEventListener("mousemove", this.editPoint);
+      document.addEventListener("click", this.drawPoint);
+    }
   }
 
   componentWillUnmount() {
@@ -56,7 +62,10 @@ class PathEdit extends Component {
     const point = { x: x - offset.x, y: y - offset.y };
 
     this.setState({
-      path: path.length === 0 ? [point, point] : [...path, point]
+      path: {
+        ...path,
+        points: [...path.points, point]
+      }
     });
   };
 
@@ -67,22 +76,45 @@ class PathEdit extends Component {
     const point = { x: x - offset.x, y: y - offset.y };
 
     this.setState({
-      path: [...init(path), point]
+      path: {
+        ...path,
+        points: [...init(path.points), point]
+      }
     });
   };
 
   endEdit = () => {
     const { path } = this.state;
-    this.props.onChange(init(path));
+    const { id, points } = path;
+
+    this.props.onChange({
+      ...path,
+      points: id ? points : init(points)
+    });
   };
 
   render() {
     const { path } = this.state;
     return (
       <g>
-        <path className={"canvas__path"} d={serializePath(path)} />
-        {path.map(({ x, y }, index) => (
-          <circle key={index} cx={x} cy={y} r={4} />
+        <path className={"canvas__path"} d={serializePath(path.points)} />
+        {path.points.map((point, index) => (
+          <Vertex
+            onChange={point => {
+              return this.setState({
+                path: {
+                  ...path,
+                  points: [
+                    ...path.points.slice(0, index),
+                    point,
+                    ...path.points.slice(index + 1)
+                  ]
+                }
+              });
+            }}
+            key={index}
+            point={point}
+          />
         ))}
       </g>
     );
@@ -90,5 +122,5 @@ class PathEdit extends Component {
 }
 
 export default ({ edit, ...props }) => {
-  return edit ? <PathEdit {...props} /> : <PathView {...props} />;
+  return edit ? <ShapeEdit {...props} /> : <ShapeView {...props} />;
 };
