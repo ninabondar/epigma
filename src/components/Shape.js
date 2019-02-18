@@ -41,6 +41,8 @@ class ShapeEdit extends Component {
         const { path, selectedVertex: index } = this.state;
 
         if (index !== null) {
+          //TODO: Improve algorithm
+
           //TODO: if index === 0 or index === path.points.length -1  ==> remove point
           //TODO: if index === 1 ==> remove two first points
           //TODO: index === path.points.length -2 ==> remove two last points
