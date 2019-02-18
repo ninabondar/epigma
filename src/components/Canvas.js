@@ -14,7 +14,7 @@ class Canvas extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      editIndex: null,
+      editIndex: 0,
       shapes: [
         {
           id: 1,
@@ -51,8 +51,17 @@ class Canvas extends Component {
   }
 
   componentDidMount() {
+    document.body.addEventListener("mousedown", this.handleDocumentClick);
     const { x, y } = this.refs.svgRoot.getBoundingClientRect();
     this.setState({ offset: { x, y } });
+  }
+
+  componentWillUnmount() {
+    document.body.removeEventListener("mousedown", this.handleDocumentClick);
+  }
+
+  handleDocumentClick(ev) {
+    console.log("Canvas click");
   }
 
   addPath = ({ pageX: x, pageY: y }) => {

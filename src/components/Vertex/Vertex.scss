@@ -1,0 +1,11 @@
+.Vertex {
+  stroke: #3498db;
+  stroke-width: 1.5;
+  fill: #fff;
+
+  &_selected {
+    fill: #3498db;
+    stroke: #fff;
+    stroke-width: 2.5;
+  }
+}

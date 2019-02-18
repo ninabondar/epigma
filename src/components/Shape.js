@@ -23,6 +23,7 @@ class ShapeEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      selectedVertex: null,
       path: this.props.path
     };
   }
@@ -33,7 +34,34 @@ class ShapeEdit extends Component {
 
   keyHandler = ev => {
     const { key } = ev;
+
     switch (key) {
+      case "Backspace":
+      case "Delete": {
+        const { path, selectedVertex: index } = this.state;
+
+        if (index !== null) {
+          //TODO: if index === 0 or index === path.points.length -1  ==> remove point
+          //TODO: if index === 1 ==> remove two first points
+          //TODO: index === path.points.length -2 ==> remove two last points
+
+          this.setState({
+            path: {
+              ...path,
+              points: [
+                ...path.points.slice(0, index),
+                {
+                  ...path.points[index],
+                  type: "M"
+                },
+                ...path.points.slice(index + 1)
+              ]
+            }
+          });
+        }
+        return;
+      }
+
       case "Escape":
       case "Enter": {
         ev.preventDefault();
@@ -44,6 +72,8 @@ class ShapeEdit extends Component {
 
   componentDidMount() {
     const { path } = this.state;
+
+    document.body.addEventListener("mousedown", this.handleDocumentClick);
 
     document.addEventListener("keydown", this.keyHandler);
 
@@ -57,7 +87,13 @@ class ShapeEdit extends Component {
     document.removeEventListener("keydown", this.keyHandler);
     document.removeEventListener("mousemove", this.editPoint);
     document.removeEventListener("click", this.drawPoint);
+
+    document.body.removeEventListener("mousedown", this.handleDocumentClick);
   }
+
+  handleDocumentClick = ev => {
+    this.setState({ selectedVertex: null });
+  };
 
   drawPoint = ({ pageX: x, pageY: y }) => {
     const { path } = this.state;
@@ -98,12 +134,16 @@ class ShapeEdit extends Component {
   };
 
   render() {
-    const { path } = this.state;
+    const { path, selectedVertex } = this.state;
     return (
       <g>
         <path className={"canvas__path"} d={serializePath(path.points)} />
         {path.points.map((point, index) => (
           <Vertex
+            key={index}
+            selected={selectedVertex === index}
+            point={point}
+            onSelect={() => this.setState({ selectedVertex: index })}
             onChange={point => {
               return this.setState({
                 path: {
@@ -116,8 +156,6 @@ class ShapeEdit extends Component {
                 }
               });
             }}
-            key={index}
-            point={point}
           />
         ))}
       </g>

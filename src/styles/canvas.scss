@@ -1,18 +1,13 @@
 .canvas {
-  height: calc(100vh - 4px);
-  width: 100vw;
-  box-sizing: border-box;
-  border: 1px solid #d6d6d6;
+  height: calc(100vh - 20px);
+  width: calc(100vw - 19px);
+
+
+  background: #e5e5e5;
 
   &__path {
     stroke: #232323;
-    stroke-width: 8;
-    fill: none;
-  }
-
-  circle {
-    stroke: #232323;
     stroke-width: 2;
-    fill: #fff;
+    fill: none;
   }
 }
