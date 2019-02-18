@@ -16,6 +16,10 @@ const ShapeView = ({ path, onSelect }) => (
 );
 
 class ShapeEdit extends Component {
+  static defaultProps = {
+    onChange: () => {}
+  };
+
   constructor(props) {
     super(props);
     this.state = {
