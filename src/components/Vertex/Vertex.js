@@ -54,7 +54,7 @@ class Vertex extends Component {
     const { selected } = this.props;
     const { x, y, type } = this.props.point;
 
-    if (type === "M") return null;
+    // if (type === "M") return null;
 
     return (
       <circle

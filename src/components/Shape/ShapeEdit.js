@@ -1,19 +1,12 @@
 import React, { Component } from "react";
-import { serializePath } from "../utils/helper";
-import { init } from "ramda";
-import Vertex from "./Vertex";
 
-const ShapeView = ({ path, onSelect }) => (
-  <g
-    onClick={ev => {
-      ev.preventDefault();
-      ev.stopPropagation();
-      return onSelect();
-    }}
-  >
-    <path className={"canvas__path"} d={serializePath(path.points)} />
-  </g>
-);
+import { init } from "ramda";
+import { removePoint, serializePath } from "../../utils/helper";
+import Vertex from "../Vertex";
+
+import BEM from "../../utils/BEM";
+import "./Shape.scss";
+const b = BEM("Shape");
 
 class ShapeEdit extends Component {
   static defaultProps = {
@@ -41,23 +34,10 @@ class ShapeEdit extends Component {
         const { path, selectedVertex: index } = this.state;
 
         if (index !== null) {
-          //TODO: Improve algorithm
-
-          //TODO: if index === 0 or index === path.points.length -1  ==> remove point
-          //TODO: if index === 1 ==> remove two first points
-          //TODO: index === path.points.length -2 ==> remove two last points
-
           this.setState({
             path: {
               ...path,
-              points: [
-                ...path.points.slice(0, index),
-                {
-                  ...path.points[index],
-                  type: "M"
-                },
-                ...path.points.slice(index + 1)
-              ]
+              points: removePoint(path.points, index)
             }
           });
         }
@@ -138,8 +118,8 @@ class ShapeEdit extends Component {
   render() {
     const { path, selectedVertex } = this.state;
     return (
-      <g>
-        <path className={"canvas__path"} d={serializePath(path.points)} />
+      <g className={b(["edit"])}>
+        <path className={b("path")} d={serializePath(path.points)} />
         {path.points.map((point, index) => (
           <Vertex
             key={index}
@@ -165,6 +145,4 @@ class ShapeEdit extends Component {
   }
 }
 
-export default ({ edit, ...props }) => {
-  return edit ? <ShapeEdit {...props} /> : <ShapeView {...props} />;
-};
+export default ShapeEdit;
