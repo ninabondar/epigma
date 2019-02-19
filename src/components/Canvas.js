@@ -48,8 +48,10 @@ class Canvas extends Component {
 
   componentDidMount() {
     document.body.addEventListener("mousedown", this.handleDocumentClick);
-    const { x, y } = this.refs.svgRoot.getBoundingClientRect();
-    this.setState({ offset: { x, y } });
+    const { top, left } = this.refs.svgRoot.getBoundingClientRect();
+    console.log(top, left);
+
+    this.setState({ offset: { x: 0, y: 0 } });
   }
 
   componentWillUnmount() {
@@ -73,36 +75,39 @@ class Canvas extends Component {
   render() {
     const { shapes, offset, editIndex } = this.state;
     return (
-      <>
-        <svg
-          ref={"svgRoot"}
-          className="canvas"
-          onClick={editIndex === null ? this.addPath : null}
-        >
-          {shapes.map((shape, index) => (
-            <Shape
-              onSelect={() => this.setState({ editIndex: index })}
-              onChange={path => {
-                const id = path.id || getId();
-                return this.setState({
-                  shapes: [
-                    ...shapes.slice(0, editIndex),
-                    { id, ...path },
-                    ...shapes.slice(editIndex + 1)
-                  ],
-                  editIndex: null
-                });
-              }}
-              key={index}
-              edit={editIndex === index}
-              offset={offset}
-              path={shape}
-            />
-          ))}
+      <svg
+        ref={"svgRoot"}
+        className="canvas"
+        style={{
+          position: "absolute",
+          // top: 0,
+          // left: 0
+        }}
+        onClick={editIndex === null ? this.addPath : null}
+      >
+        {shapes.map((shape, index) => (
+          <Shape
+            onSelect={() => this.setState({ editIndex: index })}
+            onChange={path => {
+              const id = path.id || getId();
+              return this.setState({
+                shapes: [
+                  ...shapes.slice(0, editIndex),
+                  { id, ...path },
+                  ...shapes.slice(editIndex + 1)
+                ],
+                editIndex: null
+              });
+            }}
+            key={index}
+            edit={editIndex === index}
+            offset={offset}
+            path={shape}
+          />
+        ))}
 
-          {shapes.length < 0 && <text dy={20}>Click to start drawing.</text>}
-        </svg>
-      </>
+        {shapes.length < 0 && <text dy={20}>Click to start drawing.</text>}
+      </svg>
     );
   }
 }

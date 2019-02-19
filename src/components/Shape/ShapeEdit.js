@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { init, last, update } from "ramda";
+import { append, last } from "ramda";
 import { createPoint, removePoint, serializePath } from "../../utils/helper";
 import Vertex from "../Vertex";
 
@@ -89,19 +89,15 @@ class ShapeEdit extends Component {
     this.setState({
       path: {
         ...path,
-        points: [...path.points, point]
+        points: append(point, path.points)
       }
     });
   };
 
   endEdit = () => {
     const { path } = this.state;
-    const { id, points } = path;
 
-    this.props.onChange({
-      ...path,
-      points: id ? points : init(points)
-    });
+    this.props.onChange({ ...path });
   };
 
   render() {
