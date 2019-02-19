@@ -11,27 +11,53 @@ class Vertex extends Component {
     onSelect: () => console.log("Vertex selected")
   };
 
+  constructor(props) {
+    super(props);
+
+    const { draggable } = props;
+    if (draggable) {
+      document.body.addEventListener("mousemove", this.startDragging, {
+        once: true
+      });
+    }
+  }
+
+  componentWillReceiveProps({ draggable }) {
+    if (this.props.draggable === draggable) return;
+    if (draggable) {
+      document.body.addEventListener("mousemove", this.startDragging, {
+        once: true
+      });
+    } else if (this.endDrag) {
+      this.endDrag();
+    }
+  }
+
   startDragging = ({ pageX: startX, pageY: startY }) => {
-    const { point, onChange } = this.props;
+    const { point, onChange, draggable } = this.props;
     const { x, y } = point;
 
-    const drag = ({ pageX, pageY }) => {
+    this.drag = ({ pageX, pageY }) => {
+      const { point } = this.props;
       const dx = startX - pageX;
       const dy = pageY - startY;
 
       onChange({
+        ...point,
         x: x - dx,
         y: y + dy
       });
     };
 
-    const endDrag = () => {
-      document.removeEventListener("mousemove", drag);
-      document.removeEventListener("mouseup", endDrag);
+    this.endDrag = () => {
+      document.removeEventListener("mousemove", this.drag);
+      document.removeEventListener("mouseup", this.endDrag);
     };
 
-    document.addEventListener("mousemove", drag);
-    document.addEventListener("mouseup", endDrag);
+    document.addEventListener("mousemove", this.drag);
+    if (!draggable) {
+      document.addEventListener("mouseup", this.endDrag);
+    }
   };
 
   componentDidMount() {
@@ -40,6 +66,10 @@ class Vertex extends Component {
 
   componentWillUnmount() {
     this.refs.root.removeEventListener("mousedown", this.handleMouseDown);
+
+    if (this.endDrag) {
+      this.endDrag();
+    }
   }
 
   handleMouseDown = ev => {
@@ -47,14 +77,13 @@ class Vertex extends Component {
     ev.cancelbubble = true;
 
     this.props.onSelect(ev);
+
     this.startDragging(ev);
   };
 
   render() {
     const { selected } = this.props;
-    const { x, y, type } = this.props.point;
-
-    // if (type === "M") return null;
+    const { x, y } = this.props.point;
 
     return (
       <circle

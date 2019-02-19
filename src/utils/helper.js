@@ -2,6 +2,13 @@ import { init, tail, slice, update, remove, assoc } from "ramda";
 
 export const serializePoint = ({ x, y }) => x + "," + y;
 
+export const createPoint = ({ x, y, type = "L" }) => ({ x, y, type });
+
+export const createShape = point => ({
+  points: [point],
+  style: null
+});
+
 export const serializePath = dotsArr =>
   dotsArr.reduce(
     ([stringPath, prevPoint], point) => {

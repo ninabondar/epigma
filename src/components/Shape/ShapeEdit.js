@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
-import { init } from "ramda";
-import { removePoint, serializePath } from "../../utils/helper";
+import { init, last, update } from "ramda";
+import { createPoint, removePoint, serializePath } from "../../utils/helper";
 import Vertex from "../Vertex";
 
 import BEM from "../../utils/BEM";
@@ -15,7 +15,13 @@ class ShapeEdit extends Component {
 
   constructor(props) {
     super(props);
+    const { path } = props;
+    const mode = path.id === undefined ? "create" : "edit";
+
     this.state = {
+      mode,
+      ghostPoint: mode === "create" ? last(path.points) : null,
+
       selectedVertex: null,
       path: this.props.path
     };
@@ -60,16 +66,13 @@ class ShapeEdit extends Component {
     document.addEventListener("keydown", this.keyHandler);
 
     if (path.id === undefined) {
-      document.addEventListener("mousemove", this.editPoint);
       document.addEventListener("click", this.drawPoint);
     }
   }
 
   componentWillUnmount() {
     document.removeEventListener("keydown", this.keyHandler);
-    document.removeEventListener("mousemove", this.editPoint);
     document.removeEventListener("click", this.drawPoint);
-
     document.body.removeEventListener("mousedown", this.handleDocumentClick);
   }
 
@@ -81,26 +84,12 @@ class ShapeEdit extends Component {
     const { path } = this.state;
     const { offset } = this.props;
 
-    const point = { x: x - offset.x, y: y - offset.y };
+    const point = createPoint({ x: x - offset.x, y: y - offset.y });
 
     this.setState({
       path: {
         ...path,
         points: [...path.points, point]
-      }
-    });
-  };
-
-  editPoint = ({ pageX: x, pageY: y }) => {
-    const { path } = this.state;
-    const { offset } = this.props;
-
-    const point = { x: x - offset.x, y: y - offset.y };
-
-    this.setState({
-      path: {
-        ...path,
-        points: [...init(path.points), point]
       }
     });
   };
@@ -116,30 +105,42 @@ class ShapeEdit extends Component {
   };
 
   render() {
-    const { path, selectedVertex } = this.state;
+    const { path, selectedVertex, mode, ghostPoint } = this.state;
+
+    let points = mode === "create" ? [...path.points, ghostPoint] : path.points;
+
     return (
       <g className={b(["edit"])}>
-        <path className={b("path")} d={serializePath(path.points)} />
-        {path.points.map((point, index) => (
+        <path className={b("path")} d={serializePath(points)} />
+
+        {points.map((point, index) => (
           <Vertex
             key={index}
             selected={selectedVertex === index}
             point={point}
             onSelect={() => this.setState({ selectedVertex: index })}
-            onChange={point => {
-              return this.setState({
+            onChange={point =>
+              this.setState({
                 path: {
                   ...path,
                   points: [
-                    ...path.points.slice(0, index),
+                    ...points.slice(0, index),
                     point,
-                    ...path.points.slice(index + 1)
+                    ...points.slice(index + 1)
                   ]
                 }
-              });
-            }}
+              })
+            }
           />
         ))}
+
+        {mode === "create" ? (
+          <Vertex
+            draggable={true}
+            point={ghostPoint}
+            onChange={point => this.setState({ ghostPoint: point })}
+          />
+        ) : null}
       </g>
     );
   }

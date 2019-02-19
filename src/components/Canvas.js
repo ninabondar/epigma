@@ -1,20 +1,16 @@
 import React, { Component } from "react";
+import { createPoint, createShape } from "../utils/helper";
 import "../styles/canvas.scss";
 import Shape from "./Shape";
 
 let counter = 2;
 const getId = () => counter++;
 
-const createShape = point => ({
-  points: [point, point],
-  style: null
-});
-
 class Canvas extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      editIndex: 0,
+      editIndex: null,
       shapes: [
         {
           id: 1,
@@ -66,7 +62,7 @@ class Canvas extends Component {
 
   addPath = ({ pageX: x, pageY: y }) => {
     const { shapes, offset } = this.state;
-    const point = { x: x - offset.x, y: y - offset.y };
+    const point = createPoint({ x: x - offset.x, y: y - offset.y });
 
     this.setState({
       shapes: [...shapes, createShape(point)],
