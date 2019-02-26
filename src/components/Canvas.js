@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import { createPoint, createShape } from "../utils/helper";
 import "../styles/canvas.scss";
 import Shape from "./Shape";
+import uuid from 'uuid';
 
-let counter = 2;
-const getId = () => counter++;
+
+const getId = () => uuid();
 
 class Canvas extends Component {
   constructor(props) {
