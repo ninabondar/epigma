@@ -6,6 +6,7 @@ import Vertex from "../Vertex";
 
 import BEM from "../../utils/BEM";
 import "./Shape.scss";
+
 const b = BEM("Shape");
 
 class ShapeEdit extends Component {

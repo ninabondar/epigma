@@ -1,14 +1,7 @@
 import React from "react";
 import Canvas from "./Canvas";
 import "../styles/layout.scss";
-class App extends React.Component {
-  render() {
-    return (
-      <>
-        <Canvas />
-      </>
-    );
-  }
-}
+
+const App = () => <Canvas />;
 
 export default App;

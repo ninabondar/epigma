@@ -16,13 +16,15 @@
     "react-redux": "^6.0.1",
     "react-scripts": "^2.1.5",
     "redux": "^4.0.1",
+    "redux-devtools-extension": "^2.13.8",
     "uuid": "^3.3.2"
   },
   "dependencies": {
-    "prop-types": "^15.7.1",
+    "prop-types": "^15.7.2",
     "ramda": "^0.26.1",
     "react": "^16.8.1",
-    "react-dom": "^16.8.1"
+    "react-dom": "^16.8.1",
+    "recompose": "^0.30.0"
   },
   "browserslist": [
     ">0.2%",
