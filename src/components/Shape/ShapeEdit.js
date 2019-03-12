@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 
 import { append, last } from "ramda";
-import { createPoint, removePoint, serializePath } from "../../utils/helper";
+import { createPoint, removePoint, serializePath, getBoundingBoxFromShape } from "../../utils/helper";
 import Vertex from "../Vertex";
 
 import BEM from "../../utils/BEM";
 import "./Shape.scss";
+import Selection from "../Selection/Selection";
 
 const b = BEM("Shape");
 
@@ -81,6 +82,11 @@ class ShapeEdit extends Component {
     this.setState({ selectedVertex: null });
   };
 
+  getBoundingBox = path => {
+    const box = getBoundingBoxFromShape(path);
+    return box;
+  };
+
   drawPoint = ({ pageX: x, pageY: y }) => {
     const { path } = this.state;
     const { offset } = this.props;
@@ -103,42 +109,48 @@ class ShapeEdit extends Component {
 
   render() {
     const { path, selectedVertex, mode, ghostPoint } = this.state;
-
+    const boundingBox = this.getBoundingBox(path);
     let points = mode === "create" ? [...path.points, ghostPoint] : path.points;
 
+    console.log(points);
     return (
-      <g className={b(["edit"])}>
-        <path className={b("path")} d={serializePath(points)} />
+        <Selection boundingRect={boundingBox}>
 
-        {points.map((point, index) => (
-          <Vertex
-            key={index}
-            selected={selectedVertex === index}
-            point={point}
-            onSelect={() => this.setState({ selectedVertex: index })}
-            onChange={point =>
-              this.setState({
-                path: {
-                  ...path,
-                  points: [
-                    ...points.slice(0, index),
-                    point,
-                    ...points.slice(index + 1)
-                  ]
-                }
-              })
-            }
-          />
-        ))}
+          <g className={b(["edit"])}>
+            <path className={b("path")} d={serializePath(points)} />
 
-        {mode === "create" ? (
-          <Vertex
-            draggable={true}
-            point={ghostPoint}
-            onChange={point => this.setState({ ghostPoint: point })}
-          />
-        ) : null}
-      </g>
+            {points.map((point, index) => (
+                <Vertex
+                    key={index}
+                    selected={selectedVertex === index}
+                    point={point}
+                    onSelect={() => this.setState({ selectedVertex: index })}
+                    onChange={point =>
+                        this.setState({
+                          path: {
+                            ...path,
+                            points: [
+                              ...points.slice(0, index),
+                              point,
+                              ...points.slice(index + 1)
+                            ]
+                          }
+                        })
+                    }
+                />
+            ))}
+
+            {mode === "create" ? (
+                <Vertex
+                    draggable={true}
+                    point={ghostPoint}
+                    onChange={point => this.setState({ ghostPoint: point })}
+                />
+            ) : null}
+          </g>
+
+        </Selection>
+
     );
   }
 }

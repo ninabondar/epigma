@@ -1,4 +1,14 @@
-import { init, tail, slice, update, remove, assoc } from "ramda";
+import {
+  init,
+  tail,
+  slice,
+  update,
+  remove,
+  assoc,
+  minBy,
+  maxBy,
+  prop
+} from "ramda";
 
 export const serializePoint = ({ x, y }) => x + "," + y;
 
@@ -33,3 +43,10 @@ export const removePoint = (points, index) => {
 
   return update(index, nextPoint, remove(index, 1, points));
 };
+
+export const getBoundingBoxFromShape = ({ points }) => {
+  const xs = points.map(prop("x"));
+  const ys = points.map(prop("y"));
+  return [Math.min(...ys), Math.max(...xs), Math.max(...ys), Math.min(...xs)];
+};
+

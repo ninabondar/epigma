@@ -5,7 +5,6 @@ import appReducer from "./reducers";
 export default () => {
   return createStore(
     appReducer,
-
     composeWithDevTools(applyMiddleware())
   );
 };
