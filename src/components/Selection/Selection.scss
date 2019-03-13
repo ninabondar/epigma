@@ -1,12 +1,26 @@
 .Selection {
-  stroke: #3498db;
-  stroke-width: 2;
-  &__edge {
+  stroke: transparent;
+  stroke-width: 0;
+
+  &_active {
     stroke: #3498db;
+    stroke-width: 2;
+    .Selection__edge {
+      stroke: #3498db;
+    }
+
+    .Selection__vertex {
+      fill: white;
+      stroke: #3498db;
+    }
+  }
+
+  &__edge {
+    stroke: transparent;
   }
 
   &__vertex {
-    fill: white;
-    stroke: #3498db;
+    fill: transparent;
+    stroke: transparent;
   }
 }

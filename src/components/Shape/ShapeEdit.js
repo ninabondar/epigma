@@ -1,4 +1,6 @@
+/* @flow */
 import React, { Component } from "react";
+
 
 import { append, last } from "ramda";
 import { createPoint, removePoint, serializePath, getBoundingBoxFromShape } from "../../utils/helper";
@@ -107,18 +109,24 @@ class ShapeEdit extends Component {
     this.props.onChange({ ...path });
   };
 
+  handleDoubleClick = (e) => {
+    this.setState({
+      mode: "select",
+    })
+  };
+
   render() {
     const { path, selectedVertex, mode, ghostPoint } = this.state;
     const boundingBox = this.getBoundingBox(path);
     let points = mode === "create" ? [...path.points, ghostPoint] : path.points;
 
     console.log(points);
+    console.log(mode);
     return (
-        <Selection boundingRect={boundingBox}>
+        <Selection boundingRect={boundingBox} isActive={mode === "select"}>
 
           <g className={b(["edit"])}>
-            <path className={b("path")} d={serializePath(points)} />
-
+            <path onDoubleClick={this.handleDoubleClick} className={b("path")} d={serializePath(points)} />
             {points.map((point, index) => (
                 <Vertex
                     key={index}
