@@ -1,1 +1,1 @@
-export { default } from "./Canvas";
+export { default, TransformContext } from "./Canvas";

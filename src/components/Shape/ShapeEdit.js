@@ -1,9 +1,13 @@
 /* @flow */
 import React, { Component } from "react";
 
-
 import { append, last } from "ramda";
-import { createPoint, removePoint, serializePath, getBoundingBoxFromShape } from "../../utils/helper";
+import {
+  createPoint,
+  removePoint,
+  serializePath,
+  getBoundingBoxFromShape
+} from "../../utils/helper";
 import Vertex from "../Vertex";
 
 import BEM from "../../utils/BEM";
@@ -109,10 +113,10 @@ class ShapeEdit extends Component {
     this.props.onChange({ ...path });
   };
 
-  handleDoubleClick = (e) => {
+  handleDoubleClick = e => {
     this.setState({
-      mode: "select",
-    })
+      mode: "select"
+    });
   };
 
   render() {
@@ -120,45 +124,44 @@ class ShapeEdit extends Component {
     const boundingBox = this.getBoundingBox(path);
     let points = mode === "create" ? [...path.points, ghostPoint] : path.points;
 
-    console.log(points);
-    console.log(mode);
     return (
-        <Selection boundingRect={boundingBox} isActive={mode === "select"}>
+      <Selection boundingRect={boundingBox} isActive={mode === "select"}>
+        <g className={b(["edit"])}>
+          <path
+            onDoubleClick={this.handleDoubleClick}
+            className={b("path")}
+            d={serializePath(points)}
+          />
+          {points.map((point, index) => (
+            <Vertex
+              key={index}
+              selected={selectedVertex === index}
+              point={point}
+              onSelect={() => this.setState({ selectedVertex: index })}
+              onChange={point =>
+                this.setState({
+                  path: {
+                    ...path,
+                    points: [
+                      ...points.slice(0, index),
+                      point,
+                      ...points.slice(index + 1)
+                    ]
+                  }
+                })
+              }
+            />
+          ))}
 
-          <g className={b(["edit"])}>
-            <path onDoubleClick={this.handleDoubleClick} className={b("path")} d={serializePath(points)} />
-            {points.map((point, index) => (
-                <Vertex
-                    key={index}
-                    selected={selectedVertex === index}
-                    point={point}
-                    onSelect={() => this.setState({ selectedVertex: index })}
-                    onChange={point =>
-                        this.setState({
-                          path: {
-                            ...path,
-                            points: [
-                              ...points.slice(0, index),
-                              point,
-                              ...points.slice(index + 1)
-                            ]
-                          }
-                        })
-                    }
-                />
-            ))}
-
-            {mode === "create" ? (
-                <Vertex
-                    draggable={true}
-                    point={ghostPoint}
-                    onChange={point => this.setState({ ghostPoint: point })}
-                />
-            ) : null}
-          </g>
-
-        </Selection>
-
+          {mode === "create" ? (
+            <Vertex
+              draggable={true}
+              point={ghostPoint}
+              onChange={point => this.setState({ ghostPoint: point })}
+            />
+          ) : null}
+        </g>
+      </Selection>
     );
   }
 }
