@@ -11,7 +11,11 @@ import "./Canvas.scss";
 import BEM from "../../utils/BEM";
 import { changeActiveShape } from "../../actions";
 import { getActiveShapes } from "../../reducers";
-import { getTransformMatrix, transformPoint } from "../../utils/matrix";
+import {
+  getTransformMatrix,
+  multiplyManyMatrices,
+  transformPoint
+} from "../../utils/matrix";
 const b = BEM("Canvas");
 
 const getId = () => uuid();
@@ -27,6 +31,7 @@ const CanvasTransform = ({ children }) => {
 
     const startX = pageX - matrix[2][0];
     const startY = pageY - matrix[2][1];
+
     const handleMouseMove = ({ pageX: endX, pageY: endY }) => {
       const x = endX - startX;
       const y = endY - startY;
@@ -39,8 +44,28 @@ const CanvasTransform = ({ children }) => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
     };
+
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
+  };
+
+  const handleScroll = ev => {
+    zoom(ev, matrix);
+  };
+
+  const zoom = (ev, matrix) => {
+    ev.preventDefault();
+    const x = ev.pageX;
+    const y = ev.pageY;
+    const z = ev.deltaY < 0 ? 0.9 : 1.1;
+
+    const shiftFromStart = getTransformMatrix(1, -x, -y);
+    console.log(shiftFromStart);
+    const unshiftFromStart = getTransformMatrix(1, x, y);
+    const zoom = getTransformMatrix(z, 0, 0);
+    setMatrix(
+      multiplyManyMatrices(matrix, shiftFromStart, zoom, unshiftFromStart)
+    );
   };
 
   const handleMouseDown = ev => {
@@ -50,7 +75,7 @@ const CanvasTransform = ({ children }) => {
   };
 
   return (
-    <div onMouseDown={handleMouseDown}>
+    <div onMouseDown={handleMouseDown} onWheel={handleScroll}>
       <TransformContext.Provider value={transformPoint(matrix)}>
         {children}
       </TransformContext.Provider>
