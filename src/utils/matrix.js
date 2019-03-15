@@ -108,3 +108,17 @@ export const invernMatrix = matrix => {
   //matrix I should be the inverse:
   return I;
 };
+
+
+
+//TODO: @by_alien please verify this solution and implement in real world. :)
+export const multiplyManyMatrices = (...props) =>
+    props.reduce((a, b) => multiplyMatrix(a, b));
+
+const zoomCanvas = (z, x = 0, y = 0) => {
+  const move = getTransformMatrix(1, -x, -y);
+  const unMove = getTransformMatrix(1, x, y);
+  const zoom = getTransformMatrix(z, 0, 0);
+
+  const matrix = multiplyManyMatrices(this.state.matrix, move, zoom, unMove);
+};
