@@ -2,9 +2,9 @@ import React from "react"
 
 import BEM from "../../utils/BEM"
 import "./Selection.scss"
-const b = BEM("Selection")
+const b = BEM("Selection");
 
-const CONNER_CONTROL_SIZE = 10
+const CONNER_CONTROL_SIZE = 10;
 
 const Corner = props => (
   <rect
@@ -19,7 +19,7 @@ const Corner = props => (
     height={CONNER_CONTROL_SIZE}
     {...props}
   />
-)
+);
 
 const Selection = ({ boundingRect: [minY, maxX, maxY, minX] }) => (
   <g className={b()}>
@@ -32,6 +32,6 @@ const Selection = ({ boundingRect: [minY, maxX, maxY, minX] }) => (
     <Corner x={maxX - CONNER_CONTROL_SIZE} y={maxY - CONNER_CONTROL_SIZE} />
     <Corner x={minX - CONNER_CONTROL_SIZE} y={maxY - CONNER_CONTROL_SIZE} />
   </g>
-)
+);
 
 export default Selection

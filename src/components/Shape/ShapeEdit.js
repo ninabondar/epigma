@@ -20,7 +20,7 @@ const b = BEM("Shape");
 
 const ShapeEdit = props => {
   const { offset, onChange } = props;
-  const tansformation = useContext(TransformContext);
+  const transformation = useContext(TransformContext);
 
   const [path, setPath] = useState(props.path);
   const [mode, setMode] = useState(path.id === undefined ? "create" : "edit");
@@ -96,7 +96,7 @@ const ShapeEdit = props => {
           path={path}
           className={b(["edit"])}
         />
-        {points.map(tansformation).map((point, index) => (
+        {points.map(transformation).map((point, index) => (
           <Vertex
             key={index}
             selected={selectedVertex === index}
@@ -107,7 +107,7 @@ const ShapeEdit = props => {
                 ...path,
                 points: [
                   ...points.slice(0, index),
-                  tansformation.invert(point),
+                  transformation.invert(point),
                   ...points.slice(index + 1)
                 ]
               })

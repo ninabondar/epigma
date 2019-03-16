@@ -1,7 +1,13 @@
-import React from "react";
-import Canvas from "./Canvas";
-import "../styles/layout.scss";
+import React from "react"
+import Canvas from "./Canvas"
+import "../styles/layout.scss"
+import ToolPanel from "./ToolPanel/ToolPanel"
 
-const App = () => <Canvas />;
+const App = () => (
+  <>
+    <ToolPanel />
+    <Canvas />
+  </>
+);
 
-export default App;
+export default App
