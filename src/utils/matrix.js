@@ -4,7 +4,10 @@ export const getTransformMatrix = (z, x, y) => [
   [x, y, 1]
 ];
 
-export const transformPoint = ([[a, b], [c, d], [tx, ty]]) => ({
+export const serializeTransformationMatrix = ([[a, b], [c, d], [e, f]]) =>
+  `matrix(${a},${b},${c},${d},${e},${f})`;
+
+const getTransformFns = ([[a, b], [c, d], [tx, ty]]) => ({
   x,
   y,
   ...rest
@@ -13,6 +16,15 @@ export const transformPoint = ([[a, b], [c, d], [tx, ty]]) => ({
   y: b * x + d * y + ty,
   ...rest
 });
+
+export const transformPoint = matrix => {
+  const transformFn = getTransformFns(matrix);
+
+  transformFn.matrix = matrix;
+  transformFn.invert = getTransformFns(invernMatrix(matrix));
+
+  return transformFn;
+};
 
 export const multiplyMatrix = (A, B) =>
   new Array(A.length)
@@ -109,16 +121,5 @@ export const invernMatrix = matrix => {
   return I;
 };
 
-
-
-//TODO: @by_alien please verify this solution and implement in real world. :)
 export const multiplyManyMatrices = (...props) =>
-    props.reduce((a, b) => multiplyMatrix(a, b));
-
-const zoomCanvas = (z, x = 0, y = 0) => {
-  const move = getTransformMatrix(1, -x, -y);
-  const unMove = getTransformMatrix(1, x, y);
-  const zoom = getTransformMatrix(z, 0, 0);
-
-  const matrix = multiplyManyMatrices(this.state.matrix, move, zoom, unMove);
-};
+  props.reduce((a, b) => multiplyMatrix(a, b));

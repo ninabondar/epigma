@@ -14,6 +14,7 @@ import { getActiveShapes } from "../../reducers";
 import {
   getTransformMatrix,
   multiplyManyMatrices,
+  serializeTransformationMatrix,
   transformPoint
 } from "../../utils/matrix";
 const b = BEM("Canvas");
@@ -60,9 +61,9 @@ const CanvasTransform = ({ children }) => {
     const z = ev.deltaY < 0 ? 0.9 : 1.1;
 
     const shiftFromStart = getTransformMatrix(1, -x, -y);
-    console.log(shiftFromStart);
     const unshiftFromStart = getTransformMatrix(1, x, y);
     const zoom = getTransformMatrix(z, 0, 0);
+
     setMatrix(
       multiplyManyMatrices(matrix, shiftFromStart, zoom, unshiftFromStart)
     );

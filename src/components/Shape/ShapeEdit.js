@@ -1,5 +1,5 @@
 /* @flow */
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 
 import { append, last } from "ramda";
 import {
@@ -10,10 +10,12 @@ import {
 } from "../../utils/helper";
 import Vertex from "../Vertex";
 
-import BEM from "../../utils/BEM";
-import "./Shape.scss";
+import { TransformContext } from "../Canvas";
 import Selection from "../Selection/Selection";
 
+import BEM from "../../utils/BEM";
+import "./Shape.scss";
+import { serializeTransformationMatrix } from "../../utils/matrix";
 const b = BEM("Shape");
 
 class ShapeEdit extends Component {
@@ -126,41 +128,49 @@ class ShapeEdit extends Component {
 
     return (
       <Selection boundingRect={boundingBox} isActive={mode === "select"}>
-        <g className={b(["edit"])}>
-          <path
-            onDoubleClick={this.handleDoubleClick}
-            className={b("path")}
-            d={serializePath(points)}
-          />
-          {points.map((point, index) => (
-            <Vertex
-              key={index}
-              selected={selectedVertex === index}
-              point={point}
-              onSelect={() => this.setState({ selectedVertex: index })}
-              onChange={point =>
-                this.setState({
-                  path: {
-                    ...path,
-                    points: [
-                      ...points.slice(0, index),
-                      point,
-                      ...points.slice(index + 1)
-                    ]
+        <TransformContext className="Consumer">
+          {tansformation => (
+            <g className={b(["edit"])}>
+              <g
+                transform={serializeTransformationMatrix(tansformation.matrix)}
+              >
+                <path
+                  onDoubleClick={this.handleDoubleClick}
+                  className={b("path")}
+                  d={serializePath(points)}
+                />
+              </g>
+              {points.map(tansformation).map((point, index) => (
+                <Vertex
+                  key={index}
+                  selected={selectedVertex === index}
+                  point={point}
+                  onSelect={() => this.setState({ selectedVertex: index })}
+                  onChange={point =>
+                    this.setState({
+                      path: {
+                        ...path,
+                        points: [
+                          ...points.slice(0, index),
+                          tansformation.invert(point),
+                          ...points.slice(index + 1)
+                        ]
+                      }
+                    })
                   }
-                })
-              }
-            />
-          ))}
+                />
+              ))}
 
-          {mode === "create" ? (
-            <Vertex
-              draggable={true}
-              point={ghostPoint}
-              onChange={point => this.setState({ ghostPoint: point })}
-            />
-          ) : null}
-        </g>
+              {mode === "create" ? (
+                <Vertex
+                  draggable={true}
+                  point={ghostPoint}
+                  onChange={point => this.setState({ ghostPoint: point })}
+                />
+              ) : null}
+            </g>
+          )}
+        </TransformContext>
       </Selection>
     );
   }
