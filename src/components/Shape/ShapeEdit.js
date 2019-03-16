@@ -1,5 +1,5 @@
 /* @flow */
-import React, { Component, useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { append, last } from "ramda";
 import {
@@ -15,165 +15,116 @@ import Selection from "../Selection/Selection";
 
 import BEM from "../../utils/BEM";
 import "./Shape.scss";
-import { serializeTransformationMatrix } from "../../utils/matrix";
+import { ShapeView } from "./ShapeView";
 const b = BEM("Shape");
 
-class ShapeEdit extends Component {
-  static defaultProps = {
-    onChange: () => {}
-  };
+const ShapeEdit = props => {
+  const { offset, onChange } = props;
+  const tansformation = useContext(TransformContext);
 
-  constructor(props) {
-    super(props);
-    const { path } = props;
-    const mode = path.id === undefined ? "create" : "edit";
+  const [path, setPath] = useState(props.path);
+  const [mode, setMode] = useState(path.id === undefined ? "create" : "edit");
+  const [selectedVertex, setSelectedVertex] = useState(null);
+  const [ghostPoint, setGhostPoint] = useState(
+    mode === "create" ? last(path.points) : null
+  );
 
-    this.state = {
-      mode,
-      ghostPoint: mode === "create" ? last(path.points) : null,
+  const boundingBox = getBoundingBoxFromShape(path);
+  let points = mode === "create" ? [...path.points, ghostPoint] : path.points;
 
-      selectedVertex: null,
-      path: this.props.path
-    };
-  }
+  useEffect(() => setPath(props.path), [props.path]);
 
-  componentWillReceiveProps(nextProps, nextContext) {
-    this.setState({ path: nextProps.path });
-  }
+  useEffect(
+    () => {
+      const keyHandler = ev => {
+        const { key } = ev;
 
-  keyHandler = ev => {
-    const { key } = ev;
+        switch (key) {
+          case "Backspace":
+          case "Delete": {
+            ev.preventDefault();
 
-    switch (key) {
-      case "Backspace":
-      case "Delete": {
-        const { path, selectedVertex: index } = this.state;
-
-        if (index !== null) {
-          this.setState({
-            path: {
-              ...path,
-              points: removePoint(path.points, index)
+            if (selectedVertex !== null) {
+              setPath({
+                ...path,
+                points: removePoint(path.points, selectedVertex)
+              });
             }
-          });
+            return;
+          }
+
+          case "Escape":
+          case "Enter": {
+            ev.preventDefault();
+            return onChange({ ...path });
+          }
         }
-        return;
+      };
+
+      const handleDocumentClick = ev => setSelectedVertex(null);
+
+      const drawPoint = ({ pageX: x, pageY: y }) => {
+        const point = createPoint({ x: x - offset.x, y: y - offset.y });
+        setPath({
+          ...path,
+          points: append(point, path.points)
+        });
+      };
+
+      document.body.addEventListener("mousedown", handleDocumentClick);
+      document.addEventListener("keydown", keyHandler);
+
+      if (path.id === undefined) {
+        document.addEventListener("click", drawPoint);
       }
 
-      case "Escape":
-      case "Enter": {
-        ev.preventDefault();
-        return this.endEdit();
-      }
-    }
-  };
+      return () => {
+        document.removeEventListener("keydown", keyHandler);
+        document.removeEventListener("click", drawPoint);
+        document.body.removeEventListener("mousedown", handleDocumentClick);
+      };
+    },
+    [path, selectedVertex]
+  );
 
-  componentDidMount() {
-    const { path } = this.state;
+  return (
+      <g className={b(["edit"])}>
 
-    document.body.addEventListener("mousedown", this.handleDocumentClick);
+        {mode === "select" && <Selection boundingRect={boundingBox} />}
+        <ShapeView
+          onClick={() => setMode("select")}
+          path={path}
+          className={b(["edit"])}
+        />
+        {points.map(tansformation).map((point, index) => (
+          <Vertex
+            key={index}
+            selected={selectedVertex === index}
+            point={point}
+            onSelect={() => setSelectedVertex(index)}
+            onChange={point =>
+              setPath({
+                ...path,
+                points: [
+                  ...points.slice(0, index),
+                  tansformation.invert(point),
+                  ...points.slice(index + 1)
+                ]
+              })
+            }
+          />
+        ))}
 
-    document.addEventListener("keydown", this.keyHandler);
+        {mode === "create" ? (
+          <Vertex
+            draggable={true}
+            point={ghostPoint}
+            onChange={point => setGhostPoint(point)}
+          />
+        ) : null}
+      </g>
 
-    if (path.id === undefined) {
-      document.addEventListener("click", this.drawPoint);
-    }
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener("keydown", this.keyHandler);
-    document.removeEventListener("click", this.drawPoint);
-    document.body.removeEventListener("mousedown", this.handleDocumentClick);
-  }
-
-  handleDocumentClick = ev => {
-    this.setState({ selectedVertex: null });
-  };
-
-  getBoundingBox = path => {
-    const box = getBoundingBoxFromShape(path);
-    return box;
-  };
-
-  drawPoint = ({ pageX: x, pageY: y }) => {
-    const { path } = this.state;
-    const { offset } = this.props;
-
-    const point = createPoint({ x: x - offset.x, y: y - offset.y });
-
-    this.setState({
-      path: {
-        ...path,
-        points: append(point, path.points)
-      }
-    });
-  };
-
-  endEdit = () => {
-    const { path } = this.state;
-
-    this.props.onChange({ ...path });
-  };
-
-  handleDoubleClick = e => {
-    this.setState({
-      mode: "select"
-    });
-  };
-
-  render() {
-    const { path, selectedVertex, mode, ghostPoint } = this.state;
-    const boundingBox = this.getBoundingBox(path);
-    let points = mode === "create" ? [...path.points, ghostPoint] : path.points;
-
-    return (
-      <Selection boundingRect={boundingBox} isActive={mode === "select"}>
-        <TransformContext className="Consumer">
-          {tansformation => (
-            <g className={b(["edit"])}>
-              <g
-                transform={serializeTransformationMatrix(tansformation.matrix)}
-              >
-                <path
-                  onDoubleClick={this.handleDoubleClick}
-                  className={b("path")}
-                  d={serializePath(points)}
-                />
-              </g>
-              {points.map(tansformation).map((point, index) => (
-                <Vertex
-                  key={index}
-                  selected={selectedVertex === index}
-                  point={point}
-                  onSelect={() => this.setState({ selectedVertex: index })}
-                  onChange={point =>
-                    this.setState({
-                      path: {
-                        ...path,
-                        points: [
-                          ...points.slice(0, index),
-                          tansformation.invert(point),
-                          ...points.slice(index + 1)
-                        ]
-                      }
-                    })
-                  }
-                />
-              ))}
-
-              {mode === "create" ? (
-                <Vertex
-                  draggable={true}
-                  point={ghostPoint}
-                  onChange={point => this.setState({ ghostPoint: point })}
-                />
-              ) : null}
-            </g>
-          )}
-        </TransformContext>
-      </Selection>
-    );
-  }
-}
+  );
+};
 
 export default ShapeEdit;
