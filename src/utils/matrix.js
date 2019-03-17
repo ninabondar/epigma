@@ -1,7 +1,13 @@
 // @flow
-import type { Point, TransformationMatrix } from "./types"
+import type { Matrix, Point, TransformationMatrix } from "./types"
+import { range } from "ramda"
 
-export const getTransformMatrix = (z, x, y) => [[z, 0, 0], [0, z, 0], [x, y, 1]]
+type _getTransformMatrix = (number, number, number) => TransformationMatrix
+export const getTransformMatrix: _getTransformMatrix = (z, x, y) => [
+  [z, 0, 0],
+  [0, z, 0],
+  [x, y, 1]
+]
 
 type _serializeTransformationMatrix = TransformationMatrix => string
 export const serializeTransformationMatrix: _serializeTransformationMatrix = ([
@@ -21,27 +27,29 @@ const getTransformFns: _getTransformFns = ([[a, b], [c, d], [tx, ty]]) => ({
   ...rest
 })
 
-export const transformPoint = matrix => {
+type _transformPoint = TransformationMatrix => Point => Point
+export const transformPoint: _transformPoint = matrix => {
   const transformFn = getTransformFns(matrix)
 
   transformFn.matrix = matrix
-  transformFn.invert = getTransformFns(invernMatrix(matrix))
+  transformFn.invert = getTransformFns(invertMatrix(matrix))
 
   return transformFn
 }
 
-export const multiplyMatrix = (A, B) =>
-  new Array(A.length)
-    .fill(0)
-    .map(() => new Array(B[0].length).fill(0))
+type _multiplyMatrix = (Matrix, Matrix) => Matrix
+export const multiplyMatrix: _multiplyMatrix = (A, B) =>
+  range(0, A.length)
+    .map(() => range(0, B[0].length))
     .map((row, i) =>
       row.map((val, j) => A[i].reduce((sum, elm, k) => sum + elm * B[k][j], 0))
     )
 
 const clone = a => JSON.parse(JSON.stringify(a))
 
+type _invertMatrix = Matrix => Matrix
 // Returns the inverse of matrix `M`.
-export const invernMatrix = matrix => {
+export const invertMatrix: _invertMatrix = matrix => {
   // I use Guassian Elimination to calculate the inverse:
   // (1) 'augment' the matrix (left) by the identity (on the right)
   // (2) Turn the matrix on the left into the identity by elemetry row ops
@@ -52,7 +60,7 @@ export const invernMatrix = matrix => {
   // (c) Add 2 rows
 
   //if the matrix isn't square: exit (error)
-  if (matrix.length !== matrix[0].length) return
+  if (matrix.length !== matrix[0].length) throw Error("Matrix is not square")
 
   //create the identity matrix (I), and a copy (C) of the original
   let i = 0,
@@ -90,7 +98,7 @@ export const invernMatrix = matrix => {
       //get the new diagonal
       e = C[i][i]
       //if it's still 0, not invertable (error)
-      if (e === 0) return
+      if (e === 0) throw Error("Matrix is not invertable")
     }
 
     // Scale this row down by e (so we have a 1 on the diagonal)
@@ -125,5 +133,6 @@ export const invernMatrix = matrix => {
   return I
 }
 
-export const multiplyManyMatrices = (...props) =>
-  props.reduce((a, b) => multiplyMatrix(a, b))
+type _multiplyManyMatrices = (...Matrix[]) => Matrix
+export const multiplyManyMatrices: _multiplyManyMatrices = (...props) =>
+  props.reduce((a: Matrix, b: Matrix): Matrix => multiplyMatrix(a, b))
