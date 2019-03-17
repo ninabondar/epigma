@@ -1,16 +1,20 @@
-import React, { useContext } from "react";
-import { TransformContext } from "../Canvas";
-import { withHandlers } from "recompose";
+import React, { useContext } from "react"
 
-import { serializePath } from "../../utils/helper";
-import { serializeTransformationMatrix } from "../../utils/matrix";
+import { connect } from "react-redux"
+import { withHandlers, compose } from "recompose"
 
-import BEM from "../../utils/BEM";
-import "./Shape.scss";
-const b = BEM("Shape");
+import { changeMode } from "../../actions"
+import { TransformContext } from "../CanvasTransform"
 
-export const ShapeView = ({ path, onClick, className = b()}) => {
-  const tansformation = useContext(TransformContext);
+import { serializePath } from "../../utils/helper"
+import { serializeTransformationMatrix } from "../../utils/matrix"
+
+import BEM from "../../utils/BEM"
+import "./Shape.scss"
+const b = BEM("Shape")
+
+export const ShapeView = ({ path, onClick, className = b() }) => {
+  const tansformation = useContext(TransformContext)
   return (
     <g
       transform={serializeTransformationMatrix(tansformation.matrix)}
@@ -19,15 +23,23 @@ export const ShapeView = ({ path, onClick, className = b()}) => {
     >
       <path className={b("path")} d={serializePath(path.points)} />
     </g>
-  );
-};
+  )
+}
 
-const enhancer = withHandlers({
-  onClick: ({ onSelect }) => ev => {
-    ev.preventDefault();
-    ev.stopPropagation();
-    return onSelect();
-  }
-});
+const enhancer = compose(
+  connect(
+    null,
+    { changeMode }
+  ),
 
-export default enhancer(ShapeView);
+  withHandlers({
+    onClick: ({ onSelect, changeMode }) => ev => {
+      ev.preventDefault()
+      ev.stopPropagation()
+      changeMode("EDIT")
+      return onSelect()
+    }
+  })
+)
+
+export default enhancer(ShapeView)

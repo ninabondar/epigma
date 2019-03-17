@@ -1,150 +1,97 @@
-/* @flow */
+// @flow
+import React from "react"
+import { connect } from "react-redux"
+import { compose, withHandlers, withState } from "recompose"
+import uuid from "uuid"
 
-import React, { createContext, useState } from "react";
-import { connect } from "react-redux";
-import { compose, withHandlers, withState } from "recompose";
-import uuid from "uuid";
+import { createPoint, createShape } from "../../utils/helper"
 
-import { createPoint, createShape } from "../../utils/helper";
-import Shape from "../Shape";
-import "./Canvas.scss";
-import BEM from "../../utils/BEM";
-import { changeActiveShape } from "../../actions";
-import { getActiveShapes } from "../../reducers";
-import {
-  getTransformMatrix,
-  multiplyManyMatrices,
-  serializeTransformationMatrix,
-  transformPoint
-} from "../../utils/matrix";
-const b = BEM("Canvas");
+import { changeActiveShape, changeMode } from "../../actions"
 
-const getId = () => uuid();
+import { getActiveShapes, getEditorMode } from "../../reducers"
 
-export const TransformContext = createContext();
+import Shape from "../Shape"
+import CanvasTransform from "../CanvasTransform/CanvasTransform"
 
-const CanvasTransform = ({ children }) => {
-  const [matrix, setMatrix] = useState(getTransformMatrix(1, 0, 0));
-  const [isDragging, setDragging] = useState(false);
+import BEM from "../../utils/BEM"
+import "./Canvas.scss"
+const b = BEM("Canvas")
 
-  const startDrag = ({ pageX, pageY }, matrix) => {
-    setDragging(true);
-
-    const startX = pageX - matrix[2][0];
-    const startY = pageY - matrix[2][1];
-
-    const handleMouseMove = ({ pageX: endX, pageY: endY }) => {
-      const x = endX - startX;
-      const y = endY - startY;
-      const newMatrix = [matrix[0], matrix[1], [x, y, 1]];
-      setMatrix(newMatrix);
-    };
-
-    const handleMouseUp = () => {
-      setDragging(false);
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
-    };
-
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-  };
-
-  const handleScroll = ev => {
-    zoom(ev, matrix);
-  };
-
-  const zoom = (ev, matrix) => {
-    ev.preventDefault();
-    const x = ev.pageX;
-    const y = ev.pageY;
-    const z = ev.deltaY < 0 ? 0.9 : 1.1;
-
-    const shiftFromStart = getTransformMatrix(1, -x, -y);
-    const unshiftFromStart = getTransformMatrix(1, x, y);
-    const zoom = getTransformMatrix(z, 0, 0);
-
-    setMatrix(
-      multiplyManyMatrices(matrix, shiftFromStart, zoom, unshiftFromStart)
-    );
-  };
-
-  const handleMouseDown = ev => {
-    if (!isDragging) {
-      startDrag(ev, matrix);
-    }
-  };
-
-  return (
-    <div onMouseDown={handleMouseDown} onWheel={handleScroll}>
-      <TransformContext.Provider value={transformPoint(matrix)}>
-        {children}
-      </TransformContext.Provider>
-    </div>
-  );
-};
+const getId = uuid
 
 const Canvas = ({
   shapes,
   offset,
-  editIndex,
-  setEditIndex,
+  selectedIndex,
+  setSelectedIndex,
   setShapes,
-  addPath
+  changeMode,
+  mode
 }) => (
   <CanvasTransform>
-    <svg
-      className={b()}
-      // onClick={addPath}
-    >
+    <svg className={b()}>
       {shapes.map((shape, index) => (
         <Shape
-          onSelect={() => setEditIndex(index)}
+          key={index}
+          mode={index === selectedIndex ? mode : "VIEW"}
+          onSelect={() => setSelectedIndex(index)}
           onChange={path => {
-            const id = path.id || getId();
+            const id = path.id || getId()
 
-            setEditIndex(null);
+            setSelectedIndex(null)
 
             setShapes([
-              ...shapes.slice(0, editIndex),
+              ...shapes.slice(0, selectedIndex),
               { id, ...path },
-              ...shapes.slice(editIndex + 1)
-            ]);
+              ...shapes.slice(selectedIndex + 1)
+            ])
           }}
-          key={index}
-          edit={editIndex === index}
           offset={offset}
           path={shape}
         />
       ))}
 
+      {console.log("mode", mode === "CREATE")}
+
+      {mode === "CREATE" ? (
+        <Shape
+          mode="CREATE"
+          onChange={newShape => {
+            changeMode("VIEW")
+            setShapes([...shapes, newShape])
+          }}
+        />
+      ) : null}
       {shapes.length < 0 && <text dy={20}>Click to start drawing.</text>}
     </svg>
   </CanvasTransform>
-);
+)
 
 const enhancer = compose(
   connect(
-    state => ({ shapes: getActiveShapes(state) }),
-    { setShapes: changeActiveShape }
+    state => ({ shapes: getActiveShapes(state), mode: getEditorMode(state) }),
+    { setShapes: changeActiveShape, changeMode }
   ),
 
   withState("offset", "setOffset", { x: 0, y: 0 }),
-  withState("editIndex", "setEditIndex", null),
+  withState("selectedIndex", "setSelectedIndex", null),
 
   withHandlers({
-    addPath: ({ shapes, offset, setEditIndex, setShapes, editIndex }) => ({
-      pageX: x,
-      pageY: y
-    }) => {
-      if (editIndex !== null) return;
+    addPath: ({
+      shapes,
+      offset,
+      setSelectedIndex,
+      setShapes,
+      selectedIndex
+    }) => ({ pageX: x, pageY: y }) => {
+      if (selectedIndex !== null) return
 
-      const point = createPoint({ x: x - offset.x, y: y - offset.y });
+      const point = createPoint({ x: x - offset.x, y: y - offset.y })
 
-      setEditIndex(shapes.length);
-      setShapes([...shapes, createShape(point)]);
+      setSelectedIndex(shapes.length)
+      setShapes([...shapes, createShape(point)])
     }
   })
-);
+)
 
-export default enhancer(Canvas);
+export default enhancer(Canvas)

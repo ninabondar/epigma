@@ -1,13 +1,15 @@
-import React from "react";
+// @flow
 
-import ShapeView from "./ShapeView";
-import ShapeEdit from "./ShapeEdit";
-import { branch, renderComponent } from "recompose";
+import { branch, renderComponent, compose, withProps } from "recompose"
 
-const Shape = branch(
-  ({ edit }) => edit,
-  renderComponent(ShapeEdit),
-  renderComponent(ShapeView)
-)();
+import ShapeView from "./ShapeView"
+import ShapeEdit from "./ShapeEdit"
+import ShapeCreate from "./ShapeCreate"
 
-export default Shape;
+const Shape = compose(
+  withProps( ({mode}) => console.log("==>",mode)),
+  branch(({ mode }) => mode === "EDIT", renderComponent(ShapeEdit)),
+  branch(({ mode }) => mode === "CREATE", renderComponent(ShapeCreate))
+)(ShapeView)
+
+export default Shape

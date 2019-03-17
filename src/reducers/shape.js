@@ -30,10 +30,10 @@ const defaultState = [
     style: null
   }
 ];
-export const setEditIndex = (state = defaultState, action) => {
+export const setSelectedIndex = (state = defaultState, action) => {
   return {
     ...state,
-    editIndex: action.editIndex
+    selectedIndex: action.selectedIndex
   };
 };
 
