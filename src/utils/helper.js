@@ -1,41 +1,69 @@
-import { init, tail, slice, update, remove, assoc, prop } from "ramda";
+// @flow
+import {
+  init,
+  tail,
+  slice,
+  update,
+  remove,
+  assoc,
+  prop,
+  head,
+  compose,
+  reduce
+} from "ramda"
+import type { Point, Shape } from "./types"
 
-export const serializePoint = ({ x, y }) => x + "," + y;
+type _serializePoint = Point => string
+export const serializePoint: _serializePoint = ({ x, y }) => x + "," + y
 
-export const createPoint = ({ x, y, type = "L" }) => ({ x, y, type });
+type _createPoint = ({ x: number, y: number, type: string }) => Point
+export const createPoint: _createPoint = ({ x, y, type = "L" }) => ({
+  x,
+  y,
+  type
+})
 
-export const createShape = point => ({
+type _createShape = Point => Shape
+export const createShape: _createShape = (point: Point) => ({
   points: [point],
   style: null
-});
+})
 
-export const serializePath = dotsArr =>
-  dotsArr.reduce(
-    ([stringPath, prevPoint], point) => {
-      if (!prevPoint) return ["M" + point.x + "," + point.y, point];
+type _serializePath = (Point[]) => string
+export const serializePath: _serializePath = dotsArr =>
+  compose(
+    head,
+    reduce(
+      ([stringPath, prevPoint], point) => {
+        if (!prevPoint) return ["M" + point.x + "," + point.y, point]
 
-      if (point.type === "M")
-        return [stringPath + "M" + point.x + "," + point.y, point];
+        if (point.type === "M")
+          return [stringPath + "M" + point.x + "," + point.y, point]
 
-      if (point.type === undefined || point.type === "L")
-        return [stringPath + "L" + point.x + "," + point.y, point];
-    },
-    [""]
-  )[0];
+        if (point.type === undefined || point.type === "L")
+          return [stringPath + "L" + point.x + "," + point.y, point]
+      },
+      ["", null]
+    )
+  )(dotsArr)
 
-export const removePoint = (points, index) => {
-  if (index === 0) return tail(points);
-  if (index === points.length - 1) return init(points);
-  if (index === 1) return slice(2, Infinity, points);
-  if (index === points.length - 2) return slice(0, points.length - 2, points);
+type _removePoint = (Point[]) => number => Point[]
+export const removePoint: _removePoint = (points, index) => {
+  if (index === 0) return tail(points)
+  if (index === points.length - 1) return init(points)
+  if (index === 1) return slice(2, Infinity, points)
+  if (index === points.length - 2) return slice(0, points.length - 2, points)
 
-  const nextPoint = assoc("type", "M", points[index + 1]);
+  const nextPoint = assoc("type", "M", points[index + 1])
 
-  return update(index, nextPoint, remove(index, 1, points));
-};
+  return update(index, nextPoint, remove(index, 1, points))
+}
 
-export const getBoundingBoxFromShape = ({ points }) => {
-  const xs = points.map(prop("x"));
-  const ys = points.map(prop("y"));
-  return [Math.min(...ys), Math.max(...xs), Math.max(...ys), Math.min(...xs)];
-};
+type _getBoundingBoxFromShape = Shape => [number, number, number, number]
+export const getBoundingBoxFromShape: _getBoundingBoxFromShape = ({
+  points
+}) => {
+  const xs = points.map(prop("x"))
+  const ys = points.map(prop("y"))
+  return [Math.min(...ys), Math.max(...xs), Math.max(...ys), Math.min(...xs)]
+}
