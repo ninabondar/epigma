@@ -1,1 +1,1 @@
-export { default } from "./Vertex";
+export { default } from "./Vertex"

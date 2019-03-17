@@ -8,6 +8,6 @@ const App = () => (
     <ToolPanel />
     <Canvas />
   </>
-);
+)
 
 export default App

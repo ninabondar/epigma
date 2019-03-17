@@ -51,14 +51,15 @@ const Canvas = ({
         />
       ))}
 
-      {console.log("mode", mode === "CREATE")}
-
       {mode === "CREATE" ? (
         <Shape
           mode="CREATE"
           onChange={newShape => {
             changeMode("VIEW")
-            setShapes([...shapes, newShape])
+
+            if (newShape.points && newShape.points.length > 1) {
+              setShapes([...shapes, newShape])
+            }
           }}
         />
       ) : null}

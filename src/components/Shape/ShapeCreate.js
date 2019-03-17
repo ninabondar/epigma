@@ -1,17 +1,13 @@
 // @flow
 import React, { useContext, useEffect, useState } from "react"
-
-import { append, last } from "ramda"
 import {
   createPoint,
-  removePoint,
   getBoundingBoxFromShape,
   createShape
 } from "../../utils/helper"
 import Vertex from "../Vertex"
 
 import { TransformContext } from "../CanvasTransform"
-import Selection from "../Selection/Selection"
 
 import BEM from "../../utils/BEM"
 import "./Shape.scss"
@@ -40,8 +36,6 @@ const ShapeCreate = props => {
     return () => document.removeEventListener("click", documentClickHandler)
   }, [ghostPoint])
 
-  // let points = [...path.points, ghostPoint]
-
   useEffect(() => {
     const keyHandler = ev => {
       const { key } = ev
@@ -50,7 +44,7 @@ const ShapeCreate = props => {
         case "Escape":
         case "Enter": {
           ev.preventDefault()
-          return onChange({ ...shape })
+          onChange({ ...shape })
         }
         default:
           return

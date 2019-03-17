@@ -1,1 +1,1 @@
-export { default } from "./Shape";
+export { default } from "./Shape"
