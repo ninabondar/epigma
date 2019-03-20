@@ -1,7 +1,7 @@
 // @flow
 import { CHANGE_MODE } from "../actions/actionTypes"
 
-const defaultState = { mode: "VIEW" }
+const defaultState = { mode: "CREATE" }
 
 export default (state = defaultState, action) => {
   switch (action.type) {

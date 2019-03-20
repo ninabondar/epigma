@@ -1,5 +1,5 @@
 const undoable = reducer => {
-  // Call the reducer with empty action to populate the initial state
+  // Initialize state
   const initialState = {
     past: [],
     present: reducer(undefined, {}),
@@ -28,7 +28,6 @@ const undoable = reducer => {
           future: newFuture
         }
       default:
-        // Delegate handling the action to the passed reducer
         const newPresent = reducer(present, action)
         if (present === newPresent) {
           return state
@@ -42,4 +41,4 @@ const undoable = reducer => {
   }
 }
 
-export default undoable;
+export default undoable
