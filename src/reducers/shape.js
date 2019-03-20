@@ -1,3 +1,5 @@
+import undoable from "./historyEnhancer"
+
 const defaultState = [
   {
     id: 1,
@@ -29,20 +31,21 @@ const defaultState = [
     ],
     style: null
   }
-];
+]
+
 export const setSelectedIndex = (state = defaultState, action) => {
   return {
     ...state,
     selectedIndex: action.selectedIndex
-  };
-};
+  }
+}
 
-export default (state = defaultState, action) => {
+export default undoable((state = defaultState, action) => {
   switch (action.type) {
     case "CHANGE_ACTIVE_SHAPE":
-      return action.shape;
+      return action.shape
 
     default:
-      return state;
+      return state
   }
-};
+});

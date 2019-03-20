@@ -29,6 +29,7 @@ const Canvas = ({
   mode
 }) => (
   <CanvasTransform>
+    {console.log(shapes, 'shapes')}
     <svg className={b()}>
       {shapes.map((shape, index) => (
         <Shape
