@@ -1,6 +1,7 @@
 /* @flow */
 
 import React, { Component } from "react"
+import { compose, withHandlers } from "recompose"
 
 import BEM from "../../utils/BEM"
 import "./Vertex.scss"

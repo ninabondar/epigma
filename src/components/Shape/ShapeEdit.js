@@ -73,7 +73,8 @@ const ShapeEdit = props => {
         path={path}
         className={b(["edit"])}
       />
-      {points.map(transformation).map((point, index) => (
+      {
+        points.map(transformation).map((point, index) => (
         <Vertex
           key={index}
           selected={selectedVertex === index}

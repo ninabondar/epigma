@@ -5,7 +5,8 @@ export const changeActiveShape = newShape => ({
   shape: newShape
 })
 export const undoShape = () => ({
-  type: UNDO,
-  shape: {}
+  type: UNDO
 })
+
+
 export * from "./editor"

@@ -1,5 +1,5 @@
 import React, { useContext } from "react"
-import { map } from "ramda"
+import { head, last } from "ramda"
 import { TransformContext } from "../CanvasTransform"
 
 import BEM from "../../utils/BEM"
@@ -26,18 +26,59 @@ const Corner = props => (
 const Selection = ({ boundingRect }) => {
   const transformation = useContext(TransformContext)
 
-  const [minY, maxX, maxY, minX] = map(transformation, boundingRect)
+  const [minY, maxX, maxY, minX] = boundingRect
+  const selectionPoints = [{ x: minX, y: minY }, { x: maxX, y: maxY }].map(
+    transformation
+  )
+  const minPoint = head(selectionPoints)
+  const maxPoint = last(selectionPoints)
 
   return (
     <g className={b()}>
-      <line className={b("edge")} x1={minX} y1={minY} x2={maxX} y2={minY} />
-      <line className={b("edge")} x1={maxX} y1={minY} x2={maxX} y2={maxY} />
-      <line className={b("edge")} x1={minX} y1={maxY} x2={maxX} y2={maxY} />
-      <line className={b("edge")} x1={minX} y1={minY} x2={minX} y2={maxY} />
-      <Corner x={minX - CONNER_CONTROL_SIZE} y={minY - CONNER_CONTROL_SIZE} />
-      <Corner x={maxX - CONNER_CONTROL_SIZE} y={minY - CONNER_CONTROL_SIZE} />
-      <Corner x={maxX - CONNER_CONTROL_SIZE} y={maxY - CONNER_CONTROL_SIZE} />
-      <Corner x={minX - CONNER_CONTROL_SIZE} y={maxY - CONNER_CONTROL_SIZE} />
+      <line
+        className={b("edge")}
+        x1={minPoint.x}
+        y1={minPoint.y}
+        x2={maxPoint.x}
+        y2={minPoint.y}
+      />
+      <line
+        className={b("edge")}
+        x1={maxPoint.x}
+        y1={minPoint.y}
+        x2={maxPoint.x}
+        y2={maxPoint.y}
+      />
+      <line
+        className={b("edge")}
+        x1={minPoint.x}
+        y1={maxPoint.y}
+        x2={maxPoint.x}
+        y2={maxPoint.y}
+      />
+      <line
+        className={b("edge")}
+        x1={minPoint.x}
+        y1={minPoint.y}
+        x2={minPoint.x}
+        y2={maxPoint.y}
+      />
+      <Corner
+        x={minPoint.x - CONNER_CONTROL_SIZE}
+        y={minPoint.y - CONNER_CONTROL_SIZE}
+      />
+      <Corner
+        x={maxPoint.x - CONNER_CONTROL_SIZE}
+        y={minPoint.y - CONNER_CONTROL_SIZE}
+      />
+      <Corner
+        x={maxPoint.x - CONNER_CONTROL_SIZE}
+        y={maxPoint.y - CONNER_CONTROL_SIZE}
+      />
+      <Corner
+        x={minPoint.x - CONNER_CONTROL_SIZE}
+        y={maxPoint.y - CONNER_CONTROL_SIZE}
+      />
     </g>
   )
 }

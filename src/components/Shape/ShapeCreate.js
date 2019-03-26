@@ -19,7 +19,6 @@ const ShapeCreate = props => {
   // const transformation = useContext(TransformContext)
 
   const [shape, setShape] = useState(null)
-  console.log(offset)
   const [ghostPoint, setGhostPoint] = useState(createPoint({ x: 0, y: 0 }))
 
   useEffect(() => {
