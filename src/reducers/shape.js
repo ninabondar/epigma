@@ -43,6 +43,7 @@ export const setSelectedIndex = (state = defaultState, action) => {
 export default undoable((state = defaultState, action) => {
   switch (action.type) {
     case "CHANGE_ACTIVE_SHAPE":
+      console.log(action.shape,'shape')
       return action.shape
     default:
       return state

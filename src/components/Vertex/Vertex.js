@@ -1,11 +1,13 @@
 /* @flow */
 
 import React, { Component } from "react"
+import { connect } from "react-redux"
 import { compose, withHandlers } from "recompose"
-
-import BEM from "../../utils/BEM"
-import "./Vertex.scss"
+import moveVertex from '../../actions/vertex';
 import { createPoint } from "../../utils/helper"
+
+import "./Vertex.scss"
+import BEM from "../../utils/BEM"
 
 const b = BEM("Vertex")
 
@@ -34,8 +36,10 @@ class Vertex extends Component {
   }
 
   startDragging = ({ x: startX, y: startY }) => {
-    const { point, onChange, draggable } = this.props
+    const { point, onChange, draggable, activeShape} = this.props
     const { x, y } = point
+
+    console.log(activeShape, "active shape")
 
     this.drag = ({ pageX, pageY }) => {
       const { point } = this.props
@@ -52,13 +56,13 @@ class Vertex extends Component {
     document.addEventListener("mousemove", this.drag)
 
     if (!draggable) {
-      document.addEventListener("mouseup", this.endDrag)
+      document.addEventListener("mouseup", (e) => {this.endDrag(e)})
     }
   }
 
-  endDrag = () => {
+  endDrag = (e) => {
     document.removeEventListener("mousemove", this.drag)
-    document.removeEventListener("mouseup", this.endDrag)
+    document.removeEventListener("mouseup",(e) => {this.endDrag(e)})
   }
 
   componentWillUnmount() {
@@ -90,4 +94,14 @@ class Vertex extends Component {
   }
 }
 
-export default Vertex
+const enhancer = compose(
+  connect(
+    state => ({
+    })
+  ),
+ /* withHandlers({
+    movePoint: ({pageX, pageY}) => {moveVertex(pageX, pageY)}
+  })*/
+)
+
+export default enhancer(Vertex)

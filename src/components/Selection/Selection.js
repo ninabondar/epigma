@@ -1,29 +1,15 @@
 import React, { useContext } from "react"
 import { head, last } from "ramda"
+import { compose, withHandlers } from "recompose"
 import { TransformContext } from "../CanvasTransform"
+import Corner, { CORNER_CONTROL_SIZE } from "../Corner/Corner"
 
 import BEM from "../../utils/BEM"
 import "./Selection.scss"
+
 const b = BEM("Selection")
 
-const CONNER_CONTROL_SIZE = 10
-
-const Corner = props => (
-  <rect
-    style={{
-      transform: `translate(
-        ${CONNER_CONTROL_SIZE / 2}px,
-        ${CONNER_CONTROL_SIZE / 2}px
-      )`
-    }}
-    className={b("vertex")}
-    width={CONNER_CONTROL_SIZE}
-    height={CONNER_CONTROL_SIZE}
-    {...props}
-  />
-)
-
-const Selection = ({ boundingRect }) => {
+const Selection = ({ boundingRect, startDrag }) => {
   const transformation = useContext(TransformContext)
 
   const [minY, maxX, maxY, minX] = boundingRect
@@ -64,23 +50,31 @@ const Selection = ({ boundingRect }) => {
         y2={maxPoint.y}
       />
       <Corner
-        x={minPoint.x - CONNER_CONTROL_SIZE}
-        y={minPoint.y - CONNER_CONTROL_SIZE}
+        x={minPoint.x - CORNER_CONTROL_SIZE}
+        y={minPoint.y - CORNER_CONTROL_SIZE}
       />
       <Corner
-        x={maxPoint.x - CONNER_CONTROL_SIZE}
-        y={minPoint.y - CONNER_CONTROL_SIZE}
+        onMouseDown={(e) => {startDrag(e)}}
+        x={maxPoint.x - CORNER_CONTROL_SIZE}
+        y={minPoint.y - CORNER_CONTROL_SIZE}
       />
       <Corner
-        x={maxPoint.x - CONNER_CONTROL_SIZE}
-        y={maxPoint.y - CONNER_CONTROL_SIZE}
+        x={maxPoint.x - CORNER_CONTROL_SIZE}
+        y={maxPoint.y - CORNER_CONTROL_SIZE}
       />
       <Corner
-        x={minPoint.x - CONNER_CONTROL_SIZE}
-        y={maxPoint.y - CONNER_CONTROL_SIZE}
+        x={minPoint.x - CORNER_CONTROL_SIZE}
+        y={maxPoint.y - CORNER_CONTROL_SIZE}
       />
     </g>
   )
 }
 
-export default Selection
+const enhancer = compose(
+  withHandlers({
+    startDrag: () => ({pageX, pageY}) => console.log(pageY),
+    dragging: () => () => {}
+  })
+)
+
+export default enhancer(Selection)
