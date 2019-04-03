@@ -98,10 +98,7 @@ const enhancer = compose(
   connect(
     state => ({
     })
-  ),
- /* withHandlers({
-    movePoint: ({pageX, pageY}) => {moveVertex(pageX, pageY)}
-  })*/
+  )
 )
 
 export default enhancer(Vertex)

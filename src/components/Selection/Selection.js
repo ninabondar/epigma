@@ -9,7 +9,7 @@ import "./Selection.scss"
 
 const b = BEM("Selection")
 
-const Selection = ({ boundingRect, startDrag }) => {
+const Selection = ({ boundingRect, startDrag, dragging, endDrag }) => {
   const transformation = useContext(TransformContext)
 
   const [minY, maxX, maxY, minX] = boundingRect
@@ -73,7 +73,8 @@ const Selection = ({ boundingRect, startDrag }) => {
 const enhancer = compose(
   withHandlers({
     startDrag: () => ({pageX, pageY}) => console.log(pageY),
-    dragging: () => () => {}
+    dragging: () => () => {},
+    endDrag: () => {}
   })
 )
 

@@ -33,13 +33,6 @@ const defaultState = [
   }
 ]
 
-export const setSelectedIndex = (state = defaultState, action) => {
-  return {
-    ...state,
-    selectedIndex: action.selectedIndex
-  }
-}
-
 export default undoable((state = defaultState, action) => {
   switch (action.type) {
     case "CHANGE_ACTIVE_SHAPE":
@@ -49,3 +42,6 @@ export default undoable((state = defaultState, action) => {
       return state
   }
 })
+
+
+export const getActiveShapes = state => state.present
