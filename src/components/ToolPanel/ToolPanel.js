@@ -20,7 +20,7 @@ const ToolPanel = ({ isCreateToggledOn, toggleCreateMode, undoAction }) => (
       })}
       onClick={toggleCreateMode}
     >
-      CREATE
+      DRAW
     </button>
     <button className={b("control", ["undo"])} onClick={undoAction}>
       UNDO

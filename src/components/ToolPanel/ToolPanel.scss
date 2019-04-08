@@ -1,14 +1,22 @@
+@import "../../styles/variables";
+
 .ToolPanel {
+  background: $PANEL_COLOR;
+  height: 40px;
+  color: #232323;
+
   &__control {
+    border: none;
+    outline: none;
+    height: 100%;
+    width: 55px;
+
     &_create-shape {
       font-size: 12px;
-      color: #232323;
-      background: white;
-      border: 1px solid white;
     }
 
     &_toggled-on {
-      background: #3498db;
+      background: $HIGHLIGHT_COLOR;
     }
   }
 }
