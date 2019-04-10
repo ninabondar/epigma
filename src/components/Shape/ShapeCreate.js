@@ -70,25 +70,6 @@ const ShapeCreate = props => {
         />
       ) : null}
 
-      {/*{points.map(transformation).map((point, index) => (*/}
-      {/*<Vertex*/}
-      {/*key={index}*/}
-      {/*selected={selectedVertex === index}*/}
-      {/*point={point}*/}
-      {/*onSelect={() => setSelectedVertex(index)}*/}
-      {/*onChange={point =>*/}
-      {/*setPath({*/}
-      {/*...path,*/}
-      {/*points: [*/}
-      {/*...points.slice(0, index),*/}
-      {/*transformation.invert(point),*/}
-      {/*...points.slice(index + 1)*/}
-      {/*]*/}
-      {/*})*/}
-      {/*}*/}
-      {/*/>*/}
-      {/*))}*/}
-
       <Vertex
         draggable={true}
         point={ghostPoint}

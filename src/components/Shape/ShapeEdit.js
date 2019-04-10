@@ -17,7 +17,7 @@ const ShapeEdit = props => {
   const transformation = useContext(TransformContext)
 
   const [path, setPath] = useState(props.path)
-  const [mode, setMode] = useState("edit")
+  const [mode, setMode] = useState("select")
   const [selectedVertex, setSelectedVertex] = useState(null)
 
   const boundingBox = getBoundingBoxFromShape(path)
@@ -69,12 +69,11 @@ const ShapeEdit = props => {
     <g className={b(["edit"])}>
       {mode === "select" && <Selection boundingRect={boundingBox} />}
       <ShapeView
-        onClick={() => setMode("select")}
+        onClick={() => setMode("edit")}
         path={path}
         className={b(["edit"])}
       />
-      {
-        points.map(transformation).map((point, index) => (
+      {points.map(transformation).map((point, index) => (
         <Vertex
           key={index}
           selected={selectedVertex === index}
