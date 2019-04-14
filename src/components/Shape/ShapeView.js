@@ -11,17 +11,24 @@ import { serializeTransformationMatrix } from "../../utils/matrix"
 
 import BEM from "../../utils/BEM"
 import "./Shape.scss"
+import { SelectionTransformContext } from "../Selection/Selection"
 const b = BEM("Shape")
 
 export const ShapeView = ({ path, onClick, className = b() }) => {
   const tansformation = useContext(TransformContext)
+  const selectionTransformation =
+    useContext(SelectionTransformContext) || (a => a)
+
   return (
     <g
       transform={serializeTransformationMatrix(tansformation.matrix)}
       className={className}
       onClick={onClick}
     >
-      <path className={b("path")} d={serializePath(path.points)} />
+      <path
+        className={b("path")}
+        d={serializePath(path.points.map(selectionTransformation))}
+      />
     </g>
   )
 }
@@ -38,8 +45,7 @@ const enhancer = compose(
       ev.stopPropagation()
       changeMode("EDIT")
       return onSelect()
-    },
-
+    }
   })
 )
 

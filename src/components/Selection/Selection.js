@@ -1,5 +1,5 @@
-import React from "react"
-import { head, last } from "ramda"
+import React, { createContext } from "react"
+
 import { compose, withHandlers, withState } from "recompose"
 import Corner, { CORNER_CONTROL_SIZE } from "../Corner/Corner"
 
@@ -12,6 +12,8 @@ import {
 import { getZoomMatrixXY } from "../../utils/helper"
 
 const b = BEM("Selection")
+
+export const SelectionTransformContext = createContext()
 
 const Selection = ({
   boundingRect,
@@ -26,7 +28,10 @@ const Selection = ({
 
   return (
     <g className={b()}>
-      {children}
+      <SelectionTransformContext.Provider value={transfDrag}>
+        {children}
+      </SelectionTransformContext.Provider>
+
       <line
         className={b("edge")}
         x1={minPoint.x}
