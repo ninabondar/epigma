@@ -10,6 +10,7 @@ import { ShapeView } from "./ShapeView"
 
 import BEM from "../../utils/BEM"
 import "./Shape.scss"
+import { createPoint } from "../../utils/helper"
 const b = BEM("Shape")
 
 const ShapeEdit = props => {
@@ -65,9 +66,14 @@ const ShapeEdit = props => {
     }
   }, [path, selectedVertex])
 
+  const [minY, maxX, maxY, minX] = boundingBox
+  const boundingRect = [createPoint(minX, minY), createPoint(maxX, maxY)].map(
+    transformation
+  )
+
   return (
     <g className={b(["edit"])}>
-      {mode === "select" && <Selection boundingRect={boundingBox} />}
+      {mode === "select" && <Selection boundingRect={boundingRect} />}
       <ShapeView
         onClick={() => setMode("edit")}
         path={path}

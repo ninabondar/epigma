@@ -10,8 +10,8 @@ export const getTransformMatrix: _getTransformMatrix = (z, x, y) => [
   [x, y, 1]
 ]
 
-type _getTransformSelection = number => TransformationMatrix
-export const getTransformSelection: _getTransformSelection = (zX, zY, x, y) => [
+type _getTransformMatrixWithAsymmetricZoom = number => TransformationMatrix
+export const getTransformMatrixWithAsymmetricZoom: _getTransformMatrixWithAsymmetricZoom = (zX, zY, x, y) => [
   [zX, 0, 0],
   [0, zY, 0],
   [x, y, 1]

@@ -2,8 +2,10 @@ import React, { useState, createContext } from "react"
 import {
   getTransformMatrix,
   multiplyManyMatrices,
+  multiplyMatrix,
   transformPoint
 } from "../../utils/matrix"
+import { createPoint, getZoomMatrix } from "../../utils/helper"
 
 export const TransformContext = createContext()
 
@@ -38,17 +40,11 @@ const CanvasTransform = ({ children }) => {
 
   const zoom = (ev, matrix) => {
     ev.preventDefault()
-    const x = ev.pageX
-    const y = ev.pageY
-    const z = ev.deltaY < 0 ? 0.9 : 1.1
-
-    const shiftFromStart = getTransformMatrix(1, -x, -y)
-    const unshiftFromStart = getTransformMatrix(1, x, y)
-    const zoom = getTransformMatrix(z, 0, 0)
-
-    setMatrix(
-      multiplyManyMatrices(matrix, shiftFromStart, zoom, unshiftFromStart)
+    const zoomMatrix = getZoomMatrix(
+      createPoint(ev.pageX, ev.pageY),
+      ev.deltaY < 0 ? 0.9 : 1.1
     )
+    setMatrix(multiplyMatrix(matrix, zoomMatrix))
   }
 
   const handleMouseDown = ev => {

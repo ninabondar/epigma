@@ -2,8 +2,8 @@
 import { CHANGE_MODE } from "../actions/actionTypes"
 
 const defaultState = {
-  mode: "CREATE",
-
+  mode: "VIEW", //"CREATE",
+  isTransformingShapes: false
   // TODO: Use the next structure
   // activeDocumentID: 1,
   // editorHistory: [
