@@ -3,9 +3,17 @@ import type { Matrix, Point, TransformationMatrix } from "./types"
 import { range } from "ramda"
 
 type _getTransformMatrix = (number, number, number) => TransformationMatrix
+// TODO make matrix take in zX & zY
 export const getTransformMatrix: _getTransformMatrix = (z, x, y) => [
   [z, 0, 0],
   [0, z, 0],
+  [x, y, 1]
+]
+
+type _getTransformSelection = number => TransformationMatrix
+export const getTransformSelection: _getTransformSelection = (zX, zY, x, y) => [
+  [zX, 0, 0],
+  [0, zY, 0],
   [x, y, 1]
 ]
 

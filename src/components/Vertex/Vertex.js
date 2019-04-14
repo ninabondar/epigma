@@ -1,9 +1,8 @@
 /* @flow */
-
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import { compose, withHandlers } from "recompose"
-import moveVertex from '../../actions/vertex';
+import moveVertex from "../../actions/vertex"
 import { createPoint } from "../../utils/helper"
 
 import "./Vertex.scss"
@@ -36,7 +35,7 @@ class Vertex extends Component {
   }
 
   startDragging = ({ x: startX, y: startY }) => {
-    const { point, onChange, draggable, activeShape} = this.props
+    const { point, onChange, draggable, activeShape } = this.props
     const { x, y } = point
 
     console.log(activeShape, "active shape")
@@ -56,13 +55,17 @@ class Vertex extends Component {
     document.addEventListener("mousemove", this.drag)
 
     if (!draggable) {
-      document.addEventListener("mouseup", (e) => {this.endDrag(e)})
+      document.addEventListener("mouseup", e => {
+        this.endDrag(e)
+      })
     }
   }
 
-  endDrag = (e) => {
+  endDrag = e => {
     document.removeEventListener("mousemove", this.drag)
-    document.removeEventListener("mouseup",(e) => {this.endDrag(e)})
+    document.removeEventListener("mouseup", e => {
+      this.endDrag(e)
+    })
   }
 
   componentWillUnmount() {
@@ -94,11 +97,4 @@ class Vertex extends Component {
   }
 }
 
-const enhancer = compose(
-  connect(
-    state => ({
-    })
-  )
-)
-
-export default enhancer(Vertex)
+export default Vertex
