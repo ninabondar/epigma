@@ -11,3 +11,6 @@ export const getActiveShapes = state =>
 
 // Editor selectors
 export const getEditorMode = state => fromEditor.getEditorMode(state.editor)
+
+export const getSelectedShapes = state =>
+  fromEditor.getSelectedShapes(state.editor)

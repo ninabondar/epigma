@@ -15,10 +15,10 @@ const b = BEM("Selection")
 
 const Selection = ({
   boundingRect,
-
   selectionTransform,
   setSelectionTransform,
-  startDrag
+  startDrag,
+  children
 }) => {
   const transfDrag = transformPoint(selectionTransform)
 
@@ -26,6 +26,7 @@ const Selection = ({
 
   return (
     <g className={b()}>
+      {children}
       <line
         className={b("edge")}
         x1={minPoint.x}

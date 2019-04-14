@@ -1,9 +1,10 @@
 // @flow
-import { CHANGE_MODE } from "../actions/actionTypes"
+import { CHANGE_MODE, SET_SELECTED_SHAPES } from "../actions/actionTypes"
 
 const defaultState = {
   mode: "VIEW", //"CREATE",
-  isTransformingShapes: false
+  isTransformingShapes: false,
+  selectedShapes: []
   // TODO: Use the next structure
   // activeDocumentID: 1,
   // editorHistory: [
@@ -24,6 +25,11 @@ export default (state = defaultState, action) => {
         ...state,
         mode: action.mode
       }
+    case SET_SELECTED_SHAPES:
+      return {
+        ...state,
+        selectedShapes: action.selectedShapes
+      }
     default:
       return state
   }
@@ -31,3 +37,4 @@ export default (state = defaultState, action) => {
 
 // Selectors
 export const getEditorMode = state => state.mode
+export const getSelectedShapes = state => state.selectedShapes

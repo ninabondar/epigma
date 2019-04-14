@@ -38,7 +38,8 @@ const enhancer = compose(
       ev.stopPropagation()
       changeMode("EDIT")
       return onSelect()
-    }
+    },
+
   })
 )
 

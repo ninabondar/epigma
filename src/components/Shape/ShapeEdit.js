@@ -5,7 +5,6 @@ import { removePoint, getBoundingBoxFromShape } from "../../utils/helper"
 
 import Vertex from "../Vertex"
 import { TransformContext } from "../CanvasTransform"
-import Selection from "../Selection/Selection"
 import { ShapeView } from "./ShapeView"
 
 import BEM from "../../utils/BEM"
@@ -18,10 +17,9 @@ const ShapeEdit = props => {
   const transformation = useContext(TransformContext)
 
   const [path, setPath] = useState(props.path)
-  const [mode, setMode] = useState("select")
   const [selectedVertex, setSelectedVertex] = useState(null)
 
-  const boundingBox = getBoundingBoxFromShape(path)
+
   let points = path.points
 
   useEffect(() => setPath(props.path), [props.path])
@@ -66,16 +64,10 @@ const ShapeEdit = props => {
     }
   }, [path, selectedVertex])
 
-  const [minY, maxX, maxY, minX] = boundingBox
-  const boundingRect = [createPoint(minX, minY), createPoint(maxX, maxY)].map(
-    transformation
-  )
 
   return (
     <g className={b(["edit"])}>
-      {mode === "select" && <Selection boundingRect={boundingRect} />}
       <ShapeView
-        onClick={() => setMode("edit")}
         path={path}
         className={b(["edit"])}
       />
