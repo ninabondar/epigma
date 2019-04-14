@@ -4,6 +4,9 @@
   background: $PANEL_COLOR;
   height: 40px;
   color: #232323;
+  position: absolute;
+  z-index: 10;
+  width: 100%;
 
   &__control {
     border: none;
@@ -11,12 +14,20 @@
     height: 100%;
     width: 55px;
 
+    &:hover {
+      background: rgb(172, 220, 255);
+    }
+
     &_create-shape {
       font-size: 12px;
     }
 
     &_toggled-on {
       background: $HIGHLIGHT_COLOR;
+
+      &:hover {
+        background: #3498db;
+      }
     }
   }
 }

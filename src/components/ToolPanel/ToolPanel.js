@@ -25,6 +25,8 @@ const ToolPanel = ({ isCreateToggledOn, toggleCreateMode, undoAction }) => (
     <button className={b("control", ["undo"])} onClick={undoAction}>
       UNDO
     </button>
+
+    <div className={b("doc-name")} />
   </aside>
 )
 

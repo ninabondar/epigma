@@ -73,6 +73,7 @@ const Selection = ({
         onMouseDown={e => startDrag(e)}
         onMouseMove={e => cornerDrag(e)}
         onMouseUp={e => endCornerDrag(e)}
+
         x={maxPoint.x - CORNER_CONTROL_SIZE}
         y={maxPoint.y - CORNER_CONTROL_SIZE}
       />
