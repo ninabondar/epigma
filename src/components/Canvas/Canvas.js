@@ -185,7 +185,7 @@ const enhancer = compose(
       selectedShapes
         ? setSelectedShapes([...selectedShapes, id])
         : setSelectedShapes([id])
-    }
+    },
   })
 )
 

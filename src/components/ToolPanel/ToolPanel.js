@@ -11,7 +11,7 @@ import "./ToolPanel.scss"
 
 const b = BEM("ToolPanel")
 
-const ToolPanel = ({ isCreateToggledOn, toggleCreateMode, undoAction }) => (
+const ToolPanel = ({ isCreateToggledOn, toggleCreateMode }) => (
   <aside className={b()}>
     <button
       className={b("control", {
@@ -22,9 +22,7 @@ const ToolPanel = ({ isCreateToggledOn, toggleCreateMode, undoAction }) => (
     >
       DRAW
     </button>
-    <button className={b("control", ["undo"])} onClick={undoAction}>
-      UNDO
-    </button>
+    <button className={b("control", ["undo"])}>UNDO</button>
 
     <div className={b("doc-name")} />
   </aside>
@@ -39,8 +37,7 @@ const enhancer = compose(
   ),
   withHandlers({
     toggleCreateMode: ({ isCreateToggledOn, changeMode }) => () =>
-      isCreateToggledOn ? changeMode("VIEW") : changeMode("CREATE"),
-    undoAction: ({ undoShape }) => undoShape()
+      isCreateToggledOn ? changeMode("VIEW") : changeMode("CREATE")
   })
 )
 

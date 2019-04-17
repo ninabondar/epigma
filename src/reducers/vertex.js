@@ -1,7 +1,6 @@
-import undoable from "./historyEnhancer"
 import { MOVE_VERTEX } from "../actions/actionTypes"
 
-const vertex = undoable((state = {}, action) => {
+const vertex = (state = {}, action) => {
   switch (action.type) {
     case MOVE_VERTEX:
       const { point } = action
@@ -12,6 +11,6 @@ const vertex = undoable((state = {}, action) => {
     default:
       return state
   }
-})
+}
 
 export default vertex

@@ -3,19 +3,24 @@ import React, { createContext } from "react"
 import { compose, withHandlers, withState } from "recompose"
 import Corner, { CORNER_CONTROL_SIZE } from "../Corner/Corner"
 
-import BEM from "../../utils/BEM"
-import "./Selection.scss"
 import {
   getTransformMatrixWithAsymmetricZoom,
   transformPoint
 } from "../../utils/matrix"
 import { getZoomMatrixXY } from "../../utils/helper"
+import { changeActiveShape } from "../../actions"
+import { connect } from "react-redux"
+import { getActiveShapes } from "../../reducers/document"
+
+import BEM from "../../utils/BEM"
+import "./Selection.scss"
 
 const b = BEM("Selection")
 
 export const SelectionTransformContext = createContext()
 
 const Selection = ({
+  currentDocShapes,
   boundingRect,
   selectionTransform,
   setSelectionTransform,
@@ -82,6 +87,9 @@ const Selection = ({
 }
 
 const enhancer = compose(
+  connect(state => {
+    currentDocShapes: getActiveShapes(state)
+  }),
   withState(
     "selectionTransform",
     "setSelectionTransform",
@@ -118,6 +126,10 @@ const enhancer = compose(
 
       document.addEventListener("mousemove", cornerDrag)
       document.addEventListener("mouseup", endDrag)
+    },
+    putNewShapeScaleToState: ({ currentDocShapes }) => e => {
+      e.preventDefault()
+      console.log(currentDocShapes, "curr shapes")
     }
   })
 )

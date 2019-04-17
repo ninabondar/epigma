@@ -1,7 +1,7 @@
 import { combineReducers } from "redux"
 import vertex from "./vertex.js"
 
-import documents, * as fromDocuments from "./documents"
+import documents, * as fromDocuments from "./document"
 import editor, * as fromEditor from "./editor"
 
 export default combineReducers({ documents, editor, vertex })

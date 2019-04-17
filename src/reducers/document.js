@@ -1,5 +1,3 @@
-import undoable from "./historyEnhancer"
-
 const defaultState = [
   {
     id: 1,
@@ -33,14 +31,13 @@ const defaultState = [
   }
 ]
 
-export default undoable((state = defaultState, action) => {
+export default (state = defaultState, action) => {
   switch (action.type) {
     case "CHANGE_ACTIVE_SHAPE":
       return action.shape
     default:
       return state
   }
-})
+}
 
-
-export const getActiveShapes = state => state.present
+export const getActiveShapes = state => state
