@@ -1,8 +1,6 @@
 /* @flow */
 import React, { Component } from "react"
-import { connect } from "react-redux"
-import { compose, withHandlers } from "recompose"
-import moveVertex from "../../actions/vertex"
+
 import { createPoint } from "../../utils/helper"
 
 import "./Vertex.scss"

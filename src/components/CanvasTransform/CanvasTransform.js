@@ -1,7 +1,6 @@
 import React, { useState, createContext } from "react"
 import {
   getTransformMatrix,
-  multiplyManyMatrices,
   multiplyMatrix,
   transformPoint
 } from "../../utils/matrix"

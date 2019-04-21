@@ -1,7 +1,7 @@
 // @flow
 import React from "react"
 
-import { changeActiveShape, changeMode, undoShape } from "../../actions"
+import { changeMode, undoShape } from "../../actions"
 import { getEditorMode } from "../../reducers"
 import { compose, withHandlers } from "recompose"
 import { connect } from "react-redux"

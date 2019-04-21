@@ -1,7 +1,7 @@
 // @flow
 import React, { useContext, useEffect, useState } from "react"
 
-import { removePoint, getBoundingBoxFromShape } from "../../utils/helper"
+import { removePoint } from "../../utils/helper"
 
 import Vertex from "../Vertex"
 import { TransformContext } from "../CanvasTransform"
@@ -9,16 +9,15 @@ import { ShapeView } from "./ShapeView"
 
 import BEM from "../../utils/BEM"
 import "./Shape.scss"
-import { createPoint } from "../../utils/helper"
+
 const b = BEM("Shape")
 
 const ShapeEdit = props => {
-  const { offset, onChange } = props
+  const { onChange } = props
   const transformation = useContext(TransformContext)
 
   const [path, setPath] = useState(props.path)
   const [selectedVertex, setSelectedVertex] = useState(null)
-
 
   let points = path.points
 
@@ -64,13 +63,9 @@ const ShapeEdit = props => {
     }
   }, [path, selectedVertex])
 
-
   return (
     <g className={b(["edit"])}>
-      <ShapeView
-        path={path}
-        className={b(["edit"])}
-      />
+      <ShapeView path={path} className={b(["edit"])} />
       {points.map(transformation).map((point, index) => (
         <Vertex
           key={index}

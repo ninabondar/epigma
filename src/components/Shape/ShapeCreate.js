@@ -1,13 +1,7 @@
 // @flow
-import React, { useContext, useEffect, useState } from "react"
-import {
-  createPoint,
-  getBoundingBoxFromShape,
-  createShape
-} from "../../utils/helper"
+import React, { useEffect, useState } from "react"
+import { createPoint, createShape } from "../../utils/helper"
 import Vertex from "../Vertex"
-
-import { TransformContext } from "../CanvasTransform"
 
 import BEM from "../../utils/BEM"
 import "./Shape.scss"
@@ -15,7 +9,7 @@ import { ShapeView } from "./ShapeView"
 const b = BEM("Shape")
 
 const ShapeCreate = props => {
-  const { offset, onChange } = props
+  const { onChange } = props
   // const transformation = useContext(TransformContext)
 
   const [shape, setShape] = useState(null)
@@ -45,6 +39,7 @@ const ShapeCreate = props => {
         case "Enter": {
           ev.preventDefault()
           onChange({ ...shape })
+          break
         }
         default:
           return

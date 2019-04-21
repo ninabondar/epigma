@@ -8,7 +8,7 @@ import {
   transformPoint
 } from "../../utils/matrix"
 import { getZoomMatrixXY } from "../../utils/helper"
-import { changeActiveShape } from "../../actions"
+
 import { connect } from "react-redux"
 import { getActiveShapes } from "../../reducers"
 
@@ -87,9 +87,9 @@ const Selection = ({
 }
 
 const enhancer = compose(
-  connect(state => {
+  connect(state => ({
     currentDocShapes: getActiveShapes(state)
-  }),
+  })),
   withState(
     "selectionTransform",
     "setSelectionTransform",
