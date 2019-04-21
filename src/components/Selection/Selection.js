@@ -10,7 +10,7 @@ import {
 import { getZoomMatrixXY } from "../../utils/helper"
 import { changeActiveShape } from "../../actions"
 import { connect } from "react-redux"
-import { getActiveShapes } from "../../reducers/document"
+import { getActiveShapes } from "../../reducers"
 
 import BEM from "../../utils/BEM"
 import "./Selection.scss"
@@ -98,7 +98,6 @@ const enhancer = compose(
 
   withHandlers({
     // on mouse move:
-
     startDrag: ({ setSelectionTransform, boundingRect }) => ev => {
       ev.stopPropagation()
 
@@ -111,8 +110,6 @@ const enhancer = compose(
         const dY = y - startY
         const zX = startX + dX
         const zY = startY + dY
-
-        // console.log(dX, dY, zX, zY)
 
         setSelectionTransform(
           getZoomMatrixXY(minPoint, zX / startX, zY / startY)
@@ -129,7 +126,7 @@ const enhancer = compose(
     },
     putNewShapeScaleToState: ({ currentDocShapes }) => e => {
       e.preventDefault()
-      console.log(currentDocShapes, "curr shapes")
+      console.log(typeof currentDocShapes, "curr shapes")
     }
   })
 )

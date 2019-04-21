@@ -1,7 +1,7 @@
-import { UNDO } from "./actionTypes"
+import { CHANGE_ACTIVE_SHAPE, UNDO } from "./actionTypes"
 
 export const changeActiveShape = newShape => ({
-  type: "CHANGE_ACTIVE_SHAPE",
+  type: CHANGE_ACTIVE_SHAPE,
   shape: newShape
 })
 
