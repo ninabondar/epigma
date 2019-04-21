@@ -6,14 +6,21 @@ import editor, * as fromEditor from "./editor"
 
 export default combineReducers({ documents, editor, vertex })
 
+// Editor selectors
 export const getActiveShapes = state => fromEditor.getActiveShapes(state.editor)
 
-// Editor selectors
+export const getActiveDocumentId = state =>
+  fromEditor.getActiveDocumentId(state.editor)
+
+export const getActiveDocument = state =>
+  fromEditor.getActiveDocument(state.editor)
+
 export const getEditorMode = state => fromEditor.getEditorMode(state.editor)
 
 export const getSelectedShapes = state =>
   fromEditor.getSelectedShapes(state.editor)
 
+// Document selectors
 export const getAllExistingDocuments = state =>
   fromDocuments.getAllExistingDocuments(state.documents)
 

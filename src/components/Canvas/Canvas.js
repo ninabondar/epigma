@@ -5,6 +5,7 @@ import { withRouter } from "react-router"
 import {
   branch,
   compose,
+  renderComponent,
   renderNothing,
   withHandlers,
   withProps,
@@ -19,11 +20,16 @@ import {
   getBoundingBoxFromShape
 } from "../../utils/helper"
 
-import { changeActiveShape, changeMode, setSelectedShapes } from "../../actions"
+import {
+  changeActiveShape,
+  changeMode,
+  openDocument,
+  setSelectedShapes
+} from "../../actions"
 
 import {
+  getActiveDocument,
   getDocumentById,
-  getEditorMode,
   getSelectedShapes
 } from "../../reducers"
 
@@ -32,6 +38,7 @@ import CanvasTransform, { TransformContext } from "../CanvasTransform"
 
 import BEM from "../../utils/BEM"
 import "./Canvas.scss"
+import { getActiveDocumentId } from "../../reducers"
 const b = BEM("Canvas")
 
 const getId = uuid
@@ -58,6 +65,9 @@ let SelectedShapes = ({
         <Shape
           key={index}
           mode={"VIEW"}
+          onSelect={() =>
+            console.log("TODO: implement on select for selected shapes.")
+          }
           onChange={path => {
             const id = path.id || getId()
 
@@ -153,12 +163,39 @@ const Canvas = ({
 const enhancer = compose(
   withRouter,
   withProps(({ match }) => ({ documentId: match.params.documentId })),
+
   connect(
     (state, { documentId }) => ({
-      shapes: getDocumentById(documentId, state).shapes,
-      mode: getEditorMode(state),
-      selectedShapes: getSelectedShapes(state)
+      editedDocumentId: getActiveDocumentId(state),
+      document: getDocumentById(documentId, state)
     }),
+    { openDocument }
+  ),
+
+  withProps(({ documentId, editedDocumentId, openDocument, document }) => {
+    if (documentId !== editedDocumentId) {
+      openDocument(document)
+    }
+  }),
+  branch(
+    ({ editedDocumentId }) => editedDocumentId === null,
+    renderComponent(() => "Loading...")
+  ),
+
+  connect(
+    (state, { documentId }) => {
+      const selectedShapes = getSelectedShapes(state)
+      const editedShape = null
+      return {
+        shapes: getActiveDocument(state).shapes,
+        //prettier-ignore
+        mode:
+          editedShape !== null ? "EDIT" :
+          selectedShapes !== null || selectedShapes.length !== 0 ? "SELECT":
+          "VIEW",
+        selectedShapes
+      }
+    },
     {
       setShapes: changeActiveShape,
       changeMode,
@@ -184,12 +221,8 @@ const enhancer = compose(
       setSelectedIndex(shapes.length)
       setShapes([...shapes, createShape(point)])
     },
-    selectShape: ({ selectedShapes, setSelectedShapes }) => (e, id) => {
-      console.log(id, "ID")
-      selectedShapes
-        ? setSelectedShapes([...selectedShapes, id])
-        : setSelectedShapes([id])
-    }
+    selectShape: ({ selectedShapes, setSelectedShapes }) => (e, id) =>
+      setSelectedShapes([id])
   })
 )
 
