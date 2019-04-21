@@ -1,5 +1,16 @@
+@import "./variables";
+
 body {
   margin: 0;
   color: #232323;
   font-family: "PT Sans", sans-serif;
+}
+
+a {
+  text-decoration: none;
+  color: $FONT_COLOR;
+}
+
+ul {
+  list-style-type: none;
 }

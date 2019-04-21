@@ -11,7 +11,6 @@ const defaultState = {
   isTransformingShapes: false,
   selectedShapes: [],
   pickedShapes: [],
-  activeDocumentID: 1
 
   // TODO: Use the next structure
   //
@@ -53,5 +52,4 @@ export default (state = defaultState, action) => {
 // Selectors
 export const getEditorMode = state => state.mode
 export const getSelectedShapes = state => state.selectedShapes
-export const getActiveDocumentID = state => state.activeDocumentID
 export const getActiveShapes = state => state.pickedShapes

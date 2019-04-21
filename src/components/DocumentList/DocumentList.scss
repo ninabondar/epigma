@@ -1,0 +1,15 @@
+@import "../../styles/variables";
+
+.DocumentList {
+  margin: 0 auto;
+  padding: 0;
+
+  &__document {
+    box-sizing: border-box;
+    padding: 20px;
+
+    &:hover {
+      background: #ececec;
+    }
+  }
+}

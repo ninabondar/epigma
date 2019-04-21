@@ -3,6 +3,7 @@ import { createPoint } from "../utils/helper"
 const defaultState = {
   1: {
     id: 1,
+    title: "star",
     author: "",
     contributors: [],
     createdAt: new Date(),
@@ -25,6 +26,7 @@ const defaultState = {
   },
   2: {
     id: 2,
+    title: "line",
     author: "",
     contributors: [],
     createdAt: new Date(),
@@ -35,7 +37,7 @@ const defaultState = {
         id: 3,
         points: [
           createPoint(139, 107.3333282470703),
-          createPoint(424, 294.3333282470703),
+          createPoint(424, 294.3333282470703)
         ],
         style: null
       }
@@ -50,4 +52,5 @@ export default (state = defaultState, action) => {
   }
 }
 
+export const getAllExistingDocuments = state => Object.values(state)
 export const getDocumentById = (id, state) => state[id]

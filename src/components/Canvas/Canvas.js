@@ -1,11 +1,13 @@
 // @flow
 import React, { useContext } from "react"
 import { connect } from "react-redux"
+import { withRouter } from "react-router"
 import {
   branch,
   compose,
   renderNothing,
   withHandlers,
+  withProps,
   withState
 } from "recompose"
 import uuid from "uuid"
@@ -20,7 +22,6 @@ import {
 import { changeActiveShape, changeMode, setSelectedShapes } from "../../actions"
 
 import {
-  getEditorActiveDocumentID,
   getDocumentById,
   getEditorMode,
   getSelectedShapes
@@ -150,9 +151,11 @@ const Canvas = ({
 }
 
 const enhancer = compose(
+  withRouter,
+  withProps(({ match }) => ({ documentId: match.params.documentId })),
   connect(
-    state => ({
-      shapes: getDocumentById(getEditorActiveDocumentID(state), state).shapes,
+    (state, { documentId }) => ({
+      shapes: getDocumentById(documentId, state).shapes,
       mode: getEditorMode(state),
       selectedShapes: getSelectedShapes(state)
     }),
