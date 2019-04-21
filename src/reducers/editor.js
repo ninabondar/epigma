@@ -5,7 +5,6 @@ import {
   CHANGE_ACTIVE_DOC_ID,
   CHANGE_ACTIVE_SHAPE
 } from "../actions/actionTypes"
-import { createPoint } from "../utils/helper"
 
 const defaultState = {
   mode: "VIEW", //"CREATE",
@@ -13,6 +12,7 @@ const defaultState = {
   selectedShapes: [],
   pickedShapes: [],
   activeDocumentID: 1
+
   // TODO: Use the next structure
   //
   // editorHistory: [
@@ -20,27 +20,11 @@ const defaultState = {
   //     mode: "CREATE",
   //     selectedShapes; [],
   //     selectedVertex: null,
-  //     document: null
+  //     documents: null
   //   }
   // ],
   // currentHistoryPointer: 0,
 }
-
-const defaultDocState = [
-  {
-    // this is a shape in a document
-    id: 1,
-    points: [
-      createPoint(139, 157.3333282470703),
-      createPoint(424, 294.3333282470703),
-      createPoint(433, 80.33332824707031),
-      createPoint(136, 251.3333282470703),
-      createPoint(568, 174.3333282470703),
-      createPoint(131, 155.3333282470703)
-    ],
-    style: null
-  }
-]
 
 export default (state = defaultState, action) => {
   switch (action.type) {

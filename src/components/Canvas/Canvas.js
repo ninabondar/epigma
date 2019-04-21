@@ -20,6 +20,7 @@ import {
 import { changeActiveShape, changeMode, setSelectedShapes } from "../../actions"
 
 import {
+  getEditorActiveDocumentID,
   getDocumentById,
   getEditorMode,
   getSelectedShapes
@@ -151,7 +152,7 @@ const Canvas = ({
 const enhancer = compose(
   connect(
     state => ({
-      shapes: getDocumentById(0, state),
+      shapes: getDocumentById(getEditorActiveDocumentID(state), state).shapes,
       mode: getEditorMode(state),
       selectedShapes: getSelectedShapes(state)
     }),
