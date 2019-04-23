@@ -1,6 +1,7 @@
 import React, { createContext } from "react"
 
-import { compose, withHandlers, withState } from "recompose"
+import { clone } from "ramda"
+import { compose, withHandlers, withProps, withState } from "recompose"
 import Corner, { CORNER_CONTROL_SIZE } from "../Corner/Corner"
 
 import {
@@ -10,10 +11,15 @@ import {
 import { getZoomMatrixXY } from "../../utils/helper"
 
 import { connect } from "react-redux"
-import { getActiveShapes } from "../../reducers"
+import {
+  getActiveDocument,
+  getActiveShapes,
+  getSelectedShapes
+} from "../../reducers"
 
 import BEM from "../../utils/BEM"
 import "./Selection.scss"
+import { changeEditorDocument } from "../../actions"
 
 const b = BEM("Selection")
 
@@ -87,9 +93,15 @@ const Selection = ({
 }
 
 const enhancer = compose(
-  connect(state => ({
-    currentDocShapes: getActiveShapes(state)
-  })),
+  connect(
+    state => ({
+      currentDocShapes: getActiveShapes(state),
+      document: getActiveDocument(state),
+      selectedShapes: getSelectedShapes(state)
+    }),
+
+    { changeEditorDocument }
+  ),
   withState(
     "selectionTransform",
     "setSelectionTransform",
@@ -97,8 +109,28 @@ const enhancer = compose(
   ),
 
   withHandlers({
+    onTransform: ({
+      changeEditorDocument,
+      document,
+      selectedShapes,
+      selectionTransform
+    }) => () => {
+      const newDocument = clone(document)
+
+      selectedShapes.map(selectedShapeId => {
+        const shape = newDocument.shapes.find(
+          ({ id }) => selectedShapeId === id
+        )
+        shape.points = shape.points.map(transformPoint(selectionTransform))
+      })
+
+      changeEditorDocument(newDocument)
+    }
+  }),
+
+  withHandlers({
     // on mouse move:
-    startDrag: ({ setSelectionTransform, boundingRect }) => ev => {
+    startDrag: ({ setSelectionTransform, boundingRect, onTransform }) => ev => {
       ev.stopPropagation()
 
       const [minPoint] = boundingRect
@@ -119,6 +151,7 @@ const enhancer = compose(
       const endDrag = () => {
         document.removeEventListener("mousemove", cornerDrag)
         document.removeEventListener("mouseup", endDrag)
+        onTransform()
       }
 
       document.addEventListener("mousemove", cornerDrag)

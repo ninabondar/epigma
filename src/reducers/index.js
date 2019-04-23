@@ -20,6 +20,9 @@ export const getEditorMode = state => fromEditor.getEditorMode(state.editor)
 export const getSelectedShapes = state =>
   fromEditor.getSelectedShapes(state.editor)
 
+export const getCurrentHistoryPointer = state =>
+  fromEditor.getCurrentHistoryPointer(state.editor)
+
 // Document selectors
 export const getAllExistingDocuments = state =>
   fromDocuments.getAllExistingDocuments(state.documents)

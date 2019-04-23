@@ -1,7 +1,7 @@
 // @flow
 import React from "react"
 
-import { changeMode, undoShape } from "../../actions"
+import { changeMode, editorRedo, editorUndo, undoShape } from "../../actions"
 import { getEditorMode } from "../../reducers"
 import { compose, withHandlers } from "recompose"
 import { connect } from "react-redux"
@@ -11,7 +11,7 @@ import "./ToolPanel.scss"
 
 const b = BEM("ToolPanel")
 
-const ToolPanel = ({ isCreateToggledOn, toggleCreateMode }) => (
+const ToolPanel = ({ isCreateToggledOn, toggleCreateMode, undo, redo }) => (
   <aside className={b()}>
     <button
       className={b("control", {
@@ -22,7 +22,12 @@ const ToolPanel = ({ isCreateToggledOn, toggleCreateMode }) => (
     >
       DRAW
     </button>
-    <button className={b("control", ["undo"])}>UNDO</button>
+    <button className={b("control", ["undo"])} onClick={undo}>
+      UNDO
+    </button>
+    <button className={b("control", ["redo"])} onClick={redo}>
+      REDO
+    </button>
 
     <div className={b("doc-name")} />
   </aside>
@@ -33,7 +38,7 @@ const enhancer = compose(
     state => ({
       isCreateToggledOn: getEditorMode(state) === "CREATE"
     }),
-    { changeMode, undoShape }
+    { changeMode, undo: editorUndo, redo: editorRedo }
   ),
   withHandlers({
     toggleCreateMode: ({ isCreateToggledOn, changeMode }) => () =>

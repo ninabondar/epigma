@@ -1,6 +1,13 @@
 // @flow
 
-import { CHANGE_MODE, OPEN_DOCUMENT, SET_SELECTED_SHAPES } from "./actionTypes"
+import {
+  CHANGE_EDITOR_DOCUMENT,
+  CHANGE_MODE,
+  OPEN_DOCUMENT,
+  REDO,
+  SET_SELECTED_SHAPES,
+  UNDO
+} from "./actionTypes"
 
 export const changeMode = (mode: "VIEW" | "EDIT" | "CREATE") => ({
   type: CHANGE_MODE,
@@ -12,7 +19,20 @@ export const setSelectedShapes = selectedShapes => ({
   selectedShapes
 })
 
-export const openDocument = document => ({
+export const openDocumentInEditor = document => ({
   type: OPEN_DOCUMENT,
-  payload: {document}
+  payload: { document }
+})
+
+export const changeEditorDocument = document => ({
+  type: CHANGE_EDITOR_DOCUMENT,
+  payload: { document }
+})
+
+export const editorUndo = () => ({
+  type: UNDO
+})
+
+export const editorRedo = () => ({
+  type: REDO
 })

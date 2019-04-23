@@ -4,7 +4,10 @@ import {
   SET_SELECTED_SHAPES,
   CHANGE_ACTIVE_DOC_ID,
   CHANGE_ACTIVE_SHAPE,
-  OPEN_DOCUMENT
+  OPEN_DOCUMENT,
+  CHANGE_EDITOR_DOCUMENT,
+  UNDO,
+  REDO
 } from "../actions/actionTypes"
 
 const defaultState = {
@@ -34,26 +37,53 @@ export default (state = defaultState, action) => {
         ...state,
         mode: action.mode
       }
-    case SET_SELECTED_SHAPES:
+    case SET_SELECTED_SHAPES: {
       const { selectedShapes } = action
+      const { historyPointer } = state
       return {
         ...state,
 
-        historyPointer: state.historyPointer + 1,
+        historyPointer: historyPointer + 1,
         history: [
-          ...state.history,
+          ...state.history.slice(0, historyPointer + 1),
           {
-            ...state.history[state.historyPointer],
+            ...state.history[historyPointer],
             selectedShapes: selectedShapes
           }
         ]
       }
+    }
     case CHANGE_ACTIVE_SHAPE:
       return action.shape
     case CHANGE_ACTIVE_DOC_ID:
       return {
         ...state,
         activeDocumentID: action.activeDocumentID
+      }
+    case CHANGE_EDITOR_DOCUMENT:
+      const { historyPointer } = state
+      const { document } = action.payload
+
+      return {
+        ...state,
+        historyPointer: historyPointer + 1,
+        history: [
+          ...state.history.slice(0, historyPointer + 1),
+          {
+            ...state.history[historyPointer],
+            document
+          }
+        ]
+      }
+    case UNDO:
+      return {
+        ...state,
+        historyPointer: state.historyPointer - 1
+      }
+    case REDO:
+      return {
+        ...state,
+        historyPointer: state.historyPointer + 1
       }
     default:
       return state
@@ -82,3 +112,5 @@ export const getActiveDocumentId = state => {
   const document = getActiveDocument(state)
   return document && document.id
 }
+
+export const getCurrentHistoryPointer = state => state.historyPointer

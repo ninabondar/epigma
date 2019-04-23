@@ -23,12 +23,13 @@ import {
 import {
   changeActiveShape,
   changeMode,
-  openDocument,
+  openDocumentInEditor,
   setSelectedShapes
 } from "../../actions"
 
 import {
   getActiveDocument,
+  getCurrentHistoryPointer,
   getDocumentById,
   getSelectedShapes
 } from "../../reducers"
@@ -48,7 +49,8 @@ let SelectedShapes = ({
   setSelectedIndex,
   setShapes,
   offset,
-  selectedIndex
+  selectedIndex,
+  selectionId
 }) => {
   const transformation = useContext(TransformContext)
 
@@ -60,7 +62,7 @@ let SelectedShapes = ({
   )
 
   return (
-    <Selection boundingRect={boundingRect}>
+    <Selection key={selectionId} boundingRect={boundingRect}>
       {shapes.map((shape, index) => (
         <Shape
           key={index}
@@ -87,9 +89,10 @@ let SelectedShapes = ({
   )
 }
 
-SelectedShapes = branch(({ shapes }) => shapes.length === 0, renderNothing)(
-  SelectedShapes
-)
+SelectedShapes = compose(
+  connect(state => ({ selectionId: getCurrentHistoryPointer(state) })),
+  branch(({ shapes }) => shapes.length === 0, renderNothing)
+)(SelectedShapes)
 
 const Canvas = ({
   shapes,
@@ -169,7 +172,7 @@ const enhancer = compose(
       editedDocumentId: getActiveDocumentId(state),
       document: getDocumentById(documentId, state)
     }),
-    { openDocument }
+    { openDocument: openDocumentInEditor }
   ),
 
   withProps(({ documentId, editedDocumentId, openDocument, document }) => {
