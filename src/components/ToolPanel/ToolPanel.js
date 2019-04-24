@@ -1,7 +1,7 @@
 // @flow
 import React from "react"
 
-import { changeMode, editorRedo, editorUndo, undoShape } from "../../actions"
+import { changeMode, editorRedo, editorUndo } from "../../actions"
 import {
   getCurrentHistoryPointer,
   getEditorMode,
@@ -56,8 +56,7 @@ const enhancer = compose(
   connect(
     state => ({
       isCreateToggledOn: getEditorMode(state) === "CREATE",
-      isUndo:
-        !!getCurrentHistoryPointer(state),
+      isUndo: !!getCurrentHistoryPointer(state),
       isRedo:
         getCurrentHistoryPointer(state) !== null &&
         getCurrentHistoryPointer(state) === getHistoryLength(state) - 1

@@ -1,7 +1,7 @@
 import React, { createContext } from "react"
 
 import { clone } from "ramda"
-import { compose, withHandlers, withProps, withState } from "recompose"
+import { compose, withHandlers, withState } from "recompose"
 import Corner, { CORNER_CONTROL_SIZE } from "../Corner/Corner"
 
 import {
