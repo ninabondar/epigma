@@ -3,11 +3,11 @@ import {
   CHANGE_MODE,
   SET_SELECTED_SHAPES,
   CHANGE_ACTIVE_DOC_ID,
-  CHANGE_ACTIVE_SHAPE,
   OPEN_DOCUMENT,
   CHANGE_EDITOR_DOCUMENT,
   UNDO,
-  REDO
+  REDO,
+  SET_EDITED_SHAPE
 } from "../actions/actionTypes"
 
 const defaultState = {
@@ -37,6 +37,14 @@ export default (state = defaultState, action) => {
         ...state,
         mode: action.mode
       }
+    case SET_EDITED_SHAPE: {
+      const { shapeId } = action.payload
+      return {
+        ...state,
+        pickedShape: shapeId
+      }
+    }
+
     case SET_SELECTED_SHAPES: {
       const { selectedShapes } = action
       const { historyPointer } = state
@@ -53,8 +61,7 @@ export default (state = defaultState, action) => {
         ]
       }
     }
-    case CHANGE_ACTIVE_SHAPE:
-      return action.shape
+
     case CHANGE_ACTIVE_DOC_ID:
       return {
         ...state,
@@ -98,7 +105,7 @@ export const getSelectedShapes = state => {
   return editorState && editorState.selectedShapes
 }
 
-export const getActiveShapes = state => state.pickedShape
+export const getEditedShape = state => state.pickedShape
 
 export const getActiveDocument = state => {
   const { historyPointer } = state

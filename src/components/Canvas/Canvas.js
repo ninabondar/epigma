@@ -1,7 +1,13 @@
 // @flow
+
+//TODO: do not use "document" as variable name. It makes code hard to read and debug
+
 import React, { useContext, useEffect } from "react"
 import { connect } from "react-redux"
 import { withRouter } from "react-router"
+import produce from "immer"
+import uuidv1 from "uuid/v1"
+
 import {
   branch,
   compose,
@@ -11,19 +17,15 @@ import {
   withProps,
   withState
 } from "recompose"
-import uuid from "uuid"
 
 import Selection from "../Selection/Selection"
-import {
-  createPoint,
-  createShape,
-  getBoundingBoxFromShape
-} from "../../utils/helper"
+import { createPoint, getBoundingBoxFromShape } from "../../utils/helper"
 
 import {
-  changeActiveShape,
+  changeEditorDocument,
   changeMode,
   openDocumentInEditor,
+  setEditedShape,
   setSelectedShapes
 } from "../../actions"
 
@@ -31,27 +33,24 @@ import {
   getActiveDocument,
   getCurrentHistoryPointer,
   getDocumentById,
+  getEditedShape,
+  getEditorMode,
   getSelectedShapes
 } from "../../reducers"
 
-import Shape from "../Shape"
+import ShapeCreate from "../Shape/ShapeCreate"
+import ShapeEdit from "../Shape/ShapeEdit"
+import ShapeView from "../Shape/ShapeView"
+
 import CanvasTransform, { TransformContext } from "../CanvasTransform"
 
 import BEM from "../../utils/BEM"
 import "./Canvas.scss"
 import { getActiveDocumentId } from "../../reducers"
+
 const b = BEM("Canvas")
 
-const getId = uuid
-
-let SelectedShapes = ({
-  shapes,
-  setSelectedIndex,
-  setShapes,
-  offset,
-  selectedIndex,
-  selectionId
-}) => {
+let SelectedShapes = ({ shapes, offset, selectionId, setEditedShape }) => {
   const transformation = useContext(TransformContext)
 
   const boundingBox = getBoundingBoxFromShape(shapes[0]) //TODO: fix it. Get boundingBox for all shapes. Not only for first
@@ -62,34 +61,23 @@ let SelectedShapes = ({
   )
 
   useEffect(() => {
-    document.addEventListener("keypress", ev => {
+    const keyHandler = ev => {
       if (ev.key === "escape") {
         setSelectedShapes([])
       }
       // TODO handle more use cases of Escape
-    })
+    }
+    document.addEventListener("keypress", keyHandler)
+
+    return () => document.removeEventListener("keypress", keyHandler)
   })
 
   return (
     <Selection key={selectionId} boundingRect={boundingRect}>
-      {shapes.map((shape, index) => (
-        <Shape
-          key={index}
-          mode={"VIEW"}
-          onSelect={() =>
-            console.log("TODO: implement on select for selected shapes.")
-          }
-          onChange={path => {
-            const id = path.id || getId()
-
-            setSelectedIndex(null)
-
-            setShapes([
-              ...shapes.slice(0, selectedIndex),
-              { id, ...path },
-              ...shapes.slice(selectedIndex + 1)
-            ])
-          }}
+      {shapes.map(shape => (
+        <ShapeView
+          key={shape.id}
+          onSelect={() => setEditedShape(shape.id)}
           offset={offset}
           path={shape}
         />
@@ -99,7 +87,10 @@ let SelectedShapes = ({
 }
 
 SelectedShapes = compose(
-  connect(state => ({ selectionId: getCurrentHistoryPointer(state) })),
+  connect(
+    state => ({ selectionId: getCurrentHistoryPointer(state) }),
+    { setEditedShape }
+  ),
   branch(({ shapes }) => shapes.length === 0, renderNothing)
 )(SelectedShapes)
 
@@ -107,66 +98,79 @@ const Canvas = ({
   shapes,
   offset,
   selectedShapes: selectedShapesId,
-  selectedIndex,
-  setSelectedIndex,
+  editedShape: editedShapeId,
+  selectShape,
+  setEditedShape,
   setShapes,
-  changeMode,
-  mode,
-  selectShape
+  isCreateMode,
+  changeMode
 }) => {
-  const viewShapes = shapes.filter(({ id }) => !selectedShapesId.includes(id))
-  const selectedShapes = shapes.filter(({ id }) =>
-    selectedShapesId.includes(id)
-  )
+  const viewShapes = shapes
+    .filter(({ id }) => !selectedShapesId.includes(id))
+    .filter(({ id }) => editedShapeId !== id)
+
+  const selectedShapes = shapes
+    .filter(({ id }) => selectedShapesId.includes(id))
+    .filter(({ id }) => editedShapeId !== id)
+
+  const editedShape = shapes.find(({ id }) => editedShapeId === id)
 
   return (
     <CanvasTransform>
       <svg className={b()}>
-        {viewShapes.map((shape, index) => (
-          <Shape
-            key={index}
-            mode={index === selectedIndex ? mode : "VIEW"}
-            onSelect={e => {
-              setSelectedIndex(index)
-              selectShape(e, shape.id)
-            }}
-            onChange={path => {
-              const id = path.id || getId()
-
-              setSelectedIndex(null)
-
-              setShapes([
-                ...shapes.slice(0, selectedIndex),
-                { id, ...path },
-                ...shapes.slice(selectedIndex + 1)
-              ])
-            }}
+        {viewShapes.map(shape => (
+          <ShapeView
+            key={shape.id}
+            onSelect={() => selectShape(shape.id)}
             offset={offset}
             path={shape}
           />
         ))}
 
-        <SelectedShapes
-          offset={offset}
-          shapes={selectedShapes}
-          setSelectedIndex={setSelectedIndex}
-          setShapes={setShapes}
-          selectedIndex={selectedIndex}
-        />
-
-        {mode === "CREATE" ? (
-          <Shape
-            mode="CREATE"
-            onChange={newShape => {
-              changeMode("VIEW")
-
-              if (newShape.points && newShape.points.length > 1) {
-                setShapes([...shapes, newShape])
-              }
+        {editedShape && (
+          <ShapeEdit
+            key={editedShape.id}
+            offset={offset}
+            path={editedShape}
+            onChange={editedShape => {
+              const newShapes = produce(shapes, draft => {
+                const index = draft.findIndex(({ id }) => editedShape.id === id)
+                draft[index] = editedShape
+              })
+              setShapes(newShapes)
+              setEditedShape(null)
             }}
           />
-        ) : null}
-        {shapes.length < 0 && <text dy={20}>Click to start drawing.</text>}
+        )}
+
+        {editedShape ? (
+          selectedShapes.map(shape => (
+            <ShapeView
+              key={shape.id}
+              onSelect={() => selectShape(shape.id)}
+              offset={offset}
+              path={shape}
+            />
+          ))
+        ) : (
+          <SelectedShapes offset={offset} shapes={selectedShapes} />
+        )}
+
+        {isCreateMode && (
+          <ShapeCreate
+            offset={offset}
+            onChange={newShape => {
+              if (newShape.points && newShape.points.length > 1) {
+                const id = uuidv1()
+                newShape.id = id //TODO: fix it!
+                setShapes([...shapes, newShape])
+                selectShape(id)
+              }
+
+              changeMode("VIEW")
+            }}
+          />
+        )}
       </svg>
     </CanvasTransform>
   )
@@ -179,7 +183,8 @@ const enhancer = compose(
   connect(
     (state, { documentId }) => ({
       editedDocumentId: getActiveDocumentId(state),
-      document: getDocumentById(documentId, state)
+      document: getDocumentById(documentId, state),
+      isCreateMode: getEditorMode(state) === "CREATE"
     }),
     { openDocument: openDocumentInEditor }
   ),
@@ -189,52 +194,39 @@ const enhancer = compose(
       openDocument(document)
     }
   }),
+
   branch(
     ({ editedDocumentId }) => editedDocumentId === null,
     renderComponent(() => "Loading...")
   ),
 
   connect(
-    (state, { documentId }) => {
-      const selectedShapes = getSelectedShapes(state)
-      const editedShape = null
-      return {
-        shapes: getActiveDocument(state).shapes,
-        //prettier-ignore
-        mode:
-          editedShape !== null ? "EDIT" :
-          selectedShapes !== null || selectedShapes.length !== 0 ? "SELECT":
-          "VIEW",
-        selectedShapes
-      }
-    },
+    state => ({
+      document: getActiveDocument(state),
+      shapes: getActiveDocument(state).shapes,
+      selectedShapes: getSelectedShapes(state),
+      editedShape: getEditedShape(state)
+    }),
     {
-      setShapes: changeActiveShape,
       changeMode,
-      setSelectedShapes
+      setSelectedShapes,
+      setEditedShape,
+      changeEditorDocument
     }
   ),
 
   withState("offset", "setOffset", { x: 0, y: 0 }),
-  withState("selectedIndex", "setSelectedIndex", null),
 
   withHandlers({
-    addPath: ({
-      shapes,
-      offset,
-      setSelectedIndex,
-      setShapes,
-      selectedIndex
-    }) => ({ pageX: x, pageY: y }) => {
-      if (selectedIndex !== null) return
+    setShapes: ({ changeEditorDocument, document }) => shapes => {
+      const newDocument = produce(document, draft => {
+        draft.shapes = shapes
+      })
 
-      const point = createPoint({ x: x - offset.x, y: y - offset.y })
-
-      setSelectedIndex(shapes.length)
-      setShapes([...shapes, createShape(point)])
+      changeEditorDocument(newDocument)
     },
-    selectShape: ({ selectedShapes, setSelectedShapes }) => (e, id) =>
-      setSelectedShapes([id])
+
+    selectShape: ({ setSelectedShapes }) => id => setSelectedShapes([id])
   })
 )
 

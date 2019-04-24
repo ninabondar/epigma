@@ -5,6 +5,7 @@ import {
   CHANGE_MODE,
   OPEN_DOCUMENT,
   REDO,
+  SET_EDITED_SHAPE,
   SET_SELECTED_SHAPES,
   UNDO
 } from "./actionTypes"
@@ -12,6 +13,11 @@ import {
 export const changeMode = (mode: "VIEW" | "EDIT" | "CREATE") => ({
   type: CHANGE_MODE,
   mode
+})
+
+export const setEditedShape = shapeId => ({
+  type: SET_EDITED_SHAPE,
+  payload: { shapeId }
 })
 
 export const setSelectedShapes = selectedShapes => ({

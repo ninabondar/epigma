@@ -11,11 +11,7 @@ import {
 import { getZoomMatrixXY } from "../../utils/helper"
 
 import { connect } from "react-redux"
-import {
-  getActiveDocument,
-  getActiveShapes,
-  getSelectedShapes
-} from "../../reducers"
+import { getActiveDocument, getSelectedShapes } from "../../reducers"
 
 import BEM from "../../utils/BEM"
 import "./Selection.scss"
@@ -26,10 +22,8 @@ const b = BEM("Selection")
 export const SelectionTransformContext = createContext()
 
 const Selection = ({
-  currentDocShapes,
   boundingRect,
   selectionTransform,
-  setSelectionTransform,
   startDrag,
   children
 }) => {
@@ -95,7 +89,6 @@ const Selection = ({
 const enhancer = compose(
   connect(
     state => ({
-      currentDocShapes: getActiveShapes(state),
       document: getActiveDocument(state),
       selectedShapes: getSelectedShapes(state)
     }),
@@ -156,10 +149,6 @@ const enhancer = compose(
 
       document.addEventListener("mousemove", cornerDrag)
       document.addEventListener("mouseup", endDrag)
-    },
-    putNewShapeScaleToState: ({ currentDocShapes }) => e => {
-      e.preventDefault()
-      console.log(typeof currentDocShapes, "curr shapes")
     }
   })
 )

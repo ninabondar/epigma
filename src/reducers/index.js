@@ -1,13 +1,12 @@
 import { combineReducers } from "redux"
 import vertex from "./vertex.js"
 import documents, * as fromDocuments from "./documents"
-
 import editor, * as fromEditor from "./editor"
 
 export default combineReducers({ documents, editor, vertex })
 
 // Editor selectors
-export const getActiveShapes = state => fromEditor.getActiveShapes(state.editor)
+export const getEditedShape = state => fromEditor.getEditedShape(state.editor)
 
 export const getActiveDocumentId = state =>
   fromEditor.getActiveDocumentId(state.editor)
