@@ -1,6 +1,4 @@
 export const CHANGE_MODE = "CHANGE_MODE"
-export const MOVE_VERTEX = "MOVE_VERTEX"
-
 export const SET_SELECTED_SHAPES = "SET_SELECTED_SHAPES"
 export const SET_EDITED_SHAPE = "SET_EDITED_SHAPE"
 
