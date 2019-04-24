@@ -1,4 +1,5 @@
 import { createPoint } from "../utils/helper"
+import { CREATE_DOCUMENT } from "../actions/actionTypes"
 
 const defaultState = {
   "1": {
@@ -28,8 +29,7 @@ const defaultState = {
         id: "A",
         points: [
           createPoint(179, 257.3333282470703),
-          createPoint(524, 394.3333282470703),
-
+          createPoint(524, 394.3333282470703)
         ],
         style: null
       }
@@ -58,6 +58,22 @@ const defaultState = {
 
 export default (state = defaultState, action) => {
   switch (action.type) {
+    case CREATE_DOCUMENT:
+      console.log("====> ", action)
+      const newDocumentIndex = Object.keys(state).length + 1
+      return {
+        ...state,
+
+        [String(newDocumentIndex)]: {
+          id: newDocumentIndex,
+          title: action.title,
+          author: "",
+          contributors: [],
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          shapes: []
+        }
+      }
     default:
       return state
   }
