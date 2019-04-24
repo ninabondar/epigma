@@ -113,4 +113,6 @@ export const getActiveDocumentId = state => {
   return document && document.id
 }
 
+export const getHistoryLength = state => state.history.length
+
 export const getCurrentHistoryPointer = state => state.historyPointer

@@ -12,6 +12,9 @@ export const getActiveShapes = state => fromEditor.getActiveShapes(state.editor)
 export const getActiveDocumentId = state =>
   fromEditor.getActiveDocumentId(state.editor)
 
+export const getHistoryLength = state =>
+  fromEditor.getHistoryLength(state.editor)
+
 export const getActiveDocument = state =>
   fromEditor.getActiveDocument(state.editor)
 

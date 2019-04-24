@@ -1,5 +1,5 @@
 // @flow
-import React, { useContext } from "react"
+import React, { useContext, useEffect } from "react"
 import { connect } from "react-redux"
 import { withRouter } from "react-router"
 import {
@@ -60,6 +60,15 @@ let SelectedShapes = ({
   const boundingRect = [createPoint(minX, minY), createPoint(maxX, maxY)].map(
     transformation
   )
+
+  useEffect(() => {
+    document.addEventListener("keypress", ev => {
+      if (ev.key === "escape") {
+        setSelectedShapes([])
+      }
+      // TODO handle more use cases of Escape
+    })
+  })
 
   return (
     <Selection key={selectionId} boundingRect={boundingRect}>

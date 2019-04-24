@@ -2,7 +2,11 @@
 import React from "react"
 
 import { changeMode, editorRedo, editorUndo, undoShape } from "../../actions"
-import { getEditorMode } from "../../reducers"
+import {
+  getCurrentHistoryPointer,
+  getEditorMode,
+  getHistoryLength
+} from "../../reducers"
 import { compose, withHandlers } from "recompose"
 import { connect } from "react-redux"
 
@@ -11,7 +15,14 @@ import "./ToolPanel.scss"
 
 const b = BEM("ToolPanel")
 
-const ToolPanel = ({ isCreateToggledOn, toggleCreateMode, undo, redo }) => (
+const ToolPanel = ({
+  isCreateToggledOn,
+  toggleCreateMode,
+  undo,
+  redo,
+  isUndo,
+  isRedo
+}) => (
   <aside className={b()}>
     <button
       className={b("control", {
@@ -22,10 +33,18 @@ const ToolPanel = ({ isCreateToggledOn, toggleCreateMode, undo, redo }) => (
     >
       DRAW
     </button>
-    <button className={b("control", ["undo"])} onClick={undo}>
+    <button
+      disabled={!isUndo}
+      className={b("control", { undo: true, disabled: !isUndo })}
+      onClick={undo}
+    >
       UNDO
     </button>
-    <button className={b("control", ["redo"])} onClick={redo}>
+    <button
+      disabled={isRedo}
+      className={b("control", { redo: true, disabled: isRedo })}
+      onClick={redo}
+    >
       REDO
     </button>
 
@@ -36,7 +55,12 @@ const ToolPanel = ({ isCreateToggledOn, toggleCreateMode, undo, redo }) => (
 const enhancer = compose(
   connect(
     state => ({
-      isCreateToggledOn: getEditorMode(state) === "CREATE"
+      isCreateToggledOn: getEditorMode(state) === "CREATE",
+      isUndo:
+        !!getCurrentHistoryPointer(state),
+      isRedo:
+        getCurrentHistoryPointer(state) !== null &&
+        getCurrentHistoryPointer(state) === getHistoryLength(state) - 1
     }),
     { changeMode, undo: editorUndo, redo: editorRedo }
   ),
