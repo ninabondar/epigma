@@ -26,6 +26,9 @@ export const getSelectedShapes = state =>
 export const getCurrentHistoryPointer = state =>
   fromEditor.getCurrentHistoryPointer(state.editor)
 
+export const getOpenDocumentTitle = state =>
+  fromEditor.getOpenDocumentTitle(state.editor)
+
 // Document selectors
 export const getAllExistingDocuments = state =>
   fromDocuments.getAllExistingDocuments(state.documents)

@@ -5,12 +5,15 @@ import { changeMode, editorRedo, editorUndo } from "../../actions"
 import {
   getCurrentHistoryPointer,
   getEditorMode,
-  getHistoryLength
+  getHistoryLength,
+  getOpenDocumentTitle
 } from "../../reducers"
-import { compose, withHandlers } from "recompose"
+import { compose, withHandlers, withProps } from "recompose"
 import { connect } from "react-redux"
 
 import BEM from "../../utils/BEM"
+import { withRouter } from "react-router"
+
 import "./ToolPanel.scss"
 
 const b = BEM("ToolPanel")
@@ -21,7 +24,8 @@ const ToolPanel = ({
   undo,
   redo,
   isUndo,
-  isRedo
+  isRedo,
+  documentTitle
 }) => (
   <aside className={b()}>
     <button
@@ -48,18 +52,21 @@ const ToolPanel = ({
       REDO
     </button>
 
-    <div className={b("doc-name")} />
+    <div className={b("doc-name")}>{documentTitle}</div>
   </aside>
 )
 
 const enhancer = compose(
+  withRouter,
+  withProps(({ match }) => ({ documentId: match.params.documentId })),
   connect(
     state => ({
       isCreateToggledOn: getEditorMode(state) === "CREATE",
       isUndo: !!getCurrentHistoryPointer(state),
       isRedo:
         getCurrentHistoryPointer(state) !== null &&
-        getCurrentHistoryPointer(state) === getHistoryLength(state) - 1
+        getCurrentHistoryPointer(state) === getHistoryLength(state) - 1,
+      documentTitle: getOpenDocumentTitle(state)
     }),
     { changeMode, undo: editorUndo, redo: editorRedo }
   ),

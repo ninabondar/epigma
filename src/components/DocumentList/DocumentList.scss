@@ -3,13 +3,32 @@
 .DocumentList {
   margin: 0 auto;
   padding: 0;
+  display: flex;
+  flex-wrap: wrap;
 
   &__document {
     box-sizing: border-box;
     padding: 20px;
+    flex-basis: 23%;
+    margin: 0 1%;
 
     &:hover {
       background: #ececec;
     }
+  }
+
+  &__create-document {
+    outline: none;
+    background: gray;
+    box-sizing: border-box;
+    border: none;
+    padding: 10px 12px
+  }
+  &__document-new-name {
+    outline: none;
+  }
+
+  &__document-new-name:valid + &__create-document {
+    background: $HIGHLIGHT_COLOR;
   }
 }
