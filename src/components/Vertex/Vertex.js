@@ -33,10 +33,8 @@ class Vertex extends Component {
   }
 
   startDragging = ({ x: startX, y: startY }) => {
-    const { point, onChange, draggable, activeShape } = this.props
+    const { point, onChange, draggable } = this.props
     const { x, y } = point
-
-    console.log(activeShape, "active shape")
 
     this.drag = ({ pageX, pageY }) => {
       const { point } = this.props

@@ -1,21 +1,18 @@
 // @flow
-
-//TODO: do not use "document" as variable name. It makes code hard to read and debug
-
-import React, { useContext, useEffect } from "react"
-import { connect } from "react-redux"
+import React, { useContext, useEffect, useState } from "react"
+import { connect, useSelector, useActions } from "react-redux"
 import { withRouter } from "react-router"
+
 import produce from "immer"
 import uuidv1 from "uuid/v1"
+import { find, propEq, filter, contains, without } from "ramda"
 
 import {
   branch,
   compose,
   renderComponent,
-  renderNothing,
   withHandlers,
-  withProps,
-  withState
+  withProps
 } from "recompose"
 
 import Selection from "../Selection/Selection"
@@ -28,6 +25,8 @@ import {
   setEditedShape,
   setSelectedShapes
 } from "../../actions"
+
+import * as actions from "../../actions"
 
 import {
   getActiveDocument,
@@ -50,7 +49,14 @@ import { getActiveDocumentId } from "../../reducers"
 
 const b = BEM("Canvas")
 
-let SelectedShapes = ({ shapes, offset, selectionId, setEditedShape }) => {
+let SelectedShapes = ({ shapes, offset }) => {
+  if (shapes.length === 0) return null
+
+  const selectionId = useSelector(getCurrentHistoryPointer)
+  const { setEditedShape } = useActions({
+    setEditedShape: actions.setEditedShape
+  })
+
   const transformation = useContext(TransformContext)
 
   const boundingBox = getBoundingBoxFromShape(shapes[0]) //TODO: fix it. Get boundingBox for all shapes. Not only for first
@@ -86,39 +92,24 @@ let SelectedShapes = ({ shapes, offset, selectionId, setEditedShape }) => {
   )
 }
 
-SelectedShapes = compose(
-  connect(
-    state => ({ selectionId: getCurrentHistoryPointer(state) }),
-    { setEditedShape }
-  ),
-  branch(({ shapes }) => shapes.length === 0, renderNothing)
-)(SelectedShapes)
-
 const Canvas = ({
+  allShapes,
   shapes,
-  offset,
-  selectedShapes: selectedShapesId,
-  editedShape: editedShapeId,
+  selectedShapes,
+  editedShape,
   selectShape,
-  setEditedShape,
-  setShapes,
+
   isCreateMode,
-  changeMode
+  changeMode,
+  setShapes,
+  setEditedShape
 }) => {
-  const viewShapes = shapes
-    .filter(({ id }) => !selectedShapesId.includes(id))
-    .filter(({ id }) => editedShapeId !== id)
-
-  const selectedShapes = shapes
-    .filter(({ id }) => selectedShapesId.includes(id))
-    .filter(({ id }) => editedShapeId !== id)
-
-  const editedShape = shapes.find(({ id }) => editedShapeId === id)
+  const [offset] = useState({ x: 0, y: 0 })
 
   return (
     <CanvasTransform>
       <svg className={b()}>
-        {viewShapes.map(shape => (
+        {shapes.map(shape => (
           <ShapeView
             key={shape.id}
             onSelect={() => selectShape(shape.id)}
@@ -127,33 +118,25 @@ const Canvas = ({
           />
         ))}
 
+        <SelectedShapes offset={offset} shapes={selectedShapes} />
+
         {editedShape && (
           <ShapeEdit
             key={editedShape.id}
             offset={offset}
             path={editedShape}
             onChange={editedShape => {
-              const newShapes = produce(shapes, draft => {
-                const index = draft.findIndex(({ id }) => editedShape.id === id)
-                draft[index] = editedShape
-              })
-              setShapes(newShapes)
+              setShapes(
+                produce(allShapes, draft => {
+                  const index = draft.findIndex(
+                    ({ id }) => editedShape.id === id
+                  )
+                  draft[index] = editedShape
+                })
+              )
               setEditedShape(null)
             }}
           />
-        )}
-
-        {editedShape ? (
-          selectedShapes.map(shape => (
-            <ShapeView
-              key={shape.id}
-              onSelect={() => selectShape(shape.id)}
-              offset={offset}
-              path={shape}
-            />
-          ))
-        ) : (
-          <SelectedShapes offset={offset} shapes={selectedShapes} />
         )}
 
         {isCreateMode && (
@@ -163,7 +146,7 @@ const Canvas = ({
               if (newShape.points && newShape.points.length > 1) {
                 const id = uuidv1()
                 newShape.id = id //TODO: fix it!
-                setShapes([...shapes, newShape])
+                setShapes([...allShapes, newShape])
                 selectShape(id)
               }
 
@@ -183,31 +166,10 @@ const enhancer = compose(
   connect(
     (state, { documentId }) => ({
       editedDocumentId: getActiveDocumentId(state),
-      document: getDocumentById(documentId, state),
-      isCreateMode: getEditorMode(state) === "CREATE"
-    }),
-    { openDocument: openDocumentInEditor }
-  ),
-
-  withProps(({ documentId, editedDocumentId, openDocument, document }) => {
-    if (documentId !== editedDocumentId) {
-      openDocument(document)
-    }
-  }),
-
-  branch(
-    ({ editedDocumentId }) => editedDocumentId === null,
-    renderComponent(() => "Loading...")
-  ),
-
-  connect(
-    state => ({
-      document: getActiveDocument(state),
-      shapes: getActiveDocument(state).shapes,
-      selectedShapes: getSelectedShapes(state),
-      editedShape: getEditedShape(state)
+      doc: getDocumentById(documentId, state)
     }),
     {
+      openDocument: openDocumentInEditor,
       changeMode,
       setSelectedShapes,
       setEditedShape,
@@ -215,17 +177,39 @@ const enhancer = compose(
     }
   ),
 
-  withState("offset", "setOffset", { x: 0, y: 0 }),
+  withProps(({ documentId, editedDocumentId, openDocument, doc }) => {
+    if (documentId !== editedDocumentId) openDocument(doc)
+  }),
+
+  branch(
+    ({ editedDocumentId }) => editedDocumentId === null,
+    renderComponent(() => "Loading...")
+  ),
+
+  connect(state => {
+    const doc = getActiveDocument(state)
+    const isCreateMode = getEditorMode(state) === "CREATE"
+    const editedShape = find(propEq("id", getEditedShape(state)), doc.shapes)
+    const selectedShapes = editedShape
+      ? []
+      : filter(({ id }) => contains(id, getSelectedShapes(state)), doc.shapes)
+
+    return {
+      isCreateMode,
+      allShapes: doc.shapes,
+      shapes: without([...selectedShapes, editedShape], doc.shapes),
+      selectedShapes,
+      editedShape
+    }
+  }),
 
   withHandlers({
-    setShapes: ({ changeEditorDocument, document }) => shapes => {
-      const newDocument = produce(document, draft => {
-        draft.shapes = shapes
-      })
-
-      changeEditorDocument(newDocument)
-    },
-
+    setShapes: ({ changeEditorDocument, doc }) => shapes =>
+      changeEditorDocument(
+        produce(doc, draft => {
+          draft.shapes = shapes
+        })
+      ),
     selectShape: ({ setSelectedShapes }) => id => setSelectedShapes([id])
   })
 )

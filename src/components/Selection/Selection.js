@@ -12,10 +12,10 @@ import { getZoomMatrixXY } from "../../utils/helper"
 
 import { connect } from "react-redux"
 import { getActiveDocument, getSelectedShapes } from "../../reducers"
+import { changeEditorDocument } from "../../actions"
 
 import BEM from "../../utils/BEM"
 import "./Selection.scss"
-import { changeEditorDocument } from "../../actions"
 
 const b = BEM("Selection")
 
