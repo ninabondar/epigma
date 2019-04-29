@@ -10,6 +10,8 @@ import {
   SET_EDITED_SHAPE
 } from "../actions/actionTypes"
 
+import produce from "immer"
+
 const defaultState = {
   mode: "VIEW", //"CREATE",
   isTransformingShapes: false,
@@ -18,84 +20,77 @@ const defaultState = {
   historyPointer: null
 }
 
-export default (state = defaultState, action) => {
+export default produce((draft, action) => {
   switch (action.type) {
-    case OPEN_DOCUMENT:
-      return {
-        ...state,
-        historyPointer: 0,
-        history: [
-          {
-            document: action.payload.document,
-            selectedShapes: [],
-            pickedShape: null
-          }
-        ]
-      }
-    case CHANGE_MODE:
-      return {
-        ...state,
-        mode: action.mode
-      }
+    case OPEN_DOCUMENT: {
+      draft.historyPointer = 0
+      draft.history = [
+        {
+          document: action.payload.document,
+          selectedShapes: [],
+          pickedShape: null
+        }
+      ]
+      return
+    }
+
+    case CHANGE_MODE: {
+      draft.mode = action.mode
+      return
+    }
+
     case SET_EDITED_SHAPE: {
       const { shapeId } = action.payload
-      return {
-        ...state,
-        pickedShape: shapeId
-      }
+      draft.pickedShape = shapeId
+      return
     }
 
     case SET_SELECTED_SHAPES: {
       const { selectedShapes } = action
-      const { historyPointer } = state
-      return {
-        ...state,
+      const { historyPointer } = draft
 
-        historyPointer: historyPointer + 1,
-        history: [
-          ...state.history.slice(0, historyPointer + 1),
-          {
-            ...state.history[historyPointer],
-            selectedShapes: selectedShapes
-          }
-        ]
-      }
+      draft.historyPointer++
+      draft.history = [
+        ...draft.history.slice(0, historyPointer + 1),
+        {
+          ...draft.history[historyPointer],
+          selectedShapes: selectedShapes
+        }
+      ]
+      return
     }
 
-    case CHANGE_ACTIVE_DOC_ID:
-      return {
-        ...state,
-        activeDocumentID: action.activeDocumentID
-      }
-    case CHANGE_EDITOR_DOCUMENT:
-      const { historyPointer } = state
-      const { document } = action.payload
+    case CHANGE_ACTIVE_DOC_ID: {
+      draft.activeDocumentID = action.activeDocumentID
+      return
+    }
 
-      return {
-        ...state,
-        historyPointer: historyPointer + 1,
-        history: [
-          ...state.history.slice(0, historyPointer + 1),
-          {
-            ...state.history[historyPointer],
-            document
-          }
-        ]
-      }
-    case UNDO:
-      return {
-        ...state,
-        historyPointer: state.historyPointer - 1
-      }
-    case REDO:
-      return {
-        ...state,
-        historyPointer: state.historyPointer + 1
-      }
-    default:
-      return state
+    case CHANGE_EDITOR_DOCUMENT: {
+      const { document } = action.payload
+      const { history, historyPointer } = draft
+
+      draft.historyPointer++
+      draft.history = [
+        ...draft.history.slice(0, historyPointer + 1),
+        {
+          ...history[historyPointer],
+          document
+        }
+      ]
+      return
+    }
+
+    case UNDO: {
+      draft.historyPointer--
+      return
+    }
+
+    case REDO: {
+      draft.historyPointer++
+      return
+    }
   }
-}
+}, defaultState)
 
 // Selectors
 export const getEditorMode = state => state.mode

@@ -1,3 +1,4 @@
+import produce from "immer"
 import { createPoint } from "../utils/helper"
 import { CREATE_DOCUMENT } from "../actions/actionTypes"
 
@@ -56,28 +57,29 @@ const defaultState = {
   }
 }
 
-export default (state = defaultState, action) => {
-  switch (action.type) {
-    case CREATE_DOCUMENT:
-      const newDocumentIndex = Object.keys(state).length + 1
-      return {
-        ...state,
+export default (state = defaultState, action) =>
+  produce(state, draft => {
+    switch (action.type) {
+      case CREATE_DOCUMENT:
+        const newDocumentIndex = Object.keys(draft).length + 1
+        return {
+          ...draft,
 
-        [String(newDocumentIndex)]: {
-          id: newDocumentIndex,
-          title: action.title,
-          author: "",
-          contributors: [],
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          shapes: []
+          [String(newDocumentIndex)]: {
+            id: newDocumentIndex,
+            title: action.title,
+            author: "",
+            contributors: [],
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            shapes: []
+          }
         }
-      }
 
-    default:
-      return state
-  }
-}
+      default:
+        return draft
+    }
+  })
 
 export const getAllExistingDocuments = state => Object.values(state)
 export const getDocumentById = (id, state) => state[id]

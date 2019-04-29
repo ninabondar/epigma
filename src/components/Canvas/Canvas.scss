@@ -1,7 +1,9 @@
+@import "../../styles/variables";
+
 .Canvas {
   position: absolute;
-  height: 100vh;
+  height: calc(100vh - #{$HEADER_HEIGHT});
   width: 100vw;
-
+  top: $HEADER_HEIGHT;
   background: #e5e5e5;
 }
