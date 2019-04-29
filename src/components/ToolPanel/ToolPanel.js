@@ -1,8 +1,15 @@
 // @flow
 import React from "react"
 
-import { changeMode, editorRedo, editorUndo } from "../../actions"
 import {
+  changeEditorDocument,
+  changeMode,
+  editorRedo,
+  editorUndo
+} from "../../actions"
+import {
+  getActiveDocument,
+  getActiveDocumentId,
   getCurrentHistoryPointer,
   getEditorMode,
   getHistoryLength,
@@ -15,6 +22,7 @@ import BEM from "../../utils/BEM"
 import { withRouter } from "react-router"
 
 import "./ToolPanel.scss"
+import { clone } from "ramda"
 
 const b = BEM("ToolPanel")
 
@@ -25,7 +33,8 @@ const ToolPanel = ({
   redo,
   isUndo,
   isRedo,
-  documentTitle
+  documentTitle,
+  changeActiveDocTitle
 }) => (
   <aside className={b()}>
     <button
@@ -52,7 +61,17 @@ const ToolPanel = ({
       REDO
     </button>
 
-    <div className={b("doc-name")}>{documentTitle}</div>
+    <div className={b("doc-name")}>
+      <form onSubmit={changeActiveDocTitle}>
+        <input
+          className={b("change-name")}
+          name="newTitle"
+          type="text"
+          placeholder="new name"
+        />
+      </form>
+      {documentTitle}
+    </div>
   </aside>
 )
 
@@ -66,13 +85,25 @@ const enhancer = compose(
       isRedo:
         getCurrentHistoryPointer(state) !== null &&
         getCurrentHistoryPointer(state) === getHistoryLength(state) - 1,
-      documentTitle: getOpenDocumentTitle(state)
+      documentTitle: getOpenDocumentTitle(state),
+      activeDocumentID: getActiveDocumentId(state),
+      activeDocument: getActiveDocument(state)
     }),
-    { changeMode, undo: editorUndo, redo: editorRedo }
+    { changeMode, undo: editorUndo, redo: editorRedo, changeEditorDocument }
   ),
   withHandlers({
     toggleCreateMode: ({ isCreateToggledOn, changeMode }) => () =>
-      isCreateToggledOn ? changeMode("VIEW") : changeMode("CREATE")
+      isCreateToggledOn ? changeMode("VIEW") : changeMode("CREATE"),
+    changeActiveDocTitle: ({ activeDocument, changeEditorDocument }) => e => {
+      e.preventDefault()
+      const newDocument = clone(activeDocument)
+      const { newTitle } = e.target
+
+      newDocument.title = newTitle.value
+      changeEditorDocument(newDocument)
+
+      newTitle.value = ""
+    }
   })
 )
 

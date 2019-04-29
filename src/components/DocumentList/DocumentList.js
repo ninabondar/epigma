@@ -14,8 +14,10 @@ const DocumentList = ({ documentsList, onNameSubmit }) => (
   <>
     <ul className={b()}>
       {documentsList.map(({ id, title }) => (
-        <li className={b("document")} key={id}>
-          <Link to={"/edit/" + id}>{title}</Link>
+        <li key={id}>
+          <Link className={b("document")} to={"/edit/" + id}>
+            {title}
+          </Link>
         </li>
       ))}
     </ul>

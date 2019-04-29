@@ -59,7 +59,6 @@ const defaultState = {
 export default (state = defaultState, action) => {
   switch (action.type) {
     case CREATE_DOCUMENT:
-      console.log("====> ", action)
       const newDocumentIndex = Object.keys(state).length + 1
       return {
         ...state,
@@ -74,6 +73,7 @@ export default (state = defaultState, action) => {
           shapes: []
         }
       }
+
     default:
       return state
   }
