@@ -1,4 +1,5 @@
 import { combineReducers } from "redux"
+import { curry } from "ramda"
 
 import documents, * as fromDocuments from "./documents"
 import editor, * as fromEditor from "./editor"
@@ -32,5 +33,6 @@ export const getOpenDocumentTitle = state =>
 export const getAllExistingDocuments = state =>
   fromDocuments.getAllExistingDocuments(state.documents)
 
-export const getDocumentById = (id, state) =>
+export const getDocumentById = curry((id, state) =>
   fromDocuments.getDocumentById(id, state.documents)
+)

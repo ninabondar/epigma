@@ -10,37 +10,27 @@ import { createDocument } from "../../actions/documents"
 
 const b = BEM("DocumentList")
 
-const DocumentList = ({
-  documentsList,
-  onNameChange,
-  onNameSubmit,
-  newDocumentName
-}) => {
-  return (
-    <>
-      <ul className={b()}>
-        {documentsList.map(
-          ({ id, title }) =>
-            console.log(id, title) || (
-              <li className={b("document")} key={id}>
-                <Link to={"/edit/" + id}>{title}</Link>
-              </li>
-            )
-        )}
-      </ul>
-      <form className={b("create-document-form")} onSubmit={onNameSubmit}>
-        <input
-          required
-          className={b("document-new-name")}
-          name={"documentName"}
-        />
-        <button className={b("create-document")} type={"submit"}>
-          CREATE DOCUMENT
-        </button>
-      </form>
-    </>
-  )
-}
+const DocumentList = ({ documentsList, onNameSubmit }) => (
+  <>
+    <ul className={b()}>
+      {documentsList.map(({ id, title }) => (
+        <li className={b("document")} key={id}>
+          <Link to={"/edit/" + id}>{title}</Link>
+        </li>
+      ))}
+    </ul>
+    <form className={b("create-document-form")} onSubmit={onNameSubmit}>
+      <input
+        required
+        className={b("document-new-name")}
+        name={"documentName"}
+      />
+      <button className={b("create-document")} type={"submit"}>
+        CREATE DOCUMENT
+      </button>
+    </form>
+  </>
+)
 
 const enhancer = compose(
   connect(
