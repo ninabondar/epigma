@@ -11,11 +11,12 @@ export const getTransformMatrix: _getTransformMatrix = (z, x, y) => [
 ]
 
 type _getTransformMatrixWithAsymmetricZoom = number => TransformationMatrix
-export const getTransformMatrixWithAsymmetricZoom: _getTransformMatrixWithAsymmetricZoom = (zX, zY, x, y) => [
-  [zX, 0, 0],
-  [0, zY, 0],
-  [x, y, 1]
-]
+export const getTransformMatrixWithAsymmetricZoom: _getTransformMatrixWithAsymmetricZoom = (
+  zX,
+  zY,
+  x,
+  y
+) => [[zX, 0, 0], [0, zY, 0], [x, y, 1]]
 
 type _serializeTransformationMatrix = TransformationMatrix => string
 export const serializeTransformationMatrix: _serializeTransformationMatrix = ([
@@ -39,8 +40,13 @@ type _transformPoint = TransformationMatrix => Point => Point
 export const transformPoint: _transformPoint = matrix => {
   const transformFn = getTransformFns(matrix)
 
+  let invertedMatrix = null
+
   transformFn.matrix = matrix
-  transformFn.invert = getTransformFns(invertMatrix(matrix))
+  transformFn.invert = point => {
+    invertedMatrix = invertedMatrix || invertMatrix(matrix)
+    return getTransformFns(invertedMatrix)(point)
+  }
 
   return transformFn
 }

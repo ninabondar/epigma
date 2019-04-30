@@ -62,7 +62,7 @@ const ToolPanel = ({
     </button>
 
     <div className={b("doc-name")}>
-      <form onSubmit={changeActiveDocTitle}>
+      <form  className={b("change-name-form")} onSubmit={changeActiveDocTitle}>
         <input
           className={b("change-name")}
           name="newTitle"

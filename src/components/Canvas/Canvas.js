@@ -26,7 +26,7 @@ const Canvas = ({
   setShapes,
   selectShape
 }) => {
-  const [offset] = useState({ x: 0, y: 0 })
+  const [offset] = useState({ x: 40, y: 0 })
 
   return (
     <CanvasTransform>

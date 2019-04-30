@@ -9,11 +9,11 @@ import { ShapeView } from "./ShapeView"
 const b = BEM("Shape")
 
 const ShapeCreate = props => {
-  const { onChange } = props
+  const { onChange, offset } = props
   // const transformation = useContext(TransformContext)
 
   const [shape, setShape] = useState(null)
-  const [ghostPoint, setGhostPoint] = useState(createPoint({ x: 0, y: 0 }))
+  const [ghostPoint, setGhostPoint] = useState(createPoint({ x: 0 - offset.x, y: 0 }))
 
   useEffect(() => {
     const documentClickHandler = () =>
