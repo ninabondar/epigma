@@ -1,8 +1,9 @@
-import React, { createContext } from "react"
+import React, { createContext, useContext } from "react"
 
 import { clone } from "ramda"
 import { compose, withHandlers, withState } from "recompose"
 import Corner, { CORNER_CONTROL_SIZE } from "../Corner/Corner"
+import { TransformContext } from "../CanvasTransform"
 
 import {
   getTransformMatrixWithAsymmetricZoom,
@@ -25,15 +26,17 @@ const Selection = ({
   boundingRect,
   selectionTransform,
   startDrag,
-  children
+  children,
+  canvasTransform
 }) => {
-  const transfDrag = transformPoint(selectionTransform)
-
-  const [minPoint, maxPoint] = boundingRect.map(transfDrag)
+  const selectionScale = transformPoint(selectionTransform)
+  const [minPoint, maxPoint] = boundingRect
+    .map(selectionScale)
+    .map(canvasTransform)
 
   return (
     <g className={b()}>
-      <SelectionTransformContext.Provider value={transfDrag}>
+      <SelectionTransformContext.Provider value={selectionScale}>
         {children}
       </SelectionTransformContext.Provider>
 
@@ -156,4 +159,10 @@ const enhancer = compose(
   })
 )
 
-export default enhancer(Selection)
+const EnhancedSelection = enhancer(Selection)
+
+export default props => (
+  <TransformContext.Consumer>
+    {transform => <EnhancedSelection {...props} canvasTransform={transform} />}
+  </TransformContext.Consumer>
+)

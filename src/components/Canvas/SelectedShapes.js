@@ -18,9 +18,7 @@ let SelectedShapes = ({ shapes, offset }) => {
   const boundingBox = getBoundingBoxFromShape(shapes[0]) //TODO: fix it. Get boundingBox for all shapes. Not only for first
 
   const [minY, maxX, maxY, minX] = boundingBox
-  const boundingRect = [createPoint(minX, minY), createPoint(maxX, maxY)].map(
-    transformation
-  )
+  const boundingRect = [createPoint(minX, minY), createPoint(maxX, maxY)]
 
   useEffect(() => {
     const keyHandler = ev => {
