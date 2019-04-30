@@ -98,7 +98,7 @@ const enhancer = compose(
   withState(
     "selectionTransform",
     "setSelectionTransform",
-    getTransformMatrixWithAsymmetricZoom(1, 1, 1, 1)
+    getTransformMatrixWithAsymmetricZoom(1, 1, 0, 0)
   ),
 
   withHandlers({
@@ -126,18 +126,21 @@ const enhancer = compose(
     startDrag: ({ setSelectionTransform, boundingRect, onTransform }) => ev => {
       ev.stopPropagation()
 
-      const [minPoint] = boundingRect
+      const [minPoint, maxPoint] = boundingRect
 
       const { pageX: startX, pageY: startY } = ev
 
       const cornerDrag = ({ pageX: x, pageY: y }) => {
+        const selectionWidth = maxPoint.x - minPoint.x
+        const selectionHeight = maxPoint.y - minPoint.y
+
         const dX = x - startX
         const dY = y - startY
-        const zX = startX + dX
-        const zY = startY + dY
+        const zX = selectionWidth + dX
+        const zY = selectionHeight + dY
 
         setSelectionTransform(
-          getZoomMatrixXY(minPoint, zX / startX, zY / startY)
+          getZoomMatrixXY(minPoint, zX / selectionWidth, zY / selectionHeight)
         )
       }
 
