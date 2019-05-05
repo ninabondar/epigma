@@ -1,8 +1,7 @@
-import React, { useContext, useEffect } from "react"
+import React, { useEffect } from "react"
 import { useActions, useSelector } from "react-redux"
 import { getCurrentHistoryPointer } from "../../reducers"
 import * as actions from "../../actions"
-import { TransformContext } from "../CanvasTransform"
 import { createPoint, getBoundingBoxFromShape } from "../../utils/helper"
 import Selection from "../Selection/Selection"
 import ShapeView from "../Shape/ShapeView"
@@ -11,9 +10,7 @@ let SelectedShapes = ({ shapes, offset }) => {
   if (shapes.length === 0) return null
 
   const selectionId = useSelector(getCurrentHistoryPointer)
-  const { setEditedShape, setSelectedShapes } = useActions(actions)
-
-  const transformation = useContext(TransformContext)
+  const { setEditedShape } = useActions(actions)
 
   const boundingBox = getBoundingBoxFromShape(shapes[0]) //TODO: fix it. Get boundingBox for all shapes. Not only for first
 

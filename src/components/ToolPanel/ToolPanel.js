@@ -1,5 +1,9 @@
 // @flow
 import React from "react"
+import { withRouter } from "react-router"
+import { connect } from "react-redux"
+import { compose, withHandlers, withProps, withState } from "recompose"
+import { clone } from "ramda"
 
 import {
   changeEditorDocument,
@@ -15,16 +19,14 @@ import {
   getHistoryLength,
   getOpenDocumentTitle
 } from "../../reducers"
-import { compose, withHandlers, withProps } from "recompose"
-import { connect } from "react-redux"
 
 import BEM from "../../utils/BEM"
-import { withRouter } from "react-router"
 
 import "./ToolPanel.scss"
-import { clone } from "ramda"
+import "./RenameDoc.scss"
 
 const b = BEM("ToolPanel")
+const bRename = BEM("RenameDoc")
 
 const ToolPanel = ({
   isCreateToggledOn,
@@ -34,7 +36,9 @@ const ToolPanel = ({
   isUndo,
   isRedo,
   documentTitle,
-  changeActiveDocTitle
+  changeActiveDocTitle,
+  isRenamed,
+  toggleIsRenamed
 }) => (
   <aside className={b()}>
     <button
@@ -61,16 +65,19 @@ const ToolPanel = ({
       REDO
     </button>
 
-    <div className={b("doc-name")}>
-      <form  className={b("change-name-form")} onSubmit={changeActiveDocTitle}>
+    <div className={bRename({ active: isRenamed })}>
+      <form className={bRename("rename-form")} onSubmit={changeActiveDocTitle}>
         <input
-          className={b("change-name")}
+          className={bRename("name-input")}
           name="newTitle"
           type="text"
           placeholder="new name"
+          autofocus={isRenamed}
         />
       </form>
-      {documentTitle}
+      <span className={bRename("name")} onClick={toggleIsRenamed}>
+        {documentTitle}
+      </span>
     </div>
   </aside>
 )
@@ -78,6 +85,7 @@ const ToolPanel = ({
 const enhancer = compose(
   withRouter,
   withProps(({ match }) => ({ documentId: match.params.documentId })),
+  withState("isRenamed", "setIsRenamed", false),
   connect(
     state => ({
       isCreateToggledOn: getEditorMode(state) === "CREATE",
@@ -94,7 +102,12 @@ const enhancer = compose(
   withHandlers({
     toggleCreateMode: ({ isCreateToggledOn, changeMode }) => () =>
       isCreateToggledOn ? changeMode("VIEW") : changeMode("CREATE"),
-    changeActiveDocTitle: ({ activeDocument, changeEditorDocument }) => e => {
+    changeActiveDocTitle: ({
+      activeDocument,
+      changeEditorDocument,
+      isRenamed,
+      setIsRenamed
+    }) => e => {
       e.preventDefault()
       const newDocument = clone(activeDocument)
       const { newTitle } = e.target
@@ -103,6 +116,10 @@ const enhancer = compose(
       changeEditorDocument(newDocument)
 
       newTitle.value = ""
+      setIsRenamed(!isRenamed)
+    },
+    toggleIsRenamed: ({ isRenamed, setIsRenamed }) => e => {
+      setIsRenamed(!isRenamed)
     }
   })
 )

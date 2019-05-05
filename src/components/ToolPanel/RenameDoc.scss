@@ -1,0 +1,48 @@
+@import "../../styles/variables";
+
+.RenameDoc {
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  &__name {
+    visibility: visible;
+    pointer-events: auto;
+    @include centeredAbsolutely();
+    cursor: text;
+  }
+
+  &__name,
+  &__name-input {
+    font-size: 14px;
+    line-height: 16px;
+  }
+
+  &__name-input {
+    visibility: hidden;
+    outline: none;
+    background: $PANEL_COLOR;
+    font-size: 14px;
+    line-height: 16px;
+    padding: 5px;
+    width: 400px;
+    border: 0;
+    color: white;
+    text-align: center;
+    z-index: 1;
+    font-family: $FONT_FAM;
+  }
+
+  &_active {
+    & > .RenameDoc__name {
+      pointer-events: none;
+      visibility: hidden;
+    }
+
+    & .RenameDoc__name-input {
+      visibility: visible;
+    }
+  }
+}

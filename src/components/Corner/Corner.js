@@ -2,7 +2,7 @@ import React from "react"
 import BEM from "../../utils/BEM"
 import { compose, withHandlers, withState } from "recompose"
 
-export const CORNER_CONTROL_SIZE = 10
+export const CORNER_CONTROL_SIZE = 8
 const b = BEM("Selection")
 
 const Corner = ({

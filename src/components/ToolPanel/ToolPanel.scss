@@ -30,21 +30,4 @@
       }
     }
   }
-
-  &__change-name-form {
-    float: right;
-    margin-left: 10px;
-  }
-
-  &__change-name {
-    outline: none;
-  }
-
-  &__doc-name {
-    color: white;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
 }

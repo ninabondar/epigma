@@ -1,5 +1,15 @@
 $HEADER_HEIGHT: 40px;
+$FONT_FAM: "PT Sans", sans-serif;
 
 $FONT_COLOR: #232323;
 $PANEL_COLOR: #2c2c2c;
 $HIGHLIGHT_COLOR: #47b8ff;
+
+//-----MIXINS------
+
+@mixin centeredAbsolutely() {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
