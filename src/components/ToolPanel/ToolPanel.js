@@ -72,7 +72,7 @@ const ToolPanel = ({
           name="newTitle"
           type="text"
           placeholder="new name"
-          autofocus={isRenamed}
+          autoComplete="off"
         />
       </form>
       <span className={bRename("name")} onClick={toggleIsRenamed}>
@@ -118,7 +118,7 @@ const enhancer = compose(
       newTitle.value = ""
       setIsRenamed(!isRenamed)
     },
-    toggleIsRenamed: ({ isRenamed, setIsRenamed }) => e => {
+    toggleIsRenamed: ({ isRenamed, setIsRenamed }) => {
       setIsRenamed(!isRenamed)
     }
   })

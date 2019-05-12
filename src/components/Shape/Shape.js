@@ -1,5 +1,4 @@
 // @flow
-
 import { branch, renderComponent, compose } from "recompose"
 
 import ShapeView from "./ShapeView"
