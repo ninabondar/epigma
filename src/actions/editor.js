@@ -42,3 +42,4 @@ export const editorUndo = () => ({
 export const editorRedo = () => ({
   type: REDO
 })
+

@@ -1,0 +1,44 @@
+@import "../../styles/variables";
+
+.ShapeFeatureTuningPanel {
+  box-sizing: border-box;
+  padding: 20px 0;
+  border-bottom: 1px solid $BORDER_COLOR;
+
+  &__feature-name {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  &__feature-block {
+    display: flex;
+    margin: 10px 0 0 -5px;
+  }
+
+  &__stroke-color {
+    display: flex;
+    align-content: center;
+    box-sizing: border-box;
+    padding: 5px;
+    border: 1px solid white;
+
+    &:hover {
+      border: 1px solid $BORDER_COLOR;
+    }
+  }
+
+  &__stroke-color-code {
+    margin-left: 8px;
+    font-size: 13px;
+    align-self: center;
+  }
+
+  &__stroke-color-preview {
+    align-self: center;
+    width: 12px;
+    height: 12px;
+    background: $FONT_COLOR;
+    display: block;
+  }
+}

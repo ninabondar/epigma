@@ -17,6 +17,7 @@ let SelectedShapes = ({ shapes, offset }) => {
   const [minY, maxX, maxY, minX] = boundingBox
   const boundingRect = [createPoint(minX, minY), createPoint(maxX, maxY)]
 
+
   useEffect(() => {
     const keyHandler = ev => {
       if (ev.key === "Escape") {
@@ -26,7 +27,7 @@ let SelectedShapes = ({ shapes, offset }) => {
     }
     document.addEventListener("keydown", keyHandler)
 
-    return () => document.removeEventListener("keypress", keyHandler)
+    return () => document.removeEventListener("keydown", keyHandler)
   })
 
   return (

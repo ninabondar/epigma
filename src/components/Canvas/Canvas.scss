@@ -3,7 +3,7 @@
 .Canvas {
   position: absolute;
   height: calc(100vh - #{$HEADER_HEIGHT});
-  width: 100vw;
+  width: calc(100vw - #{$SHAPE_PANEL_WIDTH});
   top: $HEADER_HEIGHT;
   background: #e5e5e5;
 }

@@ -1,6 +1,7 @@
 import React from "react"
 import ToolPanel from "../ToolPanel/ToolPanel"
 import Canvas from "../Canvas"
+import ShapeEditPanel from "../ShapeEditPanel/ShapeEditPanel"
 
 import produce from "immer"
 import { find, propEq, filter, contains, without } from "ramda"
@@ -86,6 +87,7 @@ const Editor = () => (
   <>
     <ToolPanel />
     <DocumentLoader />
+    <ShapeEditPanel />
   </>
 )
 

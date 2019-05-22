@@ -26,7 +26,6 @@ const Canvas = ({
   setShapes,
   selectShape
 }) => {
-
   const [offset] = useState({ x: 0, y: 40 })
 
   return (
