@@ -1,6 +1,5 @@
 language: node_js
 node_js:
-  - "8"
   - "10"
 sudo: required
 before_install:
@@ -12,3 +11,5 @@ cache:
   yarn: true
   directories:
     - node_modules
+script:
+  - yarn start
