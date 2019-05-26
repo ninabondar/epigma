@@ -7,3 +7,5 @@ cache: yarn
 install: yarn
 script:
   - yarn test
+notifications:
+  slack: kaguyaworkspace:BqY7ZHxYO7iXatwl01PHInDu
