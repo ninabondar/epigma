@@ -1,5 +1,5 @@
 // @flow
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 
 import produce from "immer"
 import uuidv1 from "uuid/v1"
@@ -12,6 +12,7 @@ import ShapeView from "../Shape/ShapeView"
 
 import BEM from "../../utils/BEM"
 import "./Canvas.scss"
+import { useDispatch } from "react-redux"
 const b = BEM("Canvas")
 
 const Canvas = ({
@@ -26,7 +27,11 @@ const Canvas = ({
   setShapes,
   selectShape
 }) => {
-  const [offset] = useState({ x: 0, y: 40 })
+  const [offset, setOffset] = useState({ x: 0, y: 0 })
+  const dispatch = useDispatch()
+  useEffect(() => {
+    setOffset({ x: 0, y: document.querySelector(".ToolPanel").offsetHeight })
+  })
 
   return (
     <CanvasTransform>
@@ -34,7 +39,7 @@ const Canvas = ({
         {viewedShapes.map(shape => (
           <ShapeView
             key={shape.id}
-            onSelect={() => selectShape(shape.id)}
+            onSelect={() => dispatch(selectShape(shape.id))}
             offset={offset}
             path={shape}
           />
@@ -48,15 +53,17 @@ const Canvas = ({
             offset={offset}
             path={editedShape}
             onChange={editedShape => {
-              setShapes(
-                produce(allShapes, draft => {
-                  const index = draft.findIndex(
-                    ({ id }) => editedShape.id === id
-                  )
-                  draft[index] = editedShape
-                })
+              dispatch(
+                setShapes(
+                  produce(allShapes, draft => {
+                    const index = draft.findIndex(
+                      ({ id }) => editedShape.id === id
+                    )
+                    draft[index] = editedShape
+                  })
+                )
               )
-              setEditedShape(null)
+              dispatch(setEditedShape(null))
             }}
           />
         )}
@@ -68,11 +75,11 @@ const Canvas = ({
               if (newShape.points && newShape.points.length > 1) {
                 const id = uuidv1()
                 newShape.id = id //TODO: fix it!
-                setShapes([...allShapes, newShape])
-                selectShape(id)
+                dispatch(setShapes([...allShapes, newShape]))
+                dispatch(selectShape(id))
               }
 
-              changeMode("VIEW")
+              dispatch(changeMode("VIEW"))
             }}
           />
         )}

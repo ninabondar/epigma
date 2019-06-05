@@ -1,0 +1,41 @@
+[
+  {
+    "id": "1",
+    "title": "star",
+    "author": "",
+    "contributors": [],
+    "shapes": [
+      {
+        "id": "1",
+        "points": [],
+        "style": {
+          "color": "#232323"
+        }
+      },
+
+      {
+        "id": "A",
+        "points": [],
+        "style": {
+          "color": "#232323"
+        }
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "title": "line",
+    "author": "",
+    "contributors": [],
+
+    "shapes": [
+      {
+        "id": "3",
+        "points": [],
+        "style": {
+          "color": "#232323"
+        }
+      }
+    ]
+  }
+]

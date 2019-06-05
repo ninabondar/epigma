@@ -15,3 +15,13 @@ $SHAPE_PANEL_WIDTH: 240px;
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+@mixin borderAppearsOnHover() {
+  box-sizing: border-box;
+  padding: 5px;
+  border: 1px solid white;
+
+  &:hover {
+    border: 1px solid $BORDER_COLOR;
+  }
+}

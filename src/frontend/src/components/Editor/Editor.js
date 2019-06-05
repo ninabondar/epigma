@@ -7,7 +7,7 @@ import produce from "immer"
 import { find, propEq, filter, contains, without } from "ramda"
 
 import { withRouter } from "react-router-dom"
-import { useActions, useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import {
   getActiveDocument,
   getActiveDocumentId,
@@ -29,13 +29,12 @@ const useCanvasData = doc => {
   const selectedShapes = editedShape
     ? []
     : filter(({ id }) => contains(id, selectedShapesId), doc.shapes)
-
   const {
     setSelectedShapes,
     setEditedShape,
     changeEditorDocument,
     changeMode
-  } = useActions(actions)
+  } = actions
 
   const viewedShapes = without([...selectedShapes, editedShape], doc.shapes)
 
@@ -66,10 +65,11 @@ const useEditorDocument = documentId => {
   const editedDocId = useSelector(getActiveDocumentId)
   const doc = useSelector(getDocumentById(documentId))
   const activeDoc = useSelector(getActiveDocument)
+  const dispatch = useDispatch()
 
-  const { openDocumentInEditor } = useActions(actions)
+  const { openDocumentInEditor } = actions
 
-  if (documentId !== editedDocId) openDocumentInEditor(doc)
+  if (documentId !== editedDocId) dispatch(openDocumentInEditor(doc))
 
   return activeDoc
 }

@@ -11,7 +11,6 @@ const b = BEM("Shape")
 const ShapeCreate = props => {
   const { onChange, offset } = props
   // const transformation = useContext(TransformContext)
-  console.log(offset, "<----")
 
   const [shape, setShape] = useState(null)
   const [ghostPoint, setGhostPoint] = useState(createPoint({ x: 0, y: 0 }))
@@ -71,7 +70,6 @@ const ShapeCreate = props => {
         point={ghostPoint}
         onChange={point => {
           setGhostPoint({ x: point.x - offset.x, y: point.y - offset.y })
-          console.log({ x: point.x - offset.x, y: point.y - offset.y }, " POINT")
         }}
       />
     </g>

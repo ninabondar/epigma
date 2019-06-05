@@ -1,9 +1,13 @@
-@import "./variables";
+@import "variables";
 
 body {
   margin: 0;
   color: #232323;
-  font-family: "PT Sans", sans-serif;
+  font-family: $FONT_FAM;
+}
+
+input {
+  font-family: $FONT_FAM;
 }
 
 a {

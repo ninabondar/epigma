@@ -102,6 +102,7 @@ const enhancer = compose(
   withHandlers({
     toggleCreateMode: ({ isCreateToggledOn, changeMode }) => () =>
       isCreateToggledOn ? changeMode("VIEW") : changeMode("CREATE"),
+
     changeActiveDocTitle: ({
       activeDocument,
       changeEditorDocument,
@@ -111,13 +112,14 @@ const enhancer = compose(
       e.preventDefault()
       const newDocument = clone(activeDocument)
       const { newTitle } = e.target
-
-      newDocument.title = newTitle.value
+      const { title } = newDocument
+      newDocument.title = newTitle.value === "" ? title : newTitle.value
       changeEditorDocument(newDocument)
 
       newTitle.value = ""
       setIsRenamed(!isRenamed)
     },
+
     toggleIsRenamed: ({ isRenamed, setIsRenamed }) => {
       setIsRenamed(!isRenamed)
     }

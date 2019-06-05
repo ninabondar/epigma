@@ -9,5 +9,3 @@ export const OPEN_DOCUMENT = "OPEN_DOCUMENT"
 export const UNDO = "UNDO"
 export const REDO = "REDO"
 export const CREATE_DOCUMENT = "CREATE_DOCUMENT"
-export const CHANGE_SELECTED_SHAPE_COLOR = "CHANGE_SELECTED_SHAPE_COLOR"
-

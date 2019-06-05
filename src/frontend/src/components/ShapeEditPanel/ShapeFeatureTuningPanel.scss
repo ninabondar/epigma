@@ -14,18 +14,15 @@
   &__feature-block {
     display: flex;
     margin: 10px 0 0 -5px;
+    justify-content: space-between;
+    align-items: center;
   }
 
   &__stroke-color {
     display: flex;
+    position: relative;
     align-content: center;
-    box-sizing: border-box;
-    padding: 5px;
-    border: 1px solid white;
-
-    &:hover {
-      border: 1px solid $BORDER_COLOR;
-    }
+    @include borderAppearsOnHover();
   }
 
   &__stroke-color-code {
@@ -34,11 +31,34 @@
     align-self: center;
   }
 
+  &__stroke-opacity {
+    font-size: 13px;
+    @include borderAppearsOnHover();
+  }
+
   &__stroke-color-preview {
     align-self: center;
     width: 12px;
     height: 12px;
     background: $FONT_COLOR;
     display: block;
+  }
+
+  &__stroke-color-input {
+    width: 46px;
+    position: absolute;
+    right: 0;
+    outline: none;
+    align-self: center;
+    border: 0;
+    font-size: 13px;
+    pointer-events: none;
+    visibility: hidden;
+    font-family: $FONT_FAM;
+
+    &_visible {
+      pointer-events: all;
+      visibility: visible;
+    }
   }
 }

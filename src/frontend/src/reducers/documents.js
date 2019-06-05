@@ -22,7 +22,9 @@ const defaultState = {
           createPoint(568, 174.3333282470703),
           createPoint(131, 155.3333282470703)
         ],
-        style: null
+        style: {
+          color: "#232323"
+        }
       },
 
       {
@@ -32,7 +34,9 @@ const defaultState = {
           createPoint(179, 257.3333282470703),
           createPoint(524, 394.3333282470703)
         ],
-        style: null
+        style: {
+          color: "#232323"
+        }
       }
     ]
   },
@@ -51,7 +55,9 @@ const defaultState = {
           createPoint(139, 107.3333282470703),
           createPoint(424, 294.3333282470703)
         ],
-        style: null
+        style: {
+          color: "#232323"
+        }
       }
     ]
   }

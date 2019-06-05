@@ -41,7 +41,7 @@ const CanvasTransform = ({ children }) => {
     ev.preventDefault()
     const zoomMatrix = getZoomMatrix(
       createPoint(ev.pageX, ev.pageY),
-      ev.deltaY < 0 ? 0.9 : 1.1
+      ev.deltaY < 0 ? 0.98 : 1.02
     )
     setMatrix(multiplyMatrix(matrix, zoomMatrix))
   }
