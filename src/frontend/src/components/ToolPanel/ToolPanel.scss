@@ -13,13 +13,19 @@
     outline: none;
     height: 100%;
     width: 55px;
+    background: $HEADER_PANEL_COLOR;
+    color: white;
 
     &:hover {
-      background: rgb(172, 220, 255);
+      background: black;
     }
 
-    &_create-shape {
-      font-size: 12px;
+    &_disabled {
+      opacity: 0.5;
+
+      &:hover {
+        background: $HEADER_PANEL_COLOR;
+      }
     }
 
     &_toggled-on {

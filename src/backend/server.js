@@ -1,17 +1,11 @@
 const express = require("express")
-const mongoose = require("mongoose")
 const fs = require("fs")
+const MongoClient = require("mongodb").MongoClient
 
 const app = express()
 const PORT = 8000
 
-const mongoDB = "mongodb://127.0.0.1/my_database"
-mongoose.connect(mongoDB, { useNewUrlParser: true })
-mongoose.Promise = global.Promise
-// Получение подключения по умолчанию
-const db = mongoose.connection
-
-db.on("error", console.error.bind(console, "MongoDB connection error:"))
+const mongoDBURI = "mongodb://127.0.0.1"
 
 let documents = []
 
@@ -36,6 +30,16 @@ app.get("/edit/:docId", (req, res) => {
   // take name out of query string
   let docId = req.params.docId
   res.send(docId)
+})
+
+MongoClient.connect(mongoDBURI, { useNewUrlParser: true }, (err, client) => {
+  if (err) {
+    console.log("The following error occured when connecting to database: ")
+    throw err
+  }
+  const db = client.db("epigma")
+  console.log(db, "<== docs")
+  client.close()
 })
 
 const server = app.listen(PORT, () =>

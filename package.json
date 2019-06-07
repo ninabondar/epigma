@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "test": "cd src/frontend && yarn test",
     "build:frontend": "cd src/frontend && yarn build",
     "build:backend": "cd src/backend && yarn build",
     "build": "yarn build:backend && yarn build:frontend",

@@ -24,7 +24,7 @@ const ShapeEditPanel = ({ changeColor }) => {
               className={bF("stroke-color-code")}
               onClick={console.log("changing color")}
             >
-              000000
+              {"000000"}
             </small>
             <input
               className={bF("stroke-color-input")}

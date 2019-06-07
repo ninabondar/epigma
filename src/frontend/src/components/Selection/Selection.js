@@ -117,7 +117,9 @@ const enhancer = compose(
         const shape = newDocument.shapes.find(
           ({ id }) => selectedShapeId === id
         )
-        shape.points = shape.points.map(transformPoint(selectionTransform))
+        shape.points = shape.points.map(
+          transformPoint(selectionTransform)
+        )
       })
 
       changeEditorDocument(newDocument)

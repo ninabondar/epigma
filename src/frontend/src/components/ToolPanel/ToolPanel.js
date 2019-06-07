@@ -29,6 +29,7 @@ const b = BEM("ToolPanel")
 const bRename = BEM("RenameDoc")
 
 const ToolPanel = ({
+  isDraftScreen,
   isCreateToggledOn,
   toggleCreateMode,
   undo,
@@ -40,7 +41,7 @@ const ToolPanel = ({
   isRenamed,
   toggleIsRenamed
 }) => (
-  <aside className={b()}>
+  <aside className={b({"draft-screen": isDraftScreen})}>
     <button
       className={b("control", {
         "create-shape": true,

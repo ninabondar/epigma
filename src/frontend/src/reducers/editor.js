@@ -8,7 +8,6 @@ import {
   UNDO,
   REDO,
   SET_EDITED_SHAPE,
-  CHANGE_SELECTED_SHAPE_COLOR
 } from "../actions/actionTypes"
 
 import produce from "immer"
@@ -88,6 +87,9 @@ export default produce((draft, action) => {
 
     case REDO: {
       draft.historyPointer++
+      return
+    }
+    default: {
       return
     }
 

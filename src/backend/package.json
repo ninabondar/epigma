@@ -4,16 +4,17 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
-    "build": "babel src -d build",
+    "build": "node server.js",
     "flow": "flow",
     "eject": "react-scripts eject"
   },
   "author": "ninabondar",
   "license": "ISC",
   "dependencies": {
-    "cors": "^2.8.5",
     "axios": "^0.19.0",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
+    "mongodb": "^3.2.7",
     "mongoose": "^5.5.12",
     "nodemon": "^1.19.1"
   }

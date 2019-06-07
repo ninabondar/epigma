@@ -8,8 +8,8 @@ const defaultState = {
     title: "star",
     author: "",
     contributors: [],
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: new Date().toDateString(),
+    updatedAt: new Date().toDateString(),
     shapes: [
       {
         // this is a shape in a documents
@@ -45,8 +45,8 @@ const defaultState = {
     title: "line",
     author: "",
     contributors: [],
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: new Date().toDateString(),
+    updatedAt: new Date().toDateString(),
     shapes: [
       {
         // this is a shape in a documents
@@ -76,8 +76,8 @@ export default (state = defaultState, action) =>
             title: action.title,
             author: "",
             contributors: [],
-            createdAt: new Date(),
-            updatedAt: new Date(),
+            createdAt: new Date().toDateString(),
+            updatedAt: new Date().toDateString(),
             shapes: []
           }
         }

@@ -2,29 +2,78 @@
 
 .DocumentList {
   margin: 0 auto;
-  padding: 0;
+  box-sizing: border-box;
+  padding: 20px;
+  min-height: 100vh;
+  background: $BG_COLOR;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: baseline;
 
   &__document {
     box-sizing: border-box;
+    background: #ffffff;
+    border-radius: 2px;
     padding: 20px;
     width: calc(100% / 4);
+    min-width: 300px;
+    height: 88px;
     float: left;
-    margin: 0 0.5em;
+    margin: 0.5em;
+    transition: opacity 0.2s linear;
 
     &:hover {
-      background: #ececec;
+      transition: opacity 0.2s linear;
+      opacity: 0.8;
     }
+  }
+
+  &__doc-title {
+    font-size: $FONT_SIZE_GENERAL;
+  }
+
+  &__doc-side-info {
+    box-sizing: border-box;
+    padding-top: 10px;
+    font-size: $SMALL_FONT_SIZE;
+    color: $PALE_GRAY;
+    line-height: $SMALL_LINE_HEIGHT;
+    display: flex;
+  }
+
+  &__create-document-form {
+    background: white;
+    width: calc(100% / 4);
+    min-width: 300px;
+    box-sizing: border-box;
+    padding: 20px;
+    height: 88px;
+    margin: 0.5em;
+    display: flex;
+    justify-content: center;
+    position: relative;
   }
 
   &__create-document {
     outline: none;
-    background: gray;
+    background: transparent;
     box-sizing: border-box;
-    border: none;
+    border: 1px dashed $HIGHLIGHT_COLOR;
+    border-radius: 4px;
+    text-transform: capitalize;
+    font-size: $SMALL_FONT_SIZE;
     padding: 10px 12px;
+    // TODO redesign this button
+    display: none;
   }
+
   &__document-new-name {
+    font-size: $FONT_SIZE_GENERAL;
     outline: none;
+    border: 0;
+    width: 100%;
+    border-bottom: 1px solid $BORDER_COLOR;
   }
 
   &__document-new-name:valid + &__create-document {

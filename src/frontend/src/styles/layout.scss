@@ -1,12 +1,12 @@
 @import "variables";
 
-body {
-  margin: 0;
-  color: #232323;
+* {
   font-family: $FONT_FAM;
 }
-
-input {
+body {
+  background: $BG_COLOR;
+  margin: 0;
+  color: #232323;
   font-family: $FONT_FAM;
 }
 
