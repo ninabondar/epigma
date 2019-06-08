@@ -4,9 +4,7 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
-    "build": "node server.js",
-    "flow": "flow",
-    "eject": "react-scripts eject"
+    "build": "node server.js"
   },
   "author": "ninabondar",
   "license": "ISC",

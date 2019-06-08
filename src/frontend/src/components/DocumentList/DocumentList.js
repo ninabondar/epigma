@@ -48,7 +48,7 @@ const DocumentListScreen = () => (
 const enhancer = compose(
   connect(
     state => ({ documentsList: getAllExistingDocuments(state) }),
-    { createDocument }
+    { createDocument, }
   ),
   withState("newDocumentName", "setNewDocumentName", ""),
   withHandlers({
