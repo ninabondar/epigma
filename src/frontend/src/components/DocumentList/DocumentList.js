@@ -15,8 +15,8 @@ const DocumentList = ({ documentsList, onNameSubmit }) => (
   <>
     <section className={b()}>
       {documentsList.map(({ id, title, createdAt }) => (
-        <Link to={"/edit/" + id}>
-          <div className={b("document")} key={id}>
+        <Link key={id} to={"/edit/" + id}>
+          <div className={b("document")}>
             <div className={b("doc-title")}> {title}</div>
             <div className={b("doc-side-info")}>{String(createdAt)}</div>
           </div>
@@ -48,7 +48,7 @@ const DocumentListScreen = () => (
 const enhancer = compose(
   connect(
     state => ({ documentsList: getAllExistingDocuments(state) }),
-    { createDocument, }
+    { createDocument }
   ),
   withState("newDocumentName", "setNewDocumentName", ""),
   withHandlers({
