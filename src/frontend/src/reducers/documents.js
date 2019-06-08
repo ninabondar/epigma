@@ -31,8 +31,8 @@ const defaultState = {
         // this is a shape in a documents
         id: "A",
         points: [
-          createPoint(179, 257.3333282470703),
-          createPoint(524, 394.3333282470703)
+          createPoint(264, 584),
+          createPoint(385, 643)
         ],
         style: {
           color: "#232323"

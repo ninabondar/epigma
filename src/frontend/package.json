@@ -35,6 +35,7 @@
     "react-router-dom": "^5.0.0",
     "react-scripts": "2",
     "recompose": "^0.30.0",
+    "redux-thunk": "^2.3.0",
     "yarn": "^1.16.0"
   },
   "browserslist": [

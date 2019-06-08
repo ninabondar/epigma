@@ -1,7 +1,6 @@
 const mongoose = require("mongoose")
 
 const documentSchema = mongoose.Schema({
-  id: String,
   title: String,
   author: String,
   contributors: Array,

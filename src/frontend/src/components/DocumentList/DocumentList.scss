@@ -5,7 +5,7 @@
   box-sizing: border-box;
   padding: 20px;
   min-height: 100vh;
-  background: $BG_COLOR;
+  max-width: 1700px;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
@@ -16,12 +16,12 @@
     background: #ffffff;
     border-radius: 2px;
     padding: 20px;
-    width: calc(100% / 4);
-    min-width: 300px;
+    width: calc(100vw / 5 - (3 * 0.5em));
     height: 88px;
     float: left;
     margin: 0.5em;
     transition: opacity 0.2s linear;
+    position: relative;
 
     &:hover {
       transition: opacity 0.2s linear;
@@ -44,15 +44,16 @@
 
   &__create-document-form {
     background: white;
-    width: calc(100% / 4);
-    min-width: 300px;
     box-sizing: border-box;
     padding: 20px;
     height: 88px;
-    margin: 0.5em;
+    margin: 0;
     display: flex;
     justify-content: center;
-    position: relative;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 0;
   }
 
   &__create-document {
