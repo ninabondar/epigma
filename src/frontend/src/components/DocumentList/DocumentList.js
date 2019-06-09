@@ -28,7 +28,7 @@ const DocumentsListFetched = ({
 }) => (
   <section className={b()}>
     {documentsList.map(({ id, title, createdAt, _id }, i) => {
-      if (title && _id) {
+      if (title ) {
         return (
           <Link to={"/edit/" + id} key={i}>
             <div className={b("document")}>
@@ -78,7 +78,7 @@ const enhancer = compose(
     { createNewDocument, fetchDocuments, removeDocumentById }
   ),
   withProps(({ documentsList, isFetching, fetchDocuments }) => {
-    if (!isFetching && !(documentsList.length > 2)) {
+    if (!isFetching && !(documentsList.length )) {
       fetchDocuments()
     }
   }),

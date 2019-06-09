@@ -30,7 +30,6 @@ documentRoute.get("/:_id", (req, res) => {
 documentRoute.post("/", (req, res) => {
   const { body } = req
   const newDoc = new Document(body)
-  console.log(newDoc)
 
   newDoc.save((err, doc) => {
     if (err) res.error(err)
