@@ -59,6 +59,7 @@ export const fetchDocuments = () => dispatch => {
   })
     .then(res => {
       if (res.ok) {
+        //console.log("requested successfully")
         return res.json()
       }
     })

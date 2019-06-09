@@ -5,17 +5,14 @@ import { connect } from "react-redux"
 import ToolPanel from "../ToolPanel/ToolPanel"
 
 import { getAllExistingDocuments } from "../../reducers"
-import {
-  createNewDocument,
-  receiveDocumentsSuccess,
-  fetchDocuments
-} from "../../actions/documents"
+import { createNewDocument, fetchDocuments } from "../../actions/documents"
 
 import BEM from "../../utils/BEM"
 import "./DocumentList.scss"
 const b = BEM("DocumentList")
 
 const DocumentList = ({ documentsList, onNameSubmit, fetchDocuments }) => {
+  fetchDocuments()
   return (
     <section className={b()}>
       {documentsList.map(({ id, title, createdAt }, i) => (

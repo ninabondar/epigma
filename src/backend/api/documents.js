@@ -6,8 +6,8 @@ const documentRoute = new Router()
 documentRoute.get("/", (req, res) => {
   Document.find({})
     .exec()
-    .then(doc => {
-      res.send(doc)
+    .then(docs => {
+      res.send(docs)
     })
     .catch(err => {
       res.status(404)
