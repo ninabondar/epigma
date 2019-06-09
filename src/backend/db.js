@@ -12,4 +12,7 @@ db.on("error", err => {
 
 db.once("open", () => console.log("database connection established"))
 
-module.exports = { Document: mongoose.model("Document", documentSchema) }
+module.exports = {
+  db: db,
+  Document: mongoose.model("Document", documentSchema)
+}

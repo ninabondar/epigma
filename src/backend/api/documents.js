@@ -1,16 +1,30 @@
 const { Router } = require("express")
-const { Document } = require("../db")
+const { Document, db } = require("../db")
 
 const documentRoute = new Router()
 
 documentRoute.get("/", (req, res) => {
   Document.find({})
     .exec()
-    .then(doc => res.send(doc))
+    .then(doc => {
+      res.send(doc)
+    })
     .catch(err => {
       res.status(404)
-      res.send({ error: "Document not found" })
+      res.send({ error: "Documents not found" })
     })
+})
+
+documentRoute.post("/", (req, res) => {
+  const { body } = req
+  const newDoc = new Document(body)
+  console.log(newDoc)
+
+  newDoc.save((err, doc) => {
+    if (err) res.error(err)
+
+    res.send(doc)
+  })
 })
 
 documentRoute.get("/:_id", (req, res) => {

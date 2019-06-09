@@ -7,3 +7,11 @@ GET http://localhost:8000/api/documents/5cfa9dd1ea451113d8fd6b0a
 
 ###
 
+POST http://localhost:8000/api/documents
+Content-Type: application/json
+
+{
+    "key": "my-dev-value"
+}
+
+###

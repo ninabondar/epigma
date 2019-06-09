@@ -69,7 +69,9 @@ const useEditorDocument = documentId => {
 
   const { openDocumentInEditor } = actions
 
-  if (documentId !== editedDocId) dispatch(openDocumentInEditor(doc))
+  if (documentId !== editedDocId) {
+    dispatch(openDocumentInEditor(doc))
+  }
 
   return activeDoc
 }

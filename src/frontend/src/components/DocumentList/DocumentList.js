@@ -6,7 +6,7 @@ import ToolPanel from "../ToolPanel/ToolPanel"
 
 import { getAllExistingDocuments } from "../../reducers"
 import {
-  createDocument,
+  createNewDocument,
   receiveDocumentsSuccess,
   fetchDocuments
 } from "../../actions/documents"
@@ -15,11 +15,11 @@ import BEM from "../../utils/BEM"
 import "./DocumentList.scss"
 const b = BEM("DocumentList")
 
-const DocumentList = ({ documentsList, onNameSubmit }) => (
-  <>
+const DocumentList = ({ documentsList, onNameSubmit, fetchDocuments }) => {
+  return (
     <section className={b()}>
-      {documentsList.map(({ id, title, createdAt }) => (
-        <Link to={"/edit/" + id} key={id}>
+      {documentsList.map(({ id, title, createdAt }, i) => (
+        <Link to={"/edit/" + id} key={i}>
           <div className={b("document")}>
             <div className={b("doc-title")}> {title}</div>
             <div className={b("doc-side-info")}>{String(createdAt)}</div>
@@ -41,8 +41,8 @@ const DocumentList = ({ documentsList, onNameSubmit }) => (
         </form>
       </div>
     </section>
-  </>
-)
+  )
+}
 
 const DocumentListScreen = () => (
   <>
@@ -54,19 +54,17 @@ const DocumentListScreen = () => (
 const enhancer = compose(
   connect(
     state => ({ documentsList: getAllExistingDocuments(state) }),
-    { createDocument, fetchDocuments }
+    { createNewDocument, fetchDocuments }
   ),
   withState("newDocumentName", "setNewDocumentName", ""),
   withHandlers({
-    onNameSubmit: ({ createDocument, fetchDocuments }) => ev => {
+    onNameSubmit: ({ createNewDocument, fetchDocuments }) => ev => {
       ev.preventDefault()
       const { value } = ev.target.documentName
-      const a = fetchDocuments()
-      console.log(a)
       if (value) {
         if (/^\s*$/.test(value)) {
-          createDocument("new document")
-        } else createDocument(value)
+          createNewDocument("new document")
+        } else createNewDocument(value)
       }
 
       ev.target.documentName.value = ""

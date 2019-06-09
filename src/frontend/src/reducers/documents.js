@@ -1,6 +1,9 @@
 import produce from "immer"
 import { createPoint } from "../utils/helper"
-import { CREATE_DOCUMENT } from "../actions/actionTypes"
+import {
+  CREATE_DOCUMENT_SUCCESS,
+  RECEIVE_DOCUMENTS_SUCCESS
+} from "../actions/actionTypes"
 
 const defaultState = {
   "1": {
@@ -30,10 +33,7 @@ const defaultState = {
       {
         // this is a shape in a documents
         id: "A",
-        points: [
-          createPoint(264, 584),
-          createPoint(385, 643)
-        ],
+        points: [createPoint(264, 584), createPoint(385, 643)],
         style: {
           color: "#232323"
         }
@@ -66,20 +66,16 @@ const defaultState = {
 export default (state = defaultState, action) =>
   produce(state, draft => {
     switch (action.type) {
-      case CREATE_DOCUMENT:
+      case CREATE_DOCUMENT_SUCCESS:
         const newDocumentIndex = Object.keys(draft).length + 1
         return {
           ...draft,
+          [String(newDocumentIndex)]: action.body
+        }
 
-          [String(newDocumentIndex)]: {
-            id: newDocumentIndex,
-            title: action.title,
-            author: "",
-            contributors: [],
-            createdAt: new Date().toDateString(),
-            updatedAt: new Date().toDateString(),
-            shapes: []
-          }
+      case RECEIVE_DOCUMENTS_SUCCESS:
+        return {
+          ...action.documents
         }
 
       default:
