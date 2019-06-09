@@ -14,6 +14,18 @@ documentRoute.get("/", (req, res) => {
       res.send({ error: "Documents not found" })
     })
 })
+documentRoute.get("/:_id", (req, res) => {
+  // take name out of query string
+  const { _id } = req.params
+
+  Document.findOne({ _id })
+    .exec()
+    .then(doc => res.send(doc))
+    .catch(err => {
+      res.status(404)
+      res.send({ error: "Document not found" })
+    })
+})
 
 documentRoute.post("/", (req, res) => {
   const { body } = req
@@ -27,17 +39,12 @@ documentRoute.post("/", (req, res) => {
   })
 })
 
-documentRoute.get("/:_id", (req, res) => {
-  // take name out of query string
+documentRoute.delete("/:_id", (req, res) => {
   const { _id } = req.params
-
-  Document.findOne({ _id })
-    .exec()
-    .then(doc => res.send(doc))
-    .catch(err => {
-      res.status(404)
-      res.send({ error: "Document not found" })
-    })
+  Document.findByIdAndRemove(_id, { useFindAndModify: false }, (err, doc) => {
+    if (err) throw err
+    res.send(`removed ${doc} with id: ${_id} from documents database`)
+  })
 })
 
 module.exports = documentRoute

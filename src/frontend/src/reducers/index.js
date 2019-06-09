@@ -36,3 +36,6 @@ export const getAllExistingDocuments = state =>
 export const getDocumentById = curry((id, state) =>
   fromDocuments.getDocumentById(id, state.documents)
 )
+
+export const getIsFetching = state =>
+  fromDocuments.getIsFetching(state.documents)

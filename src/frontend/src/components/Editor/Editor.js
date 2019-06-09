@@ -81,8 +81,7 @@ const CanvasWithDocument = ({ doc }) => <Canvas {...useCanvasData(doc)} />
 const DocumentLoader = withRouter(({ match }) => {
   const { documentId } = match.params
   const doc = useEditorDocument(documentId)
-
-  return doc === null ? "Loading..." : <CanvasWithDocument doc={doc} />
+  return doc === null ? "Opening document..." : <CanvasWithDocument doc={doc} />
 })
 
 const Editor = () => (

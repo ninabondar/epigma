@@ -15,3 +15,7 @@ Content-Type: application/json
 }
 
 ###
+
+DELETE http://localhost:8000/api/documents/5cfd265ab4cc612fa4aaa933
+
+###

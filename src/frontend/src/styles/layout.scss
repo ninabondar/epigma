@@ -19,3 +19,8 @@ a {
 ul {
   list-style-type: none;
 }
+
+small {
+  font-size: $SMALL_FONT_SIZE;
+  line-height: $SMALL_LINE_HEIGHT;
+}

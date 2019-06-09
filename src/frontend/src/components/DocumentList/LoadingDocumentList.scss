@@ -1,0 +1,30 @@
+@import "../../styles/variables";
+
+.LoadingDocumentList {
+  margin: auto;
+  transform: translate(-50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  box-sizing: border-box;
+  width: 10px;
+  height: 10px;
+  background: $HIGHLIGHT_COLOR;
+  border-radius: 50%;
+
+  &::before,
+  &::after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    background: $HIGHLIGHT_COLOR;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    transform: translateX(-180%);
+  }
+
+  &::after {
+    transform: translateX(180%);
+  }
+}

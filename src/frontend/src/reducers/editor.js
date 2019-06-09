@@ -17,7 +17,7 @@ const defaultState = {
   isTransformingShapes: false,
   pickedShape: null,
   history: [],
-  historyPointer: null
+  historyPointer: null,
 }
 
 export default produce((draft, action) => {
