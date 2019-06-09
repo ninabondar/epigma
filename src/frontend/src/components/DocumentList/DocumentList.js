@@ -60,6 +60,7 @@ const enhancer = compose(
   withHandlers({
     onNameSubmit: ({ createNewDocument, fetchDocuments }) => ev => {
       ev.preventDefault()
+     // fetchDocuments()
       const { value } = ev.target.documentName
       if (value) {
         if (/^\s*$/.test(value)) {

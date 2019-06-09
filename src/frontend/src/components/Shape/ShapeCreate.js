@@ -19,7 +19,7 @@ const ShapeCreate = props => {
     const documentClickHandler = () =>
       setShape(
         shape === null
-          ? createShape(ghostPoint)
+          ? createShape(transformation.invert(ghostPoint))
           : {
               ...shape,
               points: [...shape.points, transformation.invert(ghostPoint)]
