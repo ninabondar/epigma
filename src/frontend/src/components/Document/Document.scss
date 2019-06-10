@@ -1,0 +1,68 @@
+@import "../../styles/variables";
+
+.Document {
+  box-sizing: border-box;
+  background: #ffffff;
+  border-radius: 2px;
+  padding: 20px 16px;
+  width: calc(100vw / 5 - (3 * 0.5em));
+  height: 88px;
+  float: left;
+  margin: 0.5em;
+  position: relative;
+
+  &__title {
+    font-size: $FONT_SIZE_GENERAL;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 100%;
+    display: block;
+    overflow: hidden;
+  }
+
+  &__side-info {
+    box-sizing: border-box;
+    padding-top: 10px;
+    font-size: $SMALL_FONT_SIZE;
+    color: $PALE_GRAY;
+    line-height: $SMALL_LINE_HEIGHT;
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+  }
+
+  &__more-btn {
+    width: 20px;
+    border: 0;
+    outline: none;
+    background-color: transparent;
+    background-position: right;
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-image: url("../../images/dustbin.svg");
+    cursor: pointer;
+    opacity: 0.6;
+    box-sizing: border-box;
+
+    &:hover {
+      background-image: url("../../images/dustbin_black.svg");
+      opacity: 1;
+      & ~ .Document__more {
+        display: block;
+      }
+    }
+  }
+
+  &__more {
+    display: none;
+    min-width: 70px;
+    position: absolute;
+    right: 4px;
+    top: -80%;
+    color: white;
+    border-radius: 2px;
+    box-sizing: border-box;
+    padding: 6px 0;
+    background: $HEADER_PANEL_COLOR;
+  }
+}

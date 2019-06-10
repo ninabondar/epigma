@@ -19,6 +19,7 @@ import {
 
 import BEM from "../../utils/BEM"
 import "./DocumentList.scss"
+import Document from "../Document/Document"
 const b = BEM("DocumentList")
 
 const DocumentsListFetched = ({
@@ -31,23 +32,16 @@ const DocumentsListFetched = ({
       if (title) {
         return (
           <Link to={"/edit/" + id} key={i}>
-            <div className={b("document")}>
-              <div className={b("doc-title")}>{title}</div>
-              <div className={b("doc-side-info")}>
-                <small>{createdAt}</small>
-                <button
-                  className={b("doc-more")}
-                  onClick={ev => {
-                    handleMoreClick(ev, id)
-                  }}
-                />
-              </div>
-            </div>
+            <Document
+              title={title}
+              createdAt={createdAt}
+              clickHandler={ev => handleMoreClick(ev, id)}
+            />
           </Link>
         )
       }
     })}
-    <div className={b("document")}>
+    <div className={"Document"}>
       <form className={b("create-document-form")} onSubmit={onNameSubmit}>
         <input
           required
