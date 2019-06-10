@@ -14,11 +14,10 @@ documentRoute.get("/", (req, res) => {
       res.send({ error: "Documents not found" })
     })
 })
-documentRoute.get("/:_id", (req, res) => {
-  // take name out of query string
-  const { _id } = req.params
+documentRoute.get("/:id", (req, res) => {
+  const { id } = req.params
 
-  Document.findOne({ _id })
+  Document.findOne({ _id: id })
     .exec()
     .then(doc => res.send(doc))
     .catch(err => {
@@ -32,17 +31,17 @@ documentRoute.post("/", (req, res) => {
   const newDoc = new Document(body)
 
   newDoc.save((err, doc) => {
-    if (err) res.error(err)
-
+    if (err) console.error(err)
     res.send(doc)
   })
 })
 
 documentRoute.delete("/:_id", (req, res) => {
   const { _id } = req.params
+
   Document.findByIdAndRemove(_id, { useFindAndModify: false }, (err, doc) => {
     if (err) throw err
-    res.send(`removed ${doc} with id: ${_id} from documents database`)
+    res.send(`removed doc with id: ${_id} from documents database`)
   })
 })
 

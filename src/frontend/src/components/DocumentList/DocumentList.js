@@ -27,8 +27,8 @@ const DocumentsListFetched = ({
   handleMoreClick
 }) => (
   <section className={b()}>
-    {documentsList.map(({ id, title, createdAt, _id }, i) => {
-      if (title ) {
+    {documentsList.map(({ title, createdAt, id }, i) => {
+      if (title) {
         return (
           <Link to={"/edit/" + id} key={i}>
             <div className={b("document")}>
@@ -38,7 +38,7 @@ const DocumentsListFetched = ({
                 <button
                   className={b("doc-more")}
                   onClick={ev => {
-                    handleMoreClick(ev, _id)
+                    handleMoreClick(ev, id)
                   }}
                 />
               </div>
@@ -78,7 +78,7 @@ const enhancer = compose(
     { createNewDocument, fetchDocuments, removeDocumentById }
   ),
   withProps(({ documentsList, isFetching, fetchDocuments }) => {
-    if (!isFetching && !(documentsList.length )) {
+    if (!isFetching && !documentsList.length) {
       fetchDocuments()
     }
   }),

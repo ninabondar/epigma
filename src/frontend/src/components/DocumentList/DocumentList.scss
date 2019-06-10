@@ -35,6 +35,11 @@
 
   &__doc-title {
     font-size: $FONT_SIZE_GENERAL;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 100%;
+    display: block;
+    overflow: hidden;
   }
 
   &__doc-side-info {

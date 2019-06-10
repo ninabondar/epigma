@@ -6,7 +6,8 @@ const documentSchema = mongoose.Schema({
   contributors: Array,
   createdAt: String,
   updatedAt: String,
-  shapes: Array
+  shapes: Array,
+  _id: String
 })
 
 module.exports = documentSchema

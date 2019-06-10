@@ -2,8 +2,10 @@ import {
   CREATE_DOCUMENT_SUCCESS,
   RECEIVE_DOCUMENTS_SUCCESS,
   REQUEST_DOCS,
-  REMOVE_DOC_SUCCESS
+  REMOVE_DOC_SUCCESS,
+  RECEIVE_DOCUMENTS_ERROR
 } from "./actionTypes"
+import uuid from "uuid/v4"
 
 export const apiURL = "http://localhost:8000/api/documents"
 
@@ -17,6 +19,10 @@ const receiveDocumentsSuccess = documents => ({
   documents
 })
 
+const receiveDocumentsError = () => ({
+  type: RECEIVE_DOCUMENTS_ERROR
+})
+
 const requestDocs = () => ({
   type: REQUEST_DOCS
 })
@@ -28,7 +34,7 @@ const removeDocumentSuccess = id => ({
 
 export const createNewDocument = title => dispatch => {
   const body = {
-    id: "4",
+    _id: uuid(),
     title: title,
     author: "",
     contributors: [],
@@ -74,6 +80,7 @@ export const fetchDocuments = () => dispatch => {
     })
     .catch(err => {
       console.info("An error occurred while fetching documents: ")
+      dispatch(receiveDocumentsError())
       throw err
     })
 }
@@ -88,7 +95,7 @@ export const removeDocumentById = docId => dispatch => {
     }
   })
     .then(res => {
-      dispatch(removeDocumentSuccess())
+      dispatch(removeDocumentSuccess(docId))
     })
     .catch(err => {
       console.info("An error occurred while deleting a document: ", err)
