@@ -53,10 +53,11 @@ documentRoute.put("/:_id", (req, res) => {
 
   Document.findById(_id, (err, doc) => {
     if (err) return err
-    doc._id = body._id
+    doc._id = _id
     doc.title = body.title
     doc.shapes = body.shapes
     doc.updatedAt = body.updatedAt
+
     doc.save(err => {
       if (err) return err
       res.send(doc)
