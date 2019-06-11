@@ -30,3 +30,18 @@ $SHAPE_PANEL_WIDTH: 240px;
     border: 1px solid $BORDER_COLOR;
   }
 }
+
+@mixin dialogueTriangleUp($color) {
+  &::before {
+    content: "";
+    position: absolute;
+    top: -7px;
+    left: 7px;
+    width: 0;
+    height: 0;
+    border-top: transparent 4px solid;
+    border-left: transparent 4px solid;
+    border-right: transparent 4px solid;
+    border-bottom: $color 4px solid;
+  }
+}

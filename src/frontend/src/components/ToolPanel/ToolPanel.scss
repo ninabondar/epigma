@@ -15,27 +15,28 @@
     width: 40px;
     background-color: $HEADER_PANEL_COLOR;
     color: white;
+    background-size: 35%;
+    background-position: center;
+    background-repeat: no-repeat;
 
     &:hover {
       background-color: black;
     }
 
+    &_options-menu {
+      background-image: url("../../images/menu.svg");
+    }
+
     &_create-shape {
       background-image: url("../../images/edit.svg");
-      background-size: 35%;
-      background-position: center;
-      background-repeat: no-repeat;
     }
 
-    &_undo,
+    &_undo {
+      background-image: url("../../images/undo.svg");
+    }
+
     &_redo {
       background-image: url("../../images/undo.svg");
-      background-size: 35%;
-      background-position: center;
-      background-repeat: no-repeat;
-    }
-
-    &_redo {
       transform: scaleX(-1);
     }
 
@@ -52,6 +53,35 @@
 
       &:hover {
         background-color: #3498db;
+      }
+    }
+  }
+
+  &__options {
+    width: fit-content;
+    box-sizing: border-box;
+    padding: 8px 0;
+    border-radius: 2px;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 8px;
+    background-color: $HEADER_PANEL_COLOR;
+    display: none;
+    @include dialogueTriangleUp($HEADER_PANEL_COLOR);
+
+    &_opened {
+      display: block;
+    }
+
+    &-item {
+      font-size: $SMALL_FONT_SIZE;
+      line-height: $SMALL_LINE_HEIGHT;
+      color: white;
+      box-sizing: border-box;
+      padding: 0 8px;
+
+      &:hover {
+        background-color: $HIGHLIGHT_COLOR;
       }
     }
   }

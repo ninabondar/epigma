@@ -1,5 +1,6 @@
 // @flow
 import React from "react"
+import { Link } from "react-router-dom"
 import { withRouter } from "react-router"
 import { connect } from "react-redux"
 import { compose, withHandlers, withProps, withState } from "recompose"
@@ -39,9 +40,18 @@ const ToolPanel = ({
   documentTitle,
   changeActiveDocTitle,
   isRenamed,
-  toggleIsRenamed
+  toggleIsRenamed,
+  setIsOptionsOpened,
+  isOptionsOpened
 }) => (
   <aside className={b({ "draft-screen": isDraftScreen })}>
+    <button
+      className={b("control", {
+        "options-menu": true,
+        "toggled-on": isOptionsOpened
+      })}
+      onClick={() => setIsOptionsOpened(!isOptionsOpened)}
+    />
     <button
       className={b("control", {
         "create-shape": true,
@@ -59,6 +69,9 @@ const ToolPanel = ({
       className={b("control", { redo: true, disabled: isRedo })}
       onClick={redo}
     />
+    <div className={b("options", {opened: isOptionsOpened})}>
+      <Link className={b('options-item')} to={"/"}>Back to documents</Link>
+    </div>
 
     <div className={bRename({ active: isRenamed })}>
       <form className={bRename("rename-form")} onSubmit={changeActiveDocTitle}>
@@ -81,6 +94,7 @@ const enhancer = compose(
   withRouter,
   withProps(({ match }) => ({ documentId: match.params.documentId })),
   withState("isRenamed", "setIsRenamed", false),
+  withState("isOptionsOpened", "setIsOptionsOpened", false),
   connect(
     state => ({
       isCreateToggledOn: getEditorMode(state) === "CREATE",
@@ -113,7 +127,10 @@ const enhancer = compose(
       const newDocument = clone(activeDocument)
       const { newTitle } = e.target
       const { title } = newDocument
-      newDocument.title = newTitle.value === "" ? title : newTitle.value
+      //  if (/^\s*$/.test(value)) {
+
+      newDocument.title = /^\s*$/.test(newTitle.value) ? title : newTitle.value
+
       changeEditorDocument(newDocument)
 
       newTitle.value = ""
