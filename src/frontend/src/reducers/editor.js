@@ -4,7 +4,7 @@ import {
   SET_SELECTED_SHAPES,
   CHANGE_ACTIVE_DOC_ID,
   OPEN_DOCUMENT,
-  CHANGE_EDITOR_DOCUMENT,
+  CHANGE_EDITOR_DOCUMENT_SUCCESS,
   UNDO,
   REDO,
   SET_EDITED_SHAPE,
@@ -65,10 +65,9 @@ export default produce((draft, action) => {
       return
     }
 
-    case CHANGE_EDITOR_DOCUMENT: {
-      const { document } = action.payload
+    case CHANGE_EDITOR_DOCUMENT_SUCCESS: {
+      const { document } = action
       const { history, historyPointer } = draft
-
       draft.historyPointer++
       draft.history = [
         ...draft.history.slice(0, historyPointer + 1),

@@ -19,3 +19,8 @@ Content-Type: application/json
 DELETE http://localhost:8000/api/documents/5cfd265ab4cc612fa4aaa933
 
 ###
+
+PUT http://localhost:8000/api/documents/4f8f3abb-6ec3-44c6-b51a-724a799e77b1
+{}
+
+###

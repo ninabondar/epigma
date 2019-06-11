@@ -45,4 +45,23 @@ documentRoute.delete("/:_id", (req, res) => {
   })
 })
 
+documentRoute.put("/:_id", (req, res) => {
+  const { _id } = req.params
+  const { body } = req
+  body._id = body.id
+  delete body.id
+  console.log(body, "body")
+  const newDoc = new Document(body)
+  /*Document.updateOne({ _id }, {title: body.title}, (doc, err) => {
+    if (err) {
+      console.log("a server error occurred while updating opened document: ")
+      throw err
+    }
+
+    res.send("updated current document")
+  })*/
+
+  res.sendStatus(200)
+})
+
 module.exports = documentRoute

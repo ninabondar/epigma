@@ -1,7 +1,7 @@
 // @flow
 
 import {
-  CHANGE_EDITOR_DOCUMENT,
+  CHANGE_EDITOR_DOCUMENT_SUCCESS,
   CHANGE_MODE,
   OPEN_DOCUMENT,
   REDO,
@@ -9,6 +9,7 @@ import {
   SET_SELECTED_SHAPES,
   UNDO
 } from "./actionTypes"
+import { apiURL } from "./documents"
 
 export const changeMode = (mode: "VIEW" | "EDIT" | "CREATE") => ({
   type: CHANGE_MODE,
@@ -30,9 +31,9 @@ export const openDocumentInEditor = document => ({
   payload: { document }
 })
 
-export const changeEditorDocument = document => ({
-  type: CHANGE_EDITOR_DOCUMENT,
-  payload: { document }
+export const changeEditorDocumentSuccess = document => ({
+  type: CHANGE_EDITOR_DOCUMENT_SUCCESS,
+  document
 })
 
 export const editorUndo = () => ({
@@ -43,3 +44,24 @@ export const editorRedo = () => ({
   type: REDO
 })
 
+export const updateEditorDocument = doc => dispatch => {
+  const { id } = doc
+  console.log(doc, "<== DOC")
+  return fetch(apiURL + "/" + id, {
+    method: "PUT",
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*"
+    },
+    body: JSON.stringify(doc)
+  })
+    .then(res => {
+      console.log(res, "res in json")
+      dispatch(changeEditorDocumentSuccess(doc))
+    })
+    .catch(err => {
+      console.log(`Something went wrong while updating the doc`)
+      throw err
+    })
+}

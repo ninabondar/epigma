@@ -60,5 +60,6 @@ export default (state = defaultState, action) =>
 
 export const getAllExistingDocuments = state => Object.values(state)
 export const getDocumentById = (id, state) =>
-  Object.values(state).filter(doc => doc.id === id)
+  Object.values(state).filter(doc => doc.id === id)[0]
+
 export const getIsFetching = state => state.isFetching

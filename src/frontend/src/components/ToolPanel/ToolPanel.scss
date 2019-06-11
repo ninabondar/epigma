@@ -12,27 +12,46 @@
     border: none;
     outline: none;
     height: 100%;
-    width: 55px;
-    background: $HEADER_PANEL_COLOR;
+    width: 40px;
+    background-color: $HEADER_PANEL_COLOR;
     color: white;
 
     &:hover {
-      background: black;
+      background-color: black;
+    }
+
+    &_create-shape {
+      background-image: url("../../images/edit.svg");
+      background-size: 35%;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    &_undo,
+    &_redo {
+      background-image: url("../../images/undo.svg");
+      background-size: 35%;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    &_redo {
+      transform: scaleX(-1);
     }
 
     &_disabled {
       opacity: 0.5;
 
       &:hover {
-        background: $HEADER_PANEL_COLOR;
+        background-color: $HEADER_PANEL_COLOR;
       }
     }
 
     &_toggled-on {
-      background: $HIGHLIGHT_COLOR;
+      background-color: $HIGHLIGHT_COLOR;
 
       &:hover {
-        background: #3498db;
+        background-color: #3498db;
       }
     }
   }

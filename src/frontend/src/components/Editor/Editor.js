@@ -32,14 +32,14 @@ const useCanvasData = doc => {
   const {
     setSelectedShapes,
     setEditedShape,
-    changeEditorDocument,
+    changeEditorDocumentSuccess,
     changeMode
   } = actions
 
   const viewedShapes = without([...selectedShapes, editedShape], doc.shapes)
 
   const setShapes = shapes =>
-    changeEditorDocument(
+    changeEditorDocumentSuccess(
       produce(doc, draft => {
         draft.shapes = shapes
       })

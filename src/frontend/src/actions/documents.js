@@ -1,11 +1,11 @@
-import {
-  CREATE_DOCUMENT_SUCCESS,
-  RECEIVE_DOCUMENTS_SUCCESS,
-  REQUEST_DOCS,
-  REMOVE_DOC_SUCCESS,
-  RECEIVE_DOCUMENTS_ERROR
-} from "./actionTypes"
 import uuid from "uuid/v4"
+import {
+CREATE_DOCUMENT_SUCCESS,
+RECEIVE_DOCUMENTS_SUCCESS,
+REQUEST_DOCS,
+REMOVE_DOC_SUCCESS,
+RECEIVE_DOCUMENTS_ERROR
+} from "./actionTypes"
 
 export const apiURL = "http://localhost:8000/api/documents"
 
@@ -101,3 +101,4 @@ export const removeDocumentById = docId => dispatch => {
       console.info("An error occurred while deleting a document: ", err)
     })
 }
+

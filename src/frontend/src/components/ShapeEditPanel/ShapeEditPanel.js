@@ -7,7 +7,7 @@ import "./ShapeEditPanel.scss"
 import "./ShapeFeatureTuningPanel.scss"
 import BEM from "../../utils/BEM"
 import { getActiveDocument, getSelectedShapes } from "../../reducers"
-import { changeEditorDocument } from "../../actions"
+import { changeEditorDocumentSuccess } from "../../actions"
 
 const b = BEM("ShapeEditPanel")
 const bF = BEM("ShapeFeatureTuningPanel")
@@ -46,7 +46,7 @@ const enhancer = compose(
       selectedShapes: getSelectedShapes(state),
       activeDocument: getActiveDocument(state)
     }),
-    { changeEditorDocument }
+    { changeEditorDocument: changeEditorDocumentSuccess }
   ),
   // TODO make a prop of current color(calculate from current styles of picked shape),..
   // TODO ..and change color via input field

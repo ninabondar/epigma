@@ -13,7 +13,7 @@ import { getZoomMatrixXY } from "../../utils/helper"
 
 import { connect } from "react-redux"
 import { getActiveDocument, getSelectedShapes } from "../../reducers"
-import { changeEditorDocument } from "../../actions"
+import { changeEditorDocumentSuccess } from "../../actions"
 
 import BEM from "../../utils/BEM"
 import "./Selection.scss"
@@ -96,7 +96,7 @@ const enhancer = compose(
       selectedShapes: getSelectedShapes(state)
     }),
 
-    { changeEditorDocument }
+    { changeEditorDocument: changeEditorDocumentSuccess }
   ),
   withState(
     "selectionTransform",

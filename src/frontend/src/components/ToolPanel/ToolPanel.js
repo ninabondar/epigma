@@ -6,10 +6,10 @@ import { compose, withHandlers, withProps, withState } from "recompose"
 import { clone } from "ramda"
 
 import {
-  changeEditorDocument,
   changeMode,
   editorRedo,
-  editorUndo
+  editorUndo,
+  updateEditorDocument
 } from "../../actions"
 import {
   getActiveDocument,
@@ -41,30 +41,24 @@ const ToolPanel = ({
   isRenamed,
   toggleIsRenamed
 }) => (
-  <aside className={b({"draft-screen": isDraftScreen})}>
+  <aside className={b({ "draft-screen": isDraftScreen })}>
     <button
       className={b("control", {
         "create-shape": true,
         "toggled-on": isCreateToggledOn
       })}
       onClick={toggleCreateMode}
-    >
-      DRAW
-    </button>
+    />
     <button
       disabled={!isUndo}
       className={b("control", { undo: true, disabled: !isUndo })}
       onClick={undo}
-    >
-      UNDO
-    </button>
+    />
     <button
       disabled={isRedo}
       className={b("control", { redo: true, disabled: isRedo })}
       onClick={redo}
-    >
-      REDO
-    </button>
+    />
 
     <div className={bRename({ active: isRenamed })}>
       <form className={bRename("rename-form")} onSubmit={changeActiveDocTitle}>
@@ -98,7 +92,12 @@ const enhancer = compose(
       activeDocumentID: getActiveDocumentId(state),
       activeDocument: getActiveDocument(state)
     }),
-    { changeMode, undo: editorUndo, redo: editorRedo, changeEditorDocument }
+    {
+      changeMode,
+      undo: editorUndo,
+      redo: editorRedo,
+      changeEditorDocument: updateEditorDocument
+    }
   ),
   withHandlers({
     toggleCreateMode: ({ isCreateToggledOn, changeMode }) => () =>
