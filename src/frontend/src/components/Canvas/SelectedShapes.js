@@ -18,17 +18,6 @@ let SelectedShapes = ({ shapes, offset }) => {
   const [minY, maxX, maxY, minX] = boundingBox
   const boundingRect = [createPoint(minX, minY), createPoint(maxX, maxY)]
 
-  useEffect(() => {
-    const keyHandler = ev => {
-      if (ev.key === "Escape") {
-      }
-      // TODO handle more use cases of Escape
-    }
-    document.addEventListener("keydown", keyHandler)
-
-    return () => document.removeEventListener("keydown", keyHandler)
-  })
-
   return (
     <Selection key={selectionId} boundingRect={boundingRect}>
       {shapes.map(shape => (

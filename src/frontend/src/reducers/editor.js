@@ -7,7 +7,7 @@ import {
   CHANGE_EDITOR_DOCUMENT_SUCCESS,
   UNDO,
   REDO,
-  SET_EDITED_SHAPE,
+  SET_EDITED_SHAPE
 } from "../actions/actionTypes"
 
 import produce from "immer"
@@ -17,7 +17,7 @@ const defaultState = {
   isTransformingShapes: false,
   pickedShape: null,
   history: [],
-  historyPointer: null,
+  historyPointer: null
 }
 
 export default produce((draft, action) => {
@@ -91,7 +91,6 @@ export default produce((draft, action) => {
     default: {
       return
     }
-
   }
 }, defaultState)
 

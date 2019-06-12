@@ -42,7 +42,9 @@ const ToolPanel = ({
   isRenamed,
   toggleIsRenamed,
   setIsOptionsOpened,
-  isOptionsOpened
+  isOptionsOpened,
+  changeEditorDocument,
+  activeDocument
 }) => (
   <aside className={b({ "draft-screen": isDraftScreen })}>
     <button
@@ -69,8 +71,16 @@ const ToolPanel = ({
       className={b("control", { redo: true, disabled: isRedo })}
       onClick={redo}
     />
-    <div className={b("options", {opened: isOptionsOpened})}>
-      <Link className={b('options-item')} to={"/"}>Back to documents</Link>
+    <div className={b("options", { opened: isOptionsOpened })}>
+      <Link
+        className={b("options-item")}
+        to={"/"}
+        onClick={() => {
+          changeEditorDocument(activeDocument)
+        }}
+      >
+        Back to documents
+      </Link>
     </div>
 
     <div className={bRename({ active: isRenamed })}>
@@ -127,7 +137,6 @@ const enhancer = compose(
       const newDocument = clone(activeDocument)
       const { newTitle } = e.target
       const { title } = newDocument
-      //  if (/^\s*$/.test(value)) {
 
       newDocument.title = /^\s*$/.test(newTitle.value) ? title : newTitle.value
 
