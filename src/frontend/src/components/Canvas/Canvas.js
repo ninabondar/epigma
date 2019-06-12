@@ -41,7 +41,7 @@ const Canvas = ({
         dispatch(setSelectedShapes([]))
       } else if (ev.code === "Backspace") {
         ev.preventDefault()
-        console.log("delete pressed ==========")
+
       }
     }
     document.addEventListener("keydown", keyHandler)

@@ -1,4 +1,4 @@
-import React, { useState, createContext, useRef } from "react"
+import React, { useState, createContext, useRef, useEffect } from "react"
 import {
   getTransformMatrix,
   multiplyMatrix,
@@ -12,6 +12,12 @@ const CanvasTransform = ({ children }) => {
   let transformedFieldRef = useRef()
   const [matrix, setMatrix] = useState(getTransformMatrix(1, 0, 0))
   const [isDragging, setDragging] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = ev => zoom(ev, matrix)
+    document.addEventListener("wheel", handleScroll, { passive: false })
+    return () => document.removeEventListener("wheel", handleScroll)
+  })
 
   const startDrag = ({ pageX, pageY }, matrix) => {
     setDragging(true)
@@ -36,8 +42,6 @@ const CanvasTransform = ({ children }) => {
     document.addEventListener("mouseup", handleMouseUp)
   }
 
-  const handleScroll = ev => zoom(ev, matrix)
-
   const zoom = (ev, matrix) => {
     ev.preventDefault()
     const zoomMatrix = getZoomMatrix(
@@ -54,11 +58,7 @@ const CanvasTransform = ({ children }) => {
   }
 
   return (
-    <div
-      onMouseDown={handleMouseDown}
-      ref={transformedFieldRef}
-      onWheel={handleScroll}
-    >
+    <div onMouseDown={handleMouseDown} ref={transformedFieldRef}>
       <TransformContext.Provider value={transformPoint(matrix)}>
         {children}
       </TransformContext.Provider>

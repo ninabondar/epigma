@@ -46,7 +46,6 @@ export const editorRedo = () => ({
 
 export const updateEditorDocument = doc => dispatch => {
   const { id } = doc
-  console.log(doc, "<== DOC")
   return fetch(apiURL + "/" + id, {
     method: "PUT",
     mode: "cors",
@@ -57,7 +56,6 @@ export const updateEditorDocument = doc => dispatch => {
     body: JSON.stringify(doc)
   })
     .then(res => {
-      console.log(res, "res in json")
       dispatch(changeEditorDocumentSuccess(doc))
     })
     .catch(err => {
