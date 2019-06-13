@@ -34,20 +34,6 @@ const Canvas = ({
     setOffset({ x: 0, y: document.querySelector(".ToolPanel").offsetHeight })
   })
 
-  useEffect(() => {
-    const keyHandler = ev => {
-      // TODO handle more use cases of Escape
-      if (ev.code === "Escape") {
-        dispatch(setSelectedShapes([]))
-      } else if (ev.code === "Backspace") {
-        ev.preventDefault()
-
-      }
-    }
-    document.addEventListener("keydown", keyHandler)
-    return () => document.removeEventListener("keydown", keyHandler)
-  })
-
   return (
     <CanvasTransform>
       <svg className={b()}>

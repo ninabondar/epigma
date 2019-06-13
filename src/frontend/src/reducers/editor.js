@@ -7,7 +7,8 @@ import {
   CHANGE_EDITOR_DOCUMENT_SUCCESS,
   UNDO,
   REDO,
-  SET_EDITED_SHAPE
+  SET_EDITED_SHAPE,
+  SHAPE_EDIT_PANEL_IN_FOCUS
 } from "../actions/actionTypes"
 
 import produce from "immer"
@@ -15,6 +16,7 @@ import produce from "immer"
 const defaultState = {
   mode: "VIEW", //"CREATE",
   isTransformingShapes: false,
+  shapeEditPanelInFocus: false,
   pickedShape: null,
   history: [],
   historyPointer: null
@@ -88,6 +90,10 @@ export default produce((draft, action) => {
       draft.historyPointer++
       return
     }
+
+    case SHAPE_EDIT_PANEL_IN_FOCUS:
+      return { ...draft, shapeEditPanelInFocus: action.focus }
+
     default: {
       return
     }
@@ -125,3 +131,5 @@ export const getOpenDocumentTitle = state => {
   const document = getActiveDocument(state)
   return document && document.title
 }
+
+export const getShapeEditPanelInFocus = state => state.shapeEditPanelInFocus

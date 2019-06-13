@@ -46,19 +46,15 @@
 
   &__stroke-color-input {
     width: 46px;
-    position: absolute;
-    right: 0;
+    text-align: right;
     outline: none;
     align-self: center;
     border: 0;
     font-size: 13px;
-    pointer-events: none;
-    visibility: hidden;
     font-family: $FONT_FAM;
 
-    &_visible {
-      pointer-events: all;
-      visibility: visible;
+    &[placeholder] {
+      color: $FONT_COLOR;
     }
   }
 }

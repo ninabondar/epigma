@@ -7,6 +7,7 @@ import {
   REDO,
   SET_EDITED_SHAPE,
   SET_SELECTED_SHAPES,
+  SHAPE_EDIT_PANEL_IN_FOCUS,
   UNDO
 } from "./actionTypes"
 import { apiURL } from "./documents"
@@ -42,6 +43,11 @@ export const editorUndo = () => ({
 
 export const editorRedo = () => ({
   type: REDO
+})
+
+export const setShapePanelInFocus = focus => ({
+  type: SHAPE_EDIT_PANEL_IN_FOCUS,
+  focus
 })
 
 export const updateEditorDocument = doc => dispatch => {

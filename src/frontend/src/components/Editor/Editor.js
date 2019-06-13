@@ -17,6 +17,7 @@ import {
   getSelectedShapes
 } from "../../reducers"
 import * as actions from "../../actions"
+import { setSelectedShapes } from "../../actions"
 
 const useCanvasData = doc => {
   const allShapes = doc.shapes
@@ -81,15 +82,18 @@ const CanvasWithDocument = ({ doc }) => <Canvas {...useCanvasData(doc)} />
 const DocumentLoader = withRouter(({ match }) => {
   const { documentId } = match.params
   const doc = useEditorDocument(documentId)
+
   return doc === null ? "Opening document..." : <CanvasWithDocument doc={doc} />
 })
 
-const Editor = () => (
-  <>
-    <ToolPanel />
-    <DocumentLoader />
-    <ShapeEditPanel />
-  </>
-)
+const Editor = () => {
+  return (
+    <>
+      <ToolPanel />
+      <DocumentLoader />
+      <ShapeEditPanel />
+    </>
+  )
+}
 
 export default Editor
