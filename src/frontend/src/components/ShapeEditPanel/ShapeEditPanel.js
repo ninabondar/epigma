@@ -18,6 +18,9 @@ const ShapeEditPanel = () => {
   const colorInput = useRef()
   const dispatch = useDispatch()
   const activeDocument = useSelector(getActiveDocument)
+
+  const handleFocus = () => dispatch(setShapePanelInFocus(true))
+
   const selectedShapes = useSelector(getSelectedShapes)
 
   const handleBlur = e => {
@@ -28,20 +31,19 @@ const ShapeEditPanel = () => {
       //hex is 6 symbols long
       if (colorValue.length === 6) {
         const newDocument = clone(activeDocument)
-        const shapeToStyle = head(
-          newDocument.shapes.filter(shape => shape.id === selectedShapes[0])
-        )
+        const { shapes } = newDocument
 
-        newDocument.shapes[newDocument.shapes.indexOf(shapeToStyle)].style
-          ? (newDocument.shapes[0].style = {})
-          : (newDocument.shapes.color = "#" + colorValue)
+        const shapeToStyle = head(
+          shapes.filter(shape => shape.id === selectedShapes[0])
+        )
+        shapes[shapes.indexOf(shapeToStyle)].style
+          ? (shapes[0].style = {})
+          : (shapes.color = "#" + colorValue)
 
         changeEditorDocumentSuccess(newDocument)
       }
     }
   }
-
-  const handleFocus = () => dispatch(setShapePanelInFocus(true))
 
   return (
     <aside className={b()}>
