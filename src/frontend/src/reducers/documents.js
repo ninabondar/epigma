@@ -5,61 +5,83 @@ import {
   RECEIVE_DOCUMENTS_SUCCESS,
   REQUEST_DOCS,
   REMOVE_DOC_SUCCESS,
-  RECEIVE_DOCUMENTS_ERROR
+  RECEIVE_DOCUMENTS_ERROR,
+  REQUEST_DOC_BY_ID_START,
+  REQUEST_DOC_BY_ID_SUCCESS,
+  REQUEST_DOC_BY_ID_ERROR
 } from "../actions/actionTypes"
 
-const defaultState = {}
+const defaultState = {
+  fetchedDocuments: []
+}
 
 export default (state = defaultState, action) =>
   produce(state, draft => {
     switch (action.type) {
-      case CREATE_DOCUMENT_SUCCESS:
-        const { body } = action
-        body.id = body._id
-        delete body._id
+      case REQUEST_DOC_BY_ID_START: {
+        const { id } = action
+        draft.fetchedDocuments.push(id)
+        break
+      }
 
-        const newDocumentIndex = Object.keys(draft).length + 1
-        return {
-          ...draft,
-          [String(newDocumentIndex)]: action.body
-        }
+      case REQUEST_DOC_BY_ID_SUCCESS: {
+        const { doc, id } = action
+        draft[id] = doc
 
-      case RECEIVE_DOCUMENTS_SUCCESS:
-        const { documents } = action
-        documents.map(el => {
-          el.id = el._id
-          delete el._id
-        })
-        return {
-          ...documents,
-          isFetching: false
-        }
-
-      case RECEIVE_DOCUMENTS_ERROR:
-        return draft
-
-      case REQUEST_DOCS:
-        return {
-          ...draft,
-          isFetching: true
-        }
-      case REMOVE_DOC_SUCCESS:
-        const { isFetching } = draft
-        const toRemove = Object.values(draft).filter(
-          doc => doc.id === action.id
+        draft.fetchedDocuments = draft.fetchedDocuments.filter(
+          fetchedId => fetchedId !== id
         )
-        return {
-          ...without(toRemove, Object.values(draft)),
-          isFetching
-        }
 
-      default:
-        return draft
+        break
+      }
+
+      case CREATE_DOCUMENT_SUCCESS: {
+        const { body } = action
+        const id = body._id
+        body.id = id
+        delete body._id
+        draft[id] = body
+        break
+      }
+
+      case RECEIVE_DOCUMENTS_SUCCESS: {
+        const { documents } = action
+        documents.map(document => {
+          const id = document._id
+          document.id = id
+          delete document._id
+
+          draft[id] = document
+          draft.fetchedDocuments = draft.fetchedDocuments.filter(
+            fetchedId => fetchedId !== id
+          )
+        })
+
+        draft.isFetching = false
+        break
+      }
+
+      case REQUEST_DOCS: {
+        draft.isFetching = true
+        break
+      }
+
+      case REMOVE_DOC_SUCCESS: {
+        const { id } = action
+        delete draft[id]
+        break
+      }
     }
   })
 
-export const getAllExistingDocuments = state => Object.values(state)
-export const getDocumentById = (id, state) =>
-  Object.values(state).filter(doc => doc.id === id)[0]
+export const getAllExistingDocuments = state =>
+  Object.entries(state)
+    .filter(([key]) => key !== "fetchedDocuments")
+    .map(([key, value]) => value)
+
+export const getDocumentById = (id, state) => state[id]
 
 export const getIsFetching = state => state.isFetching
+
+export const getIsFetchingDocById = (id, state) =>
+  state.fetchedDocuments.includes(id)

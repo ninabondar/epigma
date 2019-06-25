@@ -1,13 +1,40 @@
 import uuid from "uuid/v4"
 import {
-CREATE_DOCUMENT_SUCCESS,
-RECEIVE_DOCUMENTS_SUCCESS,
-REQUEST_DOCS,
-REMOVE_DOC_SUCCESS,
-RECEIVE_DOCUMENTS_ERROR
+  CREATE_DOCUMENT_SUCCESS,
+  RECEIVE_DOCUMENTS_SUCCESS,
+  REQUEST_DOCS,
+  REMOVE_DOC_SUCCESS,
+  RECEIVE_DOCUMENTS_ERROR,
+  REQUEST_DOC_BY_ID_START,
+  REQUEST_DOC_BY_ID_SUCCESS,
+  REQUEST_DOC_BY_ID_ERROR
 } from "./actionTypes"
 
-export const apiURL =  process.env.REACT_APP_API_ENDPOINT  + "/documents"
+import api from "../api"
+
+export const apiURL = process.env.REACT_APP_API_ENDPOINT + "/documents"
+
+const requestDocDyIdStart = id => ({ type: REQUEST_DOC_BY_ID_START, id })
+const requestDocDyIdSuccess = (id, doc) => ({
+  type: REQUEST_DOC_BY_ID_SUCCESS,
+  id,
+  doc
+})
+const requestDocDyIdError = (id, error) => ({
+  type: REQUEST_DOC_BY_ID_ERROR,
+  id,
+  error
+})
+
+export const requestDocById = id => async dispatch => {
+  dispatch(requestDocDyIdStart(id))
+  try {
+    const doc = await api.fetchDocument(id)
+    dispatch(requestDocDyIdSuccess(id, doc))
+  } catch (error) {
+    dispatch(requestDocDyIdError(id, error))
+  }
+}
 
 export const createDocumentSuccess = body => ({
   type: CREATE_DOCUMENT_SUCCESS,
@@ -101,4 +128,3 @@ export const removeDocumentById = docId => dispatch => {
       console.info("An error occurred while deleting a document: ", err)
     })
 }
-

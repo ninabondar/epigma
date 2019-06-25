@@ -4,10 +4,10 @@ import {
   CHANGE_EDITOR_DOCUMENT_SUCCESS,
   CHANGE_MODE,
   OPEN_DOCUMENT,
-  REDO,
   SET_EDITED_SHAPE,
   SET_SELECTED_SHAPES,
   SHAPE_EDIT_PANEL_IN_FOCUS,
+  REDO,
   UNDO
 } from "./actionTypes"
 import { apiURL } from "./documents"
