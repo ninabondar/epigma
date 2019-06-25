@@ -1,5 +1,4 @@
 {
-  "proxy": "http://localhost:9000",
   "scripts": {
     "test": "cd src/frontend && yarn test",
     "build:frontend": "cd src/frontend && yarn build",

@@ -60,6 +60,7 @@ const ShapeEditPanel = () => {
             />
           </div>
           <div className={bF("stroke-opacity")}>100%</div>
+          <input type="color"/>
         </div>
       </section>
     </aside>

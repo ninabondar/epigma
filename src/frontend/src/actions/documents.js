@@ -7,7 +7,7 @@ REMOVE_DOC_SUCCESS,
 RECEIVE_DOCUMENTS_ERROR
 } from "./actionTypes"
 
-export const apiURL = "http://localhost:9000/api/documents"
+export const apiURL =  process.env.REACT_APP_API_ENDPOINT  + "/documents"
 
 export const createDocumentSuccess = body => ({
   type: CREATE_DOCUMENT_SUCCESS,

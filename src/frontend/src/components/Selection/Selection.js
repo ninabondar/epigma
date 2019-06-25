@@ -1,6 +1,6 @@
 import React, { createContext } from "react"
 
-import { clone } from "ramda"
+import { assocPath, path } from "ramda"
 import { compose, withHandlers, withState } from "recompose"
 import Corner, { CORNER_CONTROL_SIZE } from "../Corner/Corner"
 import { TransformContext } from "../CanvasTransform"
@@ -89,6 +89,11 @@ const Selection = ({
   )
 }
 
+const getSelectedShapePathInDoc = (
+  [selectedId],
+  doc //TODO: for now it works only with one selected shape.
+) => ["shapes", doc.shapes.findIndex(({ id }) => selectedId === id)]
+
 const enhancer = compose(
   connect(
     state => ({
@@ -111,17 +116,18 @@ const enhancer = compose(
       selectedShapes,
       selectionTransform
     }) => () => {
-      const newDocument = clone(document)
-
-      selectedShapes.map(selectedShapeId => {
-        const shape = newDocument.shapes.find(
-          ({ id }) => selectedShapeId === id
-        )
-        shape.points = shape.points.map(
-          transformPoint(selectionTransform)
-        )
-      })
-
+      const selectedShapePointsPath = [
+        ...getSelectedShapePathInDoc(selectedShapes, document),
+        "points"
+      ]
+      const newPoints = path(selectedShapePointsPath, document).map(
+        transformPoint(selectionTransform)
+      )
+      const newDocument = assocPath(
+        selectedShapePointsPath,
+        newPoints,
+        document
+      )
       changeEditorDocument(newDocument)
     }
   }),
