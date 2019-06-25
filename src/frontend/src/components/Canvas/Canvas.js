@@ -39,6 +39,7 @@ const Canvas = ({
       <svg className={b()}>
         {viewedShapes.map(shape => (
           <ShapeView
+            pathStyle={shape.style}
             key={shape.id}
             onSelect={() => dispatch(selectShape(shape.id))}
             offset={offset}

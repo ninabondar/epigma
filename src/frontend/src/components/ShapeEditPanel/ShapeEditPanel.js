@@ -2,10 +2,7 @@ import React, { useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { clone, head } from "ramda"
 import { getActiveDocument, getSelectedShapes } from "../../reducers"
-import {
-  changeEditorDocumentSuccess,
-  setShapePanelInFocus
-} from "../../actions"
+import { setShapePanelInFocus, updateEditorDocument } from "../../actions"
 import BEM from "../../utils/BEM"
 
 import "./ShapeEditPanel.scss"
@@ -23,7 +20,7 @@ const ShapeEditPanel = () => {
 
   const selectedShapes = useSelector(getSelectedShapes)
 
-  const handleBlur = e => {
+  const handleBlur = () => {
     dispatch(setShapePanelInFocus(false))
     const { value: colorValue } = colorInput.current
 
@@ -36,11 +33,12 @@ const ShapeEditPanel = () => {
         const shapeToStyle = head(
           shapes.filter(shape => shape.id === selectedShapes[0])
         )
-        shapes[shapes.indexOf(shapeToStyle)].style
-          ? (shapes[0].style = {})
-          : (shapes.color = "#" + colorValue)
 
-        changeEditorDocumentSuccess(newDocument)
+        const { style } = shapeToStyle
+        shapeToStyle.style = { ...style, stroke: "#" + colorValue }
+
+        dispatch(updateEditorDocument(newDocument))
+        colorInput.current.blur()
       }
     }
   }
@@ -58,7 +56,7 @@ const ShapeEditPanel = () => {
               ref={colorInput}
               placeholder={"000000"}
               onFocus={handleFocus}
-              onBlur={e => handleBlur(e)}
+              onBlur={handleBlur}
             />
           </div>
           <div className={bF("stroke-opacity")}>100%</div>

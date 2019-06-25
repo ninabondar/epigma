@@ -5,29 +5,36 @@ import { withHandlers, compose } from "recompose"
 
 import { changeMode } from "../../actions"
 import { TransformContext } from "../CanvasTransform"
+import { SelectionTransformContext } from "../Selection/Selection"
 
 import { serializePath } from "../../utils/helper"
 import { serializeTransformationMatrix } from "../../utils/matrix"
 
 import BEM from "../../utils/BEM"
 import "./Shape.scss"
-import { SelectionTransformContext } from "../Selection/Selection"
 const b = BEM("Shape")
 
-export const ShapeView = ({ path, onClick, className = b() }) => {
-  const tansformation = useContext(TransformContext)
-  const selectionTransformation =
-    useContext(SelectionTransformContext) || (a => a)
+export const ShapeView = ({
+  path,
+  pathStyle = {},
+  onClick,
+  className = b()
+}) => {
+  const transformation = useContext(TransformContext)
+  const selectionTransformation = useContext(SelectionTransformContext)
 
   return (
     <g
-      transform={serializeTransformationMatrix(tansformation.matrix)}
+      transform={serializeTransformationMatrix(transformation.matrix)}
       className={className}
       onClick={onClick}
     >
       <path
+        style={pathStyle}
         className={b("path")}
-        d={serializePath(path.points.map(selectionTransformation))}
+        d={serializePath(
+          path.points.map(selectionTransformation || (point => point))
+        )}
       />
     </g>
   )
