@@ -11,7 +11,10 @@ POST http://localhost:9000/api/documents
 Content-Type: application/json
 
 {
-    "title": "new Document"
+  "title":"test - 3",
+  "author":"",
+  "contributors":[],
+  "shapes":[]
 }
 
 ###

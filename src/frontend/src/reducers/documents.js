@@ -1,11 +1,13 @@
 import produce from "immer"
-import { without } from "ramda"
+
 import {
   CREATE_DOCUMENT_SUCCESS,
   RECEIVE_DOCUMENTS_SUCCESS,
   REQUEST_DOCS,
   REMOVE_DOC_SUCCESS,
+  //
   RECEIVE_DOCUMENTS_ERROR,
+  //
   REQUEST_DOC_BY_ID_START,
   REQUEST_DOC_BY_ID_SUCCESS,
   REQUEST_DOC_BY_ID_ERROR
@@ -37,9 +39,7 @@ export default (state = defaultState, action) =>
 
       case CREATE_DOCUMENT_SUCCESS: {
         const { body } = action
-        const id = body._id
-        body.id = id
-        delete body._id
+        const {id} = body
         draft[id] = body
         break
       }
@@ -47,10 +47,7 @@ export default (state = defaultState, action) =>
       case RECEIVE_DOCUMENTS_SUCCESS: {
         const { documents } = action
         documents.map(document => {
-          const id = document._id
-          document.id = id
-          delete document._id
-
+          const {id} = document;
           draft[id] = document
           draft.fetchedDocuments = draft.fetchedDocuments.filter(
             fetchedId => fetchedId !== id

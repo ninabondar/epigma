@@ -1,10 +1,10 @@
-import uuid from "uuid/v4"
 import {
   CREATE_DOCUMENT_SUCCESS,
   RECEIVE_DOCUMENTS_SUCCESS,
   REQUEST_DOCS,
-  REMOVE_DOC_SUCCESS,
   RECEIVE_DOCUMENTS_ERROR,
+  REMOVE_DOC_SUCCESS,
+  //
   REQUEST_DOC_BY_ID_START,
   REQUEST_DOC_BY_ID_SUCCESS,
   REQUEST_DOC_BY_ID_ERROR
@@ -59,57 +59,46 @@ const removeDocumentSuccess = id => ({
   id
 })
 
-export const createNewDocument = title => dispatch => {
+export const createNewDocument = title => async dispatch => {
   const body = {
-    _id: uuid(),
-    title: title,
+    title,
     author: "",
     contributors: [],
-    createdAt: new Date().toDateString(),
-    updatedAt: new Date().toDateString(),
     shapes: []
   }
 
-  fetch(apiURL, {
-    method: "POST",
-    mode: "cors",
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*"
-    },
-    body: JSON.stringify(body)
-  })
-    .then(res => {
-      if (res.ok) {
-        dispatch(createDocumentSuccess(body))
-      }
+  try {
+    const res = await fetch(apiURL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
     })
-    .catch(err => console.info("couldn't add document"))
+
+    if (!res.ok) throw new Error("Error with request") //TODO: write common error handler
+
+    const doc = await res.json()
+    dispatch(createDocumentSuccess(doc))
+  } catch (err) {
+    console.info("couldn't add document")
+  }
 }
 
-export const fetchDocuments = () => dispatch => {
+export const fetchDocuments = () => async dispatch => {
   dispatch(requestDocs())
-  return fetch(apiURL, {
-    method: "GET",
-    mode: "cors",
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*"
-    }
-  })
-    .then(res => {
-      if (res.ok) {
-        return res.json()
-      }
-    })
-    .then(docs => {
-      dispatch(receiveDocumentsSuccess(docs))
-    })
-    .catch(err => {
-      console.info("An error occurred while fetching documents: ")
-      dispatch(receiveDocumentsError())
-      throw err
-    })
+
+  try {
+    const res = await fetch(apiURL)
+    if (!res.ok) throw new Error("Request failed")
+
+    const docs = await res.json()
+    dispatch(receiveDocumentsSuccess(docs))
+  } catch (e) {
+    console.info("An error occurred while fetching documents: ")
+    dispatch(receiveDocumentsError())
+    throw e
+  }
 }
 
 export const removeDocumentById = docId => dispatch => {
