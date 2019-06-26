@@ -14,10 +14,12 @@ import {
   getDocumentById,
   getEditedShape,
   getEditorMode,
+  getIsFetchingDocById,
   getSelectedShapes
 } from "../../reducers"
 import * as actions from "../../actions"
 import { setSelectedShapes } from "../../actions"
+import { requestDocById } from "../../actions/documents"
 
 const useCanvasData = doc => {
   const allShapes = doc.shapes
@@ -65,12 +67,18 @@ const useCanvasData = doc => {
 const useEditorDocument = documentId => {
   const editedDocId = useSelector(getActiveDocumentId)
   const doc = useSelector(getDocumentById(documentId))
-  const activeDoc = useSelector(getActiveDocument)
+  const isDocumentFetching = useSelector(getIsFetchingDocById(documentId))
   const dispatch = useDispatch()
+
+  if (!doc && !isDocumentFetching) {
+    dispatch(requestDocById(documentId))
+  }
+
+  const activeDoc = useSelector(getActiveDocument)
 
   const { openDocumentInEditor } = actions
 
-  if (documentId !== editedDocId) {
+  if (doc && documentId !== editedDocId) {
     dispatch(openDocumentInEditor(doc))
   }
 
