@@ -1,26 +1,30 @@
-GET http://localhost:8000/api/documents
+GET http://localhost:9000/api/documents
 
 ###
 
 
-GET http://localhost:8000/api/documents/5cfa9dd1ea451113d8fd6b0a
+GET http://localhost:9000/api/documents/5d13a49ce077411bc77773f3
 
 ###
 
-POST http://localhost:8000/api/documents
+POST http://localhost:9000/api/documents
 Content-Type: application/json
 
 {
-    "key": "my-dev-value"
+    "title": "new Document"
 }
 
 ###
 
-DELETE http://localhost:8000/api/documents/5cfd265ab4cc612fa4aaa933
+DELETE http://localhost:9000/api/documents/5d13a4885fe62d1bb9ee26e6
 
 ###
 
-PUT http://localhost:8000/api/documents/4f8f3abb-6ec3-44c6-b51a-724a799e77b1
-{}
+PUT http://localhost:9000/api/documents/5d13a457a0ba051bad0a8e92
+Content-Type: application/json
+
+{
+  "title": "Changed title"
+}
 
 ###

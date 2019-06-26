@@ -6,8 +6,13 @@ const documentSchema = mongoose.Schema({
   contributors: Array,
   createdAt: String,
   updatedAt: String,
-  shapes: Array,
-  _id: String
+  shapes: Array
 })
+
+documentSchema.set('toJSON', {
+  versionKey:false,
+  virtuals: true,
+  transform: function (doc, ret) {   delete ret._id  }
+});
 
 module.exports = documentSchema
