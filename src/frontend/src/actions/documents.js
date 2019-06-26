@@ -12,6 +12,12 @@ import {
 
 import api from "../api"
 
+const normalizeDoc = ({ createdAt, updatedAt, ...rest }) => ({
+  ...rest,
+  createdAt: createdAt ? new Date(createdAt) : new Date(),
+  updatedAt: updatedAt ? new Date(updatedAt) : new Date()
+})
+
 export const apiURL = process.env.REACT_APP_API_ENDPOINT + "/documents"
 
 const requestDocDyIdStart = id => ({ type: REQUEST_DOC_BY_ID_START, id })
@@ -30,7 +36,7 @@ export const requestDocById = id => async dispatch => {
   dispatch(requestDocDyIdStart(id))
   try {
     const doc = await api.fetchDocument(id)
-    dispatch(requestDocDyIdSuccess(id, doc))
+    dispatch(requestDocDyIdSuccess(id, normalizeDoc(doc)))
   } catch (error) {
     dispatch(requestDocDyIdError(id, error))
   }
@@ -41,23 +47,15 @@ export const createDocumentSuccess = body => ({
   body
 })
 
-const receiveDocumentsSuccess = documents => ({
+const receiveDocumentsSuccess = doc => ({
   type: RECEIVE_DOCUMENTS_SUCCESS,
-  documents
+  documents: doc
 })
 
-const receiveDocumentsError = () => ({
-  type: RECEIVE_DOCUMENTS_ERROR
-})
+const receiveDocumentsError = () => ({ type: RECEIVE_DOCUMENTS_ERROR })
 
-const requestDocs = () => ({
-  type: REQUEST_DOCS
-})
-
-const removeDocumentSuccess = id => ({
-  type: REMOVE_DOC_SUCCESS,
-  id
-})
+const requestDocs = () => ({ type: REQUEST_DOCS })
+const removeDocumentSuccess = id => ({ type: REMOVE_DOC_SUCCESS, id })
 
 export const createNewDocument = title => async dispatch => {
   const body = {
@@ -79,7 +77,7 @@ export const createNewDocument = title => async dispatch => {
     if (!res.ok) throw new Error("Error with request") //TODO: write common error handler
 
     const doc = await res.json()
-    dispatch(createDocumentSuccess(doc))
+    dispatch(createDocumentSuccess(normalizeDoc(doc)))
   } catch (err) {
     console.info("couldn't add document")
   }
@@ -93,7 +91,7 @@ export const fetchDocuments = () => async dispatch => {
     if (!res.ok) throw new Error("Request failed")
 
     const docs = await res.json()
-    dispatch(receiveDocumentsSuccess(docs))
+    dispatch(receiveDocumentsSuccess(docs.map(normalizeDoc)))
   } catch (e) {
     console.info("An error occurred while fetching documents: ")
     dispatch(receiveDocumentsError())
