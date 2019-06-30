@@ -1,16 +1,9 @@
 .Shape {
-  &_edit {
-    .Shape {
-      &__path {
-        stroke: #7f8c8d;
-      }
-    }
-  }
-
   &__path {
     stroke: #232323;
     stroke-width: 2;
     fill: none;
+
     &:hover {
       stroke-width: 3;
       stroke: #3498db;

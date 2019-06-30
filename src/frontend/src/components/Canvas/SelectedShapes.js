@@ -22,6 +22,7 @@ let SelectedShapes = ({ shapes, offset }) => {
     // TODO handle more use cases of Escape
     if (!editPanelInFocus) {
       if (ev.code === "Enter" || ev.code === "Escape") {
+        ev.preventDefault()
         dispatch(setSelectedShapes([]))
       }
     }

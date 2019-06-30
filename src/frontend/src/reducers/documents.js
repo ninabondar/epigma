@@ -39,7 +39,7 @@ export default (state = defaultState, action) =>
 
       case CREATE_DOCUMENT_SUCCESS: {
         const { body } = action
-        const {id} = body
+        const { id } = body
         draft[id] = body
         break
       }
@@ -47,7 +47,7 @@ export default (state = defaultState, action) =>
       case RECEIVE_DOCUMENTS_SUCCESS: {
         const { documents } = action
         documents.map(document => {
-          const {id} = document;
+          const { id } = document
           draft[id] = document
           draft.fetchedDocuments = draft.fetchedDocuments.filter(
             fetchedId => fetchedId !== id
@@ -67,6 +67,9 @@ export default (state = defaultState, action) =>
         const { id } = action
         delete draft[id]
         break
+      }
+      default: {
+        return draft
       }
     }
   })

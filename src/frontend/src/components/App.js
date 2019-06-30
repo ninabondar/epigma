@@ -1,5 +1,5 @@
 import React from "react"
-import { Route } from "react-router-dom";
+import { Route } from "react-router-dom"
 import Editor from "./Editor/Editor"
 import DocumentList from "./DocumentList/DocumentList"
 

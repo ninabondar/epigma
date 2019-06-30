@@ -1,7 +1,11 @@
 import React, { useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { clone, head } from "ramda"
-import { getActiveDocument, getSelectedShapes } from "../../reducers"
+import {
+  getActiveDocument,
+  getSelectedShapes,
+  getShapeEditPanelInFocus
+} from "../../reducers"
 import { setShapePanelInFocus, updateEditorDocument } from "../../actions"
 import BEM from "../../utils/BEM"
 
@@ -15,31 +19,35 @@ const ShapeEditPanel = () => {
   const colorInput = useRef()
   const dispatch = useDispatch()
   const activeDocument = useSelector(getActiveDocument)
-
-  const handleFocus = () => dispatch(setShapePanelInFocus(true))
-
   const selectedShapes = useSelector(getSelectedShapes)
+  const panelIsInFocus = useSelector(getShapeEditPanelInFocus)
+
+  const handleFocus = () => {
+    if (selectedShapes.length === 1) {
+      dispatch(setShapePanelInFocus(true))
+    }
+  }
 
   const handleBlur = () => {
     dispatch(setShapePanelInFocus(false))
+  }
+
+  const handleColorSubmit = e => {
+    e.preventDefault()
     const { value: colorValue } = colorInput.current
 
-    if (selectedShapes.length === 1) {
-      //hex is 6 symbols long
-      if (colorValue.length === 6) {
-        const newDocument = clone(activeDocument)
-        const { shapes } = newDocument
+    //hex is 6 symbols long
+    if (panelIsInFocus && selectedShapes.length === 1) {
+      const newDocument = clone(activeDocument)
+      const { shapes } = newDocument
+      const shapeToStyle = head(
+        shapes.filter(shape => shape.id === selectedShapes[0])
+      )
 
-        const shapeToStyle = head(
-          shapes.filter(shape => shape.id === selectedShapes[0])
-        )
+      const { style } = shapeToStyle
 
-        const { style } = shapeToStyle
-        shapeToStyle.style = { ...style, stroke: "#" + colorValue }
-
-        dispatch(updateEditorDocument(newDocument))
-        colorInput.current.blur()
-      }
+      shapeToStyle.style = { ...style, stroke: "#" + colorValue }
+      dispatch(updateEditorDocument(newDocument))
     }
   }
 
@@ -48,7 +56,7 @@ const ShapeEditPanel = () => {
       <section className={bF()}>
         <h4 className={bF("feature-name")}>Stroke</h4>
         <div className={bF("feature-block")}>
-          <div className={bF("stroke-color")}>
+          <form className={bF("stroke-color")} onSubmit={handleColorSubmit}>
             <span className={bF("stroke-color-preview")} />
             <input
               className={bF("stroke-color-input")}
@@ -58,9 +66,9 @@ const ShapeEditPanel = () => {
               onFocus={handleFocus}
               onBlur={handleBlur}
             />
-          </div>
+          </form>
           <div className={bF("stroke-opacity")}>100%</div>
-          <input type="color"/>
+          <input type="color" />
         </div>
       </section>
     </aside>
