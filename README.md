@@ -4,6 +4,14 @@ This is a basic training clone of Figma - an online SVG editor with rich functio
 ## Motivation
 It first appeared as a training educational project for university course of web development, however now is striving to become something more helpful, still holding the features of an svg editor and remaining a functional style project. 
 
+## Installation
+After cloning, run in your console:
+ ```yarn install```
+ 
+To start the project, run:
+```yarn start```
+
+
 ## Tech stack
 #### Frontend: 
  - React Redux
