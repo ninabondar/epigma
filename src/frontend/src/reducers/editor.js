@@ -105,7 +105,7 @@ export const getEditorMode = state => state.mode
 export const getSelectedShapes = state => {
   const { historyPointer, history } = state
   const editorState = history[historyPointer]
-  return editorState && editorState.selectedShapes
+  return (editorState && editorState.selectedShapes) || []
 }
 
 export const getEditedShape = state => state.pickedShape

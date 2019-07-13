@@ -1,13 +1,12 @@
 import React from "react"
-import ToolPanel from "../ToolPanel/ToolPanel"
-import Canvas from "../Canvas"
-import ShapeEditPanel from "../ShapeEditPanel/ShapeEditPanel"
 
 import produce from "immer"
 import { find, propEq, filter, contains, without } from "ramda"
 
 import { withRouter } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
+
+//
 import {
   getActiveDocument,
   getActiveDocumentId,
@@ -17,9 +16,19 @@ import {
   getIsFetchingDocById,
   getSelectedShapes
 } from "../../reducers"
-import * as actions from "../../actions"
-import { setSelectedShapes } from "../../actions"
-import { requestDocById } from "../../actions/documents"
+import {
+  setSelectedShapes,
+  setEditedShape,
+  changeEditorDocumentSuccess,
+  changeMode,
+  requestDocById,
+  openDocumentInEditor
+} from "../../actions"
+
+//
+import ToolPanel from "../ToolPanel/ToolPanel"
+import Canvas from "../Canvas"
+import ShapeEditPanel from "../ShapeEditPanel/ShapeEditPanel"
 
 import "./Editor.scss"
 import BEM from "../../utils/BEM"
@@ -36,12 +45,6 @@ const useCanvasData = doc => {
   const selectedShapes = editedShape
     ? []
     : filter(({ id }) => contains(id, selectedShapesId), doc.shapes)
-  const {
-    setSelectedShapes,
-    setEditedShape,
-    changeEditorDocumentSuccess,
-    changeMode
-  } = actions
 
   const viewedShapes = without([...selectedShapes, editedShape], doc.shapes)
 
@@ -80,8 +83,6 @@ const useEditorDocument = documentId => {
 
   const activeDoc = useSelector(getActiveDocument)
 
-  const { openDocumentInEditor } = actions
-
   if (doc && documentId !== editedDocId) {
     dispatch(openDocumentInEditor(doc))
   }
@@ -99,6 +100,8 @@ const DocumentLoader = withRouter(({ match }) => {
 })
 
 const Editor = () => {
+  const selectedShapes = useSelector(getSelectedShapes)
+
   return (
     <div className={b()}>
       <div className={b("top-panel")}>
@@ -107,8 +110,10 @@ const Editor = () => {
       <div className={b("canvas")}>
         <DocumentLoader />
       </div>
+
       <section className={b("side-panel")}>
-        <ShapeEditPanel />
+        {selectedShapes.length === 0 && "This is Epigma! The best svg editor ever."}
+        {selectedShapes.length !== 0 && <ShapeEditPanel />}
       </section>
     </div>
   )

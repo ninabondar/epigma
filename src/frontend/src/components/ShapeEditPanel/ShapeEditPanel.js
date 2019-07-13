@@ -11,15 +11,15 @@ import BEM from "../../utils/BEM"
 
 import "./ShapeEditPanel.scss"
 
-
-
 const b = BEM("ShapeEditPanel")
 
 const ShapeEditPanel = () => {
   const colorInput = useRef()
   const dispatch = useDispatch()
+
   const activeDocument = useSelector(getActiveDocument)
   const selectedShapes = useSelector(getSelectedShapes)
+
   const panelIsInFocus = useSelector(getShapeEditPanelInFocus)
 
   const handleFocus = () => {
@@ -34,6 +34,7 @@ const ShapeEditPanel = () => {
 
   const handleColorSubmit = e => {
     e.preventDefault()
+
     const { value: colorValue } = colorInput.current
 
     //hex is 6 symbols long
@@ -68,7 +69,6 @@ const ShapeEditPanel = () => {
             />
           </form>
           <div className={b("stroke-opacity")}>100%</div>
-          <input type="color" />
         </div>
       </section>
     </>
