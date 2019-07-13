@@ -13,7 +13,8 @@ import "./Shape.scss"
 const b = BEM("Shape")
 
 const ShapeEdit = props => {
-  const { onChange } = props
+  const { onChange, style } = props
+
   const transformation = useContext(TransformContext)
 
   const [path, setPath] = useState(props.path)
@@ -65,7 +66,7 @@ const ShapeEdit = props => {
 
   return (
     <g className={b(["edit"])}>
-      <ShapeView path={path} className={b(["edit"])} />
+      <ShapeView style={style} path={path} className={b(["edit"])} />
       {points.map(transformation).map((point, index) => (
         <Vertex
           key={index}

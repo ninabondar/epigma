@@ -1,4 +1,4 @@
-import React, { useState, createContext, useRef, useEffect } from "react"
+import React, { useState, createContext, useEffect } from "react"
 import {
   getTransformMatrix,
   multiplyMatrix,
@@ -9,7 +9,6 @@ import { createPoint, getZoomMatrix } from "../../utils/helper"
 export const TransformContext = createContext()
 
 const CanvasTransform = ({ children }) => {
-  let transformedFieldRef = useRef()
   const [matrix, setMatrix] = useState(getTransformMatrix(1, 0, 0))
   const [isDragging, setDragging] = useState(false)
 
@@ -58,7 +57,7 @@ const CanvasTransform = ({ children }) => {
   }
 
   return (
-    <div onMouseDown={handleMouseDown} ref={transformedFieldRef}>
+    <div onMouseDown={handleMouseDown}>
       <TransformContext.Provider value={transformPoint(matrix)}>
         {children}
       </TransformContext.Provider>

@@ -36,7 +36,7 @@ let SelectedShapes = ({ shapes, offset }) => {
     <Selection key={selectionId} boundingRect={boundingRect}>
       {shapes.map(shape => (
         <ShapeView
-          pathStyle={shape.style}
+          style={shape.style}
           key={shape.id}
           onSelect={() => dispatch(setEditedShape(shape.id))}
           offset={offset}
