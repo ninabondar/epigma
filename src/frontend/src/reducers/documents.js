@@ -6,11 +6,11 @@ import {
   REQUEST_DOCS,
   REMOVE_DOC_SUCCESS,
   //
-  RECEIVE_DOCUMENTS_ERROR,
+  // RECEIVE_DOCUMENTS_ERROR,
   //
   REQUEST_DOC_BY_ID_START,
   REQUEST_DOC_BY_ID_SUCCESS,
-  REQUEST_DOC_BY_ID_ERROR
+  // REQUEST_DOC_BY_ID_ERROR
 } from "../actions/actionTypes"
 
 const defaultState = {

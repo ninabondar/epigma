@@ -4,19 +4,17 @@ import {
   getCurrentHistoryPointer,
   getShapeEditPanelInFocus
 } from "../../reducers"
-import * as actions from "../../actions"
+
 import Selection from "../Selection/Selection"
 import ShapeView from "../Shape/ShapeView"
 import { createPoint, getBoundingBoxFromShape } from "../../utils/helper"
-import { setSelectedShapes } from "../../actions"
+
+import { setEditedShape, setSelectedShapes } from "../../actions"
 
 let SelectedShapes = ({ shapes, offset }) => {
-  if (shapes.length === 0) return null
-
   const dispatch = useDispatch()
   const selectionId = useSelector(getCurrentHistoryPointer)
   const editPanelInFocus = useSelector(getShapeEditPanelInFocus)
-  const { setEditedShape } = actions
 
   const keyHandler = ev => {
     // TODO handle more use cases of Escape
@@ -33,6 +31,7 @@ let SelectedShapes = ({ shapes, offset }) => {
     return () => document.removeEventListener("keypress", keyHandler)
   })
 
+  if (shapes.length === 0) return null
   const boundingBox = getBoundingBoxFromShape(shapes[0]) //TODO: fix it. Get boundingBox for all shapes. Not only for first
 
   const [minY, maxX, maxY, minX] = boundingBox

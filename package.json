@@ -1,6 +1,7 @@
 {
   "name": "epigma",
   "version": "0.0.1",
+  "private": true,
   "scripts": {
     "test": "cd src/frontend && yarn test",
     "build:frontend": "cd src/frontend && yarn build",
@@ -24,6 +25,10 @@
     "concurrently": "^4.1.0",
     "node-sass": "^4.11.0"
   },
+  "workspaces": [
+    "src/backend",
+    "src/frontend"
+  ],
   "browserslist": [
     ">0.2%",
     "not dead",
