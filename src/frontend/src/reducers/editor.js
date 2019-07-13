@@ -4,7 +4,7 @@ import {
   SET_SELECTED_SHAPES,
   CHANGE_ACTIVE_DOC_ID,
   OPEN_DOCUMENT,
-  CHANGE_EDITOR_DOCUMENT_SUCCESS,
+  CHANGE_DOCUMENT_SUCCESS,
   UNDO,
   REDO,
   SET_EDITED_SHAPE
@@ -65,7 +65,7 @@ export default produce((draft, action) => {
       return
     }
 
-    case CHANGE_EDITOR_DOCUMENT_SUCCESS: {
+    case CHANGE_DOCUMENT_SUCCESS: {
       const { document } = action
       const { history, historyPointer } = draft
       draft.historyPointer++

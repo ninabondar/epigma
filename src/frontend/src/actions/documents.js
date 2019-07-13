@@ -7,7 +7,8 @@ import {
   //
   REQUEST_DOC_BY_ID_START,
   REQUEST_DOC_BY_ID_SUCCESS,
-  REQUEST_DOC_BY_ID_ERROR
+  REQUEST_DOC_BY_ID_ERROR,
+  CHANGE_DOCUMENT_SUCCESS
 } from "./actionTypes"
 
 import api from "../api"
@@ -114,4 +115,21 @@ export const removeDocumentById = docId => dispatch => {
     .catch(err => {
       console.info("An error occurred while deleting a document: ", err)
     })
+}
+
+export const changeDocumentSuccess = document => ({
+  type: CHANGE_DOCUMENT_SUCCESS,
+  document
+})
+
+export const updateDocument = doc => async dispatch => {
+  const { id } = doc
+
+  try {
+    await api.saveDocument(id, doc)
+    dispatch(changeDocumentSuccess(doc))
+  } catch (err) {
+    console.log(`Something went wrong while updating the doc`)
+    throw err
+  }
 }

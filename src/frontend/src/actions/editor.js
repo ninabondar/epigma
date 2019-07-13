@@ -1,7 +1,6 @@
 // @flow
-
 import {
-  CHANGE_EDITOR_DOCUMENT_SUCCESS,
+  CHANGE_DOCUMENT_SUCCESS,
   CHANGE_MODE,
   OPEN_DOCUMENT,
   SET_EDITED_SHAPE,
@@ -9,7 +8,6 @@ import {
   REDO,
   UNDO
 } from "./actionTypes"
-import { apiURL } from "./documents"
 
 export const changeMode = (mode: "VIEW" | "EDIT" | "CREATE") => ({
   type: CHANGE_MODE,
@@ -31,34 +29,5 @@ export const openDocumentInEditor = document => ({
   payload: { document }
 })
 
-export const changeEditorDocumentSuccess = document => ({
-  type: CHANGE_EDITOR_DOCUMENT_SUCCESS,
-  document
-})
-
-export const editorUndo = () => ({
-  type: UNDO
-})
-
-export const editorRedo = () => ({
-  type: REDO
-})
-export const updateEditorDocument = doc => async dispatch => {
-  const { id } = doc
-  return fetch(apiURL + "/" + id, {
-    method: "PUT",
-    mode: "cors",
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*"
-    },
-    body: JSON.stringify(doc)
-  })
-    .then(res => {
-      dispatch(changeEditorDocumentSuccess(doc))
-    })
-    .catch(err => {
-      console.log(`Something went wrong while updating the doc`)
-      throw err
-    })
-}
+export const editorUndo = () => ({ type: UNDO })
+export const editorRedo = () => ({ type: REDO })

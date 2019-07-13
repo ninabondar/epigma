@@ -2,7 +2,7 @@ import React, { useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { clone } from "ramda"
 import { getActiveDocument } from "../../reducers"
-import { updateEditorDocument } from "../../actions"
+import { updateDocument } from "../../actions"
 import BEM from "../../utils/BEM"
 
 import "./ShapeEditPanel.scss"
@@ -23,7 +23,7 @@ const ShapeEditPanel = ({ shapes }) => {
     shapes.map(shapeId => {
       const shapeIndex = newDoc.shapes.findIndex(shape => shape.id === shapeId)
       newDoc.shapes[shapeIndex].style.stroke = "#" + colorValue
-      dispatch(updateEditorDocument(newDoc))
+      dispatch(updateDocument(newDoc))
     })
   }
 

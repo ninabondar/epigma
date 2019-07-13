@@ -19,7 +19,7 @@ import {
 import {
   setSelectedShapes,
   setEditedShape,
-  changeEditorDocumentSuccess,
+  changeDocumentSuccess,
   changeMode,
   requestDocById,
   openDocumentInEditor
@@ -49,7 +49,7 @@ const useCanvasData = doc => {
   const viewedShapes = without([...selectedShapes, editedShape], doc.shapes)
 
   const setShapes = shapes =>
-    changeEditorDocumentSuccess(
+    changeDocumentSuccess(
       produce(doc, draft => {
         draft.shapes = shapes
       })

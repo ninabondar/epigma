@@ -10,7 +10,7 @@ import {
   changeMode,
   editorRedo,
   editorUndo,
-  updateEditorDocument
+  updateDocument
 } from "../../actions"
 import {
   getActiveDocument,
@@ -120,7 +120,7 @@ const enhancer = compose(
       changeMode,
       undo: editorUndo,
       redo: editorRedo,
-      changeEditorDocument: updateEditorDocument
+      changeEditorDocument: updateDocument
     }
   ),
   withHandlers({
