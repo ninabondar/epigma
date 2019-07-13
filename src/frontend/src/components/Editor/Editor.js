@@ -21,6 +21,10 @@ import * as actions from "../../actions"
 import { setSelectedShapes } from "../../actions"
 import { requestDocById } from "../../actions/documents"
 
+import "./Editor.scss"
+import BEM from "../../utils/BEM"
+const b = BEM("Editor")
+
 const useCanvasData = doc => {
   const allShapes = doc.shapes
 
@@ -96,11 +100,17 @@ const DocumentLoader = withRouter(({ match }) => {
 
 const Editor = () => {
   return (
-    <>
-      <ToolPanel />
-      <DocumentLoader />
-      <ShapeEditPanel />
-    </>
+    <div className={b()}>
+      <div className={b("top-panel")}>
+        <ToolPanel />
+      </div>
+      <div className={b("canvas")}>
+        <DocumentLoader />
+      </div>
+      <section className={b("side-panel")}>
+        <ShapeEditPanel />
+      </section>
+    </div>
   )
 }
 

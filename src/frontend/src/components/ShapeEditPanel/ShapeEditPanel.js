@@ -10,10 +10,10 @@ import { setShapePanelInFocus, updateEditorDocument } from "../../actions"
 import BEM from "../../utils/BEM"
 
 import "./ShapeEditPanel.scss"
-import "./ShapeFeatureTuningPanel.scss"
+
+
 
 const b = BEM("ShapeEditPanel")
-const bF = BEM("ShapeFeatureTuningPanel")
 
 const ShapeEditPanel = () => {
   const colorInput = useRef()
@@ -52,14 +52,14 @@ const ShapeEditPanel = () => {
   }
 
   return (
-    <aside className={b()}>
-      <section className={bF()}>
-        <h4 className={bF("feature-name")}>Stroke</h4>
-        <div className={bF("feature-block")}>
-          <form className={bF("stroke-color")} onSubmit={handleColorSubmit}>
-            <span className={bF("stroke-color-preview")} />
+    <>
+      <section className={b()}>
+        <h4 className={b("feature-name")}>Stroke</h4>
+        <div className={b("feature-block")}>
+          <form className={b("stroke-color")} onSubmit={handleColorSubmit}>
+            <span className={b("stroke-color-preview")} />
             <input
-              className={bF("stroke-color-input")}
+              className={b("stroke-color-input")}
               type="text"
               ref={colorInput}
               placeholder={"000000"}
@@ -67,11 +67,11 @@ const ShapeEditPanel = () => {
               onBlur={handleBlur}
             />
           </form>
-          <div className={bF("stroke-opacity")}>100%</div>
+          <div className={b("stroke-opacity")}>100%</div>
           <input type="color" />
         </div>
       </section>
-    </aside>
+    </>
   )
 }
 

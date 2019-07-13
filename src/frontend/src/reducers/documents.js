@@ -9,7 +9,7 @@ import {
   // RECEIVE_DOCUMENTS_ERROR,
   //
   REQUEST_DOC_BY_ID_START,
-  REQUEST_DOC_BY_ID_SUCCESS,
+  REQUEST_DOC_BY_ID_SUCCESS
   // REQUEST_DOC_BY_ID_ERROR
 } from "../actions/actionTypes"
 

@@ -1,0 +1,16 @@
+@import "../../styles/variables";
+
+.Editor {
+  &__side-panel {
+    position: fixed;
+    box-sizing: border-box;
+    padding: 20px 30px;
+    height: calc(100vh - #{$HEADER_HEIGHT});
+    width: $SHAPE_PANEL_WIDTH;
+    background: white;
+    right: 0;
+    top: $HEADER_HEIGHT;
+    display: flex;
+    flex-direction: column;
+  }
+}
