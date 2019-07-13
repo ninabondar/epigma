@@ -60,8 +60,7 @@ export const serializePath: _serializePath = dotsArr =>
     )
   )(dotsArr)
 
-type _removePoint = (Point[]) => number => Point[]
-export const removePoint: _removePoint = (points, index) => {
+export const removePoint = curry((points, index) => {
   if (index === 0) return tail(points)
   if (index === points.length - 1) return init(points)
   if (index === 1) return slice(2, Infinity, points)
@@ -70,7 +69,7 @@ export const removePoint: _removePoint = (points, index) => {
   const nextPoint = assoc("type", "M", points[index + 1])
 
   return update(index, nextPoint, remove(index, 1, points))
-}
+})
 
 type _getBoundingBoxFromShape = Shape => [number, number, number, number]
 export const getBoundingBoxFromShape: _getBoundingBoxFromShape = ({

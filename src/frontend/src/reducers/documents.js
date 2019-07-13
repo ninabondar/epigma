@@ -46,7 +46,7 @@ export default (state = defaultState, action) =>
 
       case RECEIVE_DOCUMENTS_SUCCESS: {
         const { documents } = action
-        documents.map(document => {
+        documents.forEach(document => {
           const { id } = document
           draft[id] = document
           draft.fetchedDocuments = draft.fetchedDocuments.filter(

@@ -1,5 +1,3 @@
-import { apiURL } from "./actions"
-
 const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT
 
 class API {
