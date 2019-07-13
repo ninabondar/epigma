@@ -13,7 +13,6 @@ import ShapeView from "../Shape/ShapeView"
 import BEM from "../../utils/BEM"
 import "./Canvas.scss"
 import { useDispatch } from "react-redux"
-import { setSelectedShapes } from "../../actions"
 const b = BEM("Canvas")
 
 const Canvas = ({
@@ -32,7 +31,7 @@ const Canvas = ({
   const dispatch = useDispatch()
   useEffect(() => {
     setOffset({ x: 0, y: document.querySelector(".ToolPanel").offsetHeight })
-  })
+  }, [])
 
   return (
     <CanvasTransform>
