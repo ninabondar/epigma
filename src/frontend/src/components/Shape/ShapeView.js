@@ -20,6 +20,8 @@ export const ShapeView = ({
   onClick,
   className = b()
 }) => {
+  const { stroke } = pathStyle
+
   const transformation = useContext(TransformContext)
   const selectionTransformation = useContext(SelectionTransformContext)
 
@@ -30,7 +32,7 @@ export const ShapeView = ({
       onClick={onClick}
     >
       <path
-        style={pathStyle}
+        style={{ ...pathStyle, stroke: "#" + stroke }}
         className={b("path")}
         d={serializePath(
           path.points.map(selectionTransformation || (point => point))
