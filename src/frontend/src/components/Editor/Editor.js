@@ -113,7 +113,7 @@ const Editor = () => {
 
       <section className={b("side-panel")}>
         {selectedShapes.length === 0 && "This is Epigma! The best svg editor ever."}
-        {selectedShapes.length !== 0 && <ShapeEditPanel />}
+        {selectedShapes.length !== 0 && <ShapeEditPanel shapes={selectedShapes} />}
       </section>
     </div>
   )

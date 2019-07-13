@@ -94,3 +94,19 @@ export const getZoomMatrixXY = curry((centerOfCoordinates, zoomX, zoomY) => {
 
   return multiplyManyMatrices(shiftFromStart, zoomMatrix, unshiftFromStart)
 })
+
+const stopEvent = (ev: Event) => {
+  ev.stopPropagation()
+  if (ev.nativeEvent) ev.nativeEvent.stopImmediatePropagation()
+  ev.cancelBubble = true
+}
+
+export const stopAllEvents = {
+  onMouseMove: stopEvent,
+  onMouseUp: stopEvent,
+  onMouseDown: stopEvent,
+
+  onWheel: stopEvent,
+  onKeyDown: stopEvent,
+  onKeyPress: stopEvent
+}

@@ -29,9 +29,6 @@ export const getCurrentHistoryPointer = state =>
 export const getOpenDocumentTitle = state =>
   fromEditor.getOpenDocumentTitle(state.editor)
 
-export const getShapeEditPanelInFocus = state =>
-  fromEditor.getShapeEditPanelInFocus(state.editor)
-
 // Document selectors
 export const getAllExistingDocuments = state =>
   fromDocuments.getAllExistingDocuments(state.documents)

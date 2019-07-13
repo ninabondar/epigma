@@ -1,9 +1,6 @@
 import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import {
-  getCurrentHistoryPointer,
-  getShapeEditPanelInFocus
-} from "../../reducers"
+import { getCurrentHistoryPointer } from "../../reducers"
 
 import Selection from "../Selection/Selection"
 import ShapeView from "../Shape/ShapeView"
@@ -14,15 +11,13 @@ import { setEditedShape, setSelectedShapes } from "../../actions"
 let SelectedShapes = ({ shapes, offset }) => {
   const dispatch = useDispatch()
   const selectionId = useSelector(getCurrentHistoryPointer)
-  const editPanelInFocus = useSelector(getShapeEditPanelInFocus)
 
   const keyHandler = ev => {
     // TODO handle more use cases of Escape
-    if (!editPanelInFocus) {
-      if (ev.code === "Enter" || ev.code === "Escape") {
-        ev.preventDefault()
-        dispatch(setSelectedShapes([]))
-      }
+
+    if (ev.code === "Enter" || ev.code === "Escape") {
+      ev.preventDefault()
+      dispatch(setSelectedShapes([]))
     }
   }
 
