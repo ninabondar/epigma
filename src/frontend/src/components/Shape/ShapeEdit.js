@@ -1,5 +1,5 @@
 // @flow
-import React, { useContext, useEffect, useState, useCallback } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { __, assoc, assocPath, pipe } from "ramda"
 import { useEvent, useKey } from "react-use"
 import { removePoint } from "../../utils/helper"
@@ -23,27 +23,21 @@ const ShapeEdit = ({ onChange, style, path: pathProperty }) => {
   useEffect(() => setPath(pathProperty), [pathProperty])
   useEvent("mousedown", () => setSelectedVertex(null), document.body)
 
-  const deleteHandler = useCallback(
-    ev => {
-      ev.preventDefault()
-      if (selectedVertex == null) return
+  const deleteHandler = ev => {
+    ev.preventDefault()
+    if (selectedVertex == null) return
 
-      pipe(
-        removePoint(pathState.points),
-        assoc("points", __, pathState),
-        setPath
-      )(selectedVertex)
-    },
-    [pathState.points, selectedVertex]
-  )
+    pipe(
+      removePoint(pathState.points),
+      assoc("points", __, pathState),
+      setPath
+    )(selectedVertex)
+  }
 
-  const changeHandler = useCallback(
-    ev => {
-      ev.preventDefault()
-      return onChange(pathState)
-    },
-    [pathState]
-  )
+  const changeHandler = ev => {
+    ev.preventDefault()
+    return onChange(pathState)
+  }
 
   useKey(({ key }) => ["Backspace", "Delete"].includes(key), deleteHandler, {
     event: "keydown"

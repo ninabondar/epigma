@@ -29,17 +29,16 @@ const DocumentsListFetched = ({
 }) => (
   <section className={b()}>
     {documentsList.map(({ title, createdAt, id }, i) => {
-      if (title) {
-        return (
-          <Link to={"/edit/" + id} key={i}>
-            <Document
-              title={title}
-              createdAt={createdAt}
-              clickHandler={ev => handleMoreClick(ev, id)}
-            />
-          </Link>
-        )
-      }
+      if (!title) return ""
+      return (
+        <Link to={"/edit/" + id} key={i}>
+          <Document
+            title={title}
+            createdAt={createdAt}
+            clickHandler={ev => handleMoreClick(ev, id)}
+          />
+        </Link>
+      )
     })}
     <div className={"Document"}>
       <form className={b("create-document-form")} onSubmit={onNameSubmit}>

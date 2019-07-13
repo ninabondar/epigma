@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { assocPath, clone, pathOr, pipe } from "ramda"
+import { assocPath, pathOr, pipe } from "ramda"
 import { getActiveDocument } from "../../reducers"
 import { updateDocument } from "../../actions"
 import BEM from "../../utils/BEM"
@@ -21,7 +21,7 @@ const ShapeEditPanel = ({ shapes }) => {
   }, {})
 
   const [color, setColor] = useState(
-    shapes.length == 1
+    shapes.length === 1
       ? pathOr(
           "",
           ["shapes", shapeIndices[shapes[0]], "style", "stroke"],
@@ -33,7 +33,7 @@ const ShapeEditPanel = ({ shapes }) => {
   const handleColorSubmit = e => {
     e.preventDefault()
 
-    shapes.map(shapeId => {
+    shapes.forEach(shapeId => {
       pipe(
         assocPath(["shapes", shapeIndices[shapeId], "style", "stroke"], color),
         updateDocument,
