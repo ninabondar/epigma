@@ -69,7 +69,6 @@ export default (state = defaultState, action) =>
         break
       }
       default: {
-        return draft
       }
     }
   })
