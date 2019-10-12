@@ -1,24 +1,22 @@
-import React from 'react'
+import React, { forwardRef } from "react"
 import BEM from "../../utils/BEM"
 
-import './FormInput.scss'
+import "./FormInput.scss"
 
 const b = BEM("FormInput")
 
-const FormInput = ({ id, ref, type = 'text', value, label, placeholder, children, changeHandler }) => (
+const FormInput = forwardRef(({ id, type="text", label, children, ...restProps }, ref) => (
   <div className={b("group")}>
-    <label htmlFor={id}>{label}</label>
+    {label && <label htmlFor={id}>{label}</label>}
     {children}
     <input
       id={id}
       ref={ref}
-      value={value}
       type={type}
-      placeholder={placeholder}
-      onChange={changeHandler}
       className={b("control")}
+      {...restProps}
     />
   </div>
-)
+))
 
 export default FormInput

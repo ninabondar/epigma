@@ -3,13 +3,27 @@
 .FormInput {
   box-sizing: border-box;
   padding: 20px 0;
-  border-bottom: 1px solid $BORDER_COLOR;
-  
-  &__group {
 
+  &__group {
+    display: flex;
+    justify-content: space-between;
+    @include borderAppearsOnHover();
+
+    &:focus-within {
+      border: 1px solid $BORDER_COLOR;
+    }
   }
 
-  &__input {
+  &__control {
+    text-align: right;
+    align-self: center;
+    font-size: 13px;
+    font-family: $FONT_FAM;
+    border: 0;
+    outline: none;
 
+    &[placeholder] {
+      color: $FONT_COLOR;
+    }
   }
 }

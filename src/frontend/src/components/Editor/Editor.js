@@ -28,7 +28,7 @@ import {
 //
 import ToolPanel from "../ToolPanel/ToolPanel"
 import Canvas from "../Canvas"
-import ShapeEditPanel from "../ShapeEditPanel/ShapeEditPanel"
+import ShapeEditPanel from "../ShapeEditPanel"
 
 import "./Editor.scss"
 import BEM from "../../utils/BEM"
