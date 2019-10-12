@@ -1,46 +1,16 @@
 const { Router } = require("express")
+
 const { Document, db } = require("../db")
+const { documentController } = require("../api/controllers")
 
 const documentRoute = new Router()
 
 documentRoute
-  .get("/", async (req, res) => {
-    try {
-      const docs = await Document.find({}).exec()
+  .get("/", documentController.getDocuments)
+  .get("/:id", documentController.getDocById)
+  .post("/", documentController.createDocument())
 
-      res.send(docs)
-    } catch (err) {
-      res.status(404)
-      res.send({ error: "Documents not found" })
-    }
-  })
-  .get("/:id", async (req, res) => {
-    const { id } = req.params
-
-    try {
-      const doc = await Document.findById(id).exec()
-      res.send(doc)
-    } catch (err) {
-      res.status(404)
-      res.send({ error: "Document not found" })
-    }
-  })
-
-  .post("/", (req, res) => {
-    const { body } = req
-    const newDoc = new Document({
-      ...body,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    })
-
-    newDoc.save((err, doc) => {
-      if (err) console.error(err)
-      res.send(doc)
-    })
-  })
-
-  .delete("/:id", (req, res) => {
+  .delete("/:id", async (req, res) => {
     const { id } = req.params
 
     Document.findByIdAndRemove(id, { useFindAndModify: false }, (err, doc) => {
