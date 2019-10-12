@@ -1,8 +1,11 @@
-const { Router } = require("express")
+const apiRouts = require("express").Router()
 
-const apiRouts = new Router()
+const {documentRouter} = require('./router')
 
-// binding routes
-apiRouts.use("/documents", require("./documents"))
+apiRouts.all("/", (req, res) => {
+  res.redirect("/documents")
+})
+
+apiRouts.use("/documents", documentRouter)
 
 module.exports = apiRouts

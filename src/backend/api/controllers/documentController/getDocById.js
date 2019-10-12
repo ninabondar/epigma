@@ -1,13 +1,9 @@
-const { Document } = require("../../../db")
-
 module.exports = async (req, res) => {
-  const { id } = req.params
-
   try {
-    const doc = await Document.findById(id).exec()
-    res.send(doc)
+    const document = req.document
+
+    res.send(document)
   } catch (err) {
-    res.status(404)
-    res.send({ error: "Document not found" })
+    res.status(err.status).send({ error: "Document not found" })
   }
 }
