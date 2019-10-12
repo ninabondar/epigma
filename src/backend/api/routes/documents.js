@@ -1,5 +1,5 @@
 const { Router } = require("express")
-const { Document, db } = require("../db")
+const { Document, db } = require("../../db")
 
 const documentRoute = new Router()
 
