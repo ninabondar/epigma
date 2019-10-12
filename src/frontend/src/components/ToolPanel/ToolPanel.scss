@@ -13,6 +13,7 @@
     outline: none;
     height: 100%;
     width: 40px;
+    padding: 0 6px;
     background-color: $HEADER_PANEL_COLOR;
     color: white;
     background-size: 35%;
@@ -23,6 +24,10 @@
       background-color: black;
     }
 
+    &_go-back {
+      background-image: url("../../images/left-arrow.svg");
+      display: inline-block;
+    }
     &_options-menu {
       background-image: url("../../images/menu.svg");
     }

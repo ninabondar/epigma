@@ -41,19 +41,19 @@ const ToolPanel = ({
   changeActiveDocTitle,
   isRenamed,
   toggleIsRenamed,
-  setIsOptionsOpened,
-  isOptionsOpened,
   changeEditorDocument,
   activeDocument
 }) => (
   <aside className={b({ "draft-screen": isDraftScreen })}>
-    <button
-      className={b("control", {
-        "options-menu": true,
-        "toggled-on": isOptionsOpened
-      })}
-      onClick={() => setIsOptionsOpened(!isOptionsOpened)}
-    />
+
+    <Link
+      className={b("control", {"go-back": true})}
+      to={"/"}
+      onClick={() => {
+          changeEditorDocument(activeDocument)
+      }}>
+    </Link>
+
     <button
       className={b("control", {
         "create-shape": true,
@@ -71,17 +71,6 @@ const ToolPanel = ({
       className={b("control", { redo: true, disabled: isRedo })}
       onClick={redo}
     />
-    <div className={b("options", { opened: isOptionsOpened })}>
-      <Link
-        className={b("options-item")}
-        to={"/"}
-        onClick={() => {
-          changeEditorDocument(activeDocument)
-        }}
-      >
-        Back to documents
-      </Link>
-    </div>
 
     <div className={bRename({ active: isRenamed })}>
       <form className={bRename("rename-form")} onSubmit={changeActiveDocTitle}>
@@ -104,7 +93,6 @@ const enhancer = compose(
   withRouter,
   withProps(({ match }) => ({ documentId: match.params.documentId })),
   withState("isRenamed", "setIsRenamed", false),
-  withState("isOptionsOpened", "setIsOptionsOpened", false),
   connect(
     state => ({
       isCreateToggledOn: getEditorMode(state) === "CREATE",
