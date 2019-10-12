@@ -20,8 +20,8 @@ export const ShapeView = ({
   onClick,
   className = b()
 }) => {
-  const { stroke } = pathStyle
-
+  let { stroke } = pathStyle
+  stroke = stroke ? stroke : "000000"
   const transformation = useContext(TransformContext)
   const selectionTransformation = useContext(SelectionTransformContext)
 

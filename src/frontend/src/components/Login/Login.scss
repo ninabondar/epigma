@@ -1,0 +1,30 @@
+@import "../../styles/variables";
+
+.Login {
+  border: 1px $BORDER_COLOR solid;
+  margin: auto;
+  @include centeredAbsolutely();
+  width: 400px;
+  height: 300px;
+  background: white;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  box-sizing: border-box;
+  font-size: $FONT_SIZE_GENERAL;
+
+  &__submit-btn {
+    margin-top: 30px;
+    align-self: center;
+    vertical-align: bottom;
+    outline: white;
+    border: none;
+    padding: 8px 12px;
+    width: 80px;
+    background: $HIGHLIGHT_COLOR;
+    color: white;
+    border-radius: 2px;
+    font-size: $FONT_SIZE_GENERAL;
+  }
+}

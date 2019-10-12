@@ -1,7 +1,8 @@
 const mongoose = require("mongoose")
 const documentSchema = require("./schemas/documents")
 
-const databaseURI = "mongodb://localhost:27017/epigma"
+const databaseURI =
+  "mongodb+srv://user:1234567890@epigma-ti4w5.mongodb.net/test"
 
 mongoose.connect(databaseURI, { useNewUrlParser: true })
 const db = mongoose.connection
