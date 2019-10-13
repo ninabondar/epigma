@@ -1,5 +1,5 @@
 // @flow
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 
 import produce from "immer"
 import uuidv1 from "uuid/v1"
@@ -28,17 +28,19 @@ const Canvas = ({
   selectShape
 }) => {
   const [offset, setOffset] = useState({ x: 0, y: 0 })
+  const rootEl = useRef()
   const dispatch = useDispatch()
+
   useEffect(() => {
-    setOffset({ x: 0, y: document.querySelector(".ToolPanel").offsetHeight })
-  }, [])
+    setOffset({ x: 0, y: rootEl.current.getBoundingClientRect().top })
+  }, [rootEl])
 
   return (
     <CanvasTransform>
-      <svg className={b()}>
+      <svg className={b()} ref={rootEl}>
         {viewedShapes.map(shape => (
           <ShapeView
-            pathStyle={shape.style}
+            style={shape.style}
             key={shape.id}
             onSelect={() => dispatch(selectShape(shape.id))}
             offset={offset}
@@ -52,6 +54,7 @@ const Canvas = ({
           <ShapeEdit
             key={editedShape.id}
             offset={offset}
+            style={editedShape.style}
             path={editedShape}
             onChange={editedShape => {
               dispatch(

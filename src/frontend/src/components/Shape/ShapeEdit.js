@@ -1,6 +1,7 @@
 // @flow
 import React, { useContext, useEffect, useState } from "react"
-
+import { __, assoc, assocPath, pipe } from "ramda"
+import { useEvent, useKey } from "react-use"
 import { removePoint } from "../../utils/helper"
 
 import Vertex from "../Vertex"
@@ -12,76 +13,56 @@ import "./Shape.scss"
 
 const b = BEM("Shape")
 
-const ShapeEdit = props => {
-  const { onChange } = props
+const ShapeEdit = ({ onChange, style, path: pathProperty }) => {
   const transformation = useContext(TransformContext)
-
-  const [path, setPath] = useState(props.path)
+  const [pathState, setPath] = useState(pathProperty)
   const [selectedVertex, setSelectedVertex] = useState(null)
 
-  let points = path.points
+  const points = pathState.points
 
-  useEffect(() => setPath(props.path), [props.path])
+  useEffect(() => setPath(pathProperty), [pathProperty])
+  useEvent("mousedown", () => setSelectedVertex(null), document.body)
 
-  useEffect(() => {
-    const keyHandler = ev => {
-      const { key } = ev
+  const deleteHandler = ev => {
+    ev.preventDefault()
+    if (selectedVertex == null) return
 
-      switch (key) {
-        case "Backspace":
-        case "Delete": {
-          ev.preventDefault()
+    pipe(
+      removePoint(pathState.points),
+      assoc("points", __, pathState),
+      setPath
+    )(selectedVertex)
+  }
 
-          if (selectedVertex !== null) {
-            setPath({
-              ...path,
-              points: removePoint(path.points, selectedVertex)
-            })
-          }
-          return
-        }
+  const changeHandler = ev => {
+    ev.preventDefault()
+    return onChange(pathState)
+  }
 
-        case "Escape":
-        case "Enter": {
-          ev.preventDefault()
-          return onChange({ ...path })
-        }
+  useKey(({ key }) => ["Backspace", "Delete"].includes(key), deleteHandler, {
+    event: "keydown"
+  })
 
-        default:
-          return
-      }
-    }
-
-    const handleDocumentClick = ev => setSelectedVertex(null)
-
-    document.body.addEventListener("mousedown", handleDocumentClick)
-    document.addEventListener("keydown", keyHandler)
-
-    return () => {
-      document.removeEventListener("keydown", keyHandler)
-      document.body.removeEventListener("mousedown", handleDocumentClick)
-    }
-  }, [path, selectedVertex])
+  useKey(({ key }) => ["Escape", "Enter"].includes(key), changeHandler, {
+    event: "keydown"
+  })
 
   return (
     <g className={b(["edit"])}>
-      <ShapeView path={path} className={b(["edit"])} />
+      <ShapeView style={style} path={pathState} className={b(["edit"])} />
       {points.map(transformation).map((point, index) => (
         <Vertex
           key={index}
           selected={selectedVertex === index}
           point={point}
           onSelect={() => setSelectedVertex(index)}
-          onChange={point =>
-            setPath({
-              ...path,
-              points: [
-                ...points.slice(0, index),
-                transformation.invert(point),
-                ...points.slice(index + 1)
-              ]
-            })
-          }
+          onChange={point => {
+            pipe(
+              transformation.invert,
+              assocPath(["points", index], __, pathState),
+              setPath
+            )(point)
+          }}
         />
       ))}
     </g>

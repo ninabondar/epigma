@@ -14,14 +14,10 @@ import BEM from "../../utils/BEM"
 import "./Shape.scss"
 const b = BEM("Shape")
 
-export const ShapeView = ({
-  path,
-  pathStyle = {},
-  onClick,
-  className = b()
-}) => {
-  let { stroke } = pathStyle
-  stroke = stroke ? stroke : "000000"
+export const ShapeView = ({ path, style, onClick, className = b() }) => {
+  style = style || {}
+  const { stroke } = style
+
   const transformation = useContext(TransformContext)
   const selectionTransformation = useContext(SelectionTransformContext)
 
@@ -32,7 +28,7 @@ export const ShapeView = ({
       onClick={onClick}
     >
       <path
-        style={{ ...pathStyle, stroke: "#" + stroke }}
+        style={{ ...style, stroke: "#" + stroke }}
         className={b("path")}
         d={serializePath(
           path.points.map(selectionTransformation || (point => point))
