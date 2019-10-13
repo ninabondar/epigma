@@ -12,6 +12,10 @@
     &:focus-within {
       border: 1px solid $BORDER_COLOR;
     }
+
+    &:first-of-type {
+      margin-right: 15px;
+    }
   }
 
   &__control {
@@ -25,5 +29,10 @@
     &[placeholder] {
       color: $FONT_COLOR;
     }
+  }
+
+  &__group_color &__control {
+    width: 50%;
+    max-width: 50%;
   }
 }
