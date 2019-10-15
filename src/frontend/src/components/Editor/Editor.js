@@ -4,7 +4,15 @@ import produce from "immer"
 import { find, propEq, filter, contains, without } from "ramda"
 
 import { withRouter } from "react-router-dom"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch, useSelector, connect } from "react-redux"
+import {
+  compose,
+  withProps,
+} from "recompose"
+
+import { getAllExistingDocuments, getIsFetching } from "../../reducers"
+import { fetchDocuments } from "../../actions/documents"
+
 
 //
 import {
@@ -119,4 +127,20 @@ const Editor = () => {
   )
 }
 
-export default Editor
+const enhancer = compose(
+  connect(
+    state => ({
+      documentsList: getAllExistingDocuments(state),
+      isFetching: getIsFetching(state)
+    }),
+    { fetchDocuments }
+  ),
+  withProps(({ documentsList, isFetching ,fetchDocuments }) => {
+    if (!isFetching && !documentsList.length <= 1) {
+      fetchDocuments()
+    }
+  })
+)
+
+export default enhancer(Editor)
+
