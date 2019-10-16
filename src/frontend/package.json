@@ -6,15 +6,22 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "jest",
     "flow": "flow",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage --collectCoverage=true",
     "eject": "react-scripts eject"
   },
   "author": "ninabondar",
   "license": "ISC",
   "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/preset-flow": "^7.0.0",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.15.1",
+    "enzyme-to-json": "^3.4.2",
     "flow-bin": "latest",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^24.8.0",
     "node-sass": "^4.11.0",
     "react-redux": "^7.1.0-alpha.1",
@@ -44,5 +51,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "resolutions": {
+    "babel-jest": "24.8.0"
+  }
 }

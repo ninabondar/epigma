@@ -77,8 +77,8 @@ class Vertex extends Component {
   }
 
   render() {
-    const { selected, draggable } = this.props
-    const { x, y } = this.props.point
+    const { point, selected, draggable } = this.props
+    const { x, y } = point
 
     return (
       <circle
