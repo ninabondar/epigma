@@ -1,5 +1,5 @@
 ## Epigma
-This is a basic training clone of Figma - an online SVG editor with rich functionality.
+This is a training clone of Figma - an online SVG editor with reduced yet rich functionality.
 
 ## Motivation
 It first appeared as a training educational project for university course of web development, however now is striving to become something more helpful, still holding the features of an svg editor and remaining a functional style project. 
@@ -24,5 +24,7 @@ To start the project, run:
 For continious integration Travis CI was chosen, so you can see the status of each build right here on Github.
 
 ## Cooperation
-Please feel free to make propositions via PRs and opened issues.
+At Epigma we stick to KISS and YAGNI paradigm of thinking. This means, we always try to keep config and code as simple as possible and never pre-install something that *might* be useful in the future. Instead, we implement changes step by step when needed.
+Please feel free to suggest changes via issues/PRs to make Epigma better.
+
  
