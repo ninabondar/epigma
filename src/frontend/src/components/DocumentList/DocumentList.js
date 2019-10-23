@@ -31,7 +31,7 @@ const DocumentsListFetched = ({
     {documentsList.map(({ title, createdAt, id }, i) => {
       if (!title) return ""
       return (
-        <Link to={"/edit/" + id} key={i}>
+        <Link className={"DocumentWrapper"} to={"/edit/" + id} key={i}>
           <Document
             title={title}
             createdAt={createdAt}

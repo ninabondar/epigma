@@ -66,3 +66,9 @@
     background: $HEADER_PANEL_COLOR;
   }
 }
+
+@media screen and (max-width: 820px) {
+  .Document {
+    width: 95%;
+  }
+}

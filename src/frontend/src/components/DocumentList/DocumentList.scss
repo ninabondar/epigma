@@ -54,3 +54,14 @@
     background: $HIGHLIGHT_COLOR;
   }
 }
+
+
+@media screen and (max-width: 820px) {
+  .DocumentWrapper {
+    width: 100%;
+  }
+  .DocumentList {
+    flex-direction: column-reverse;
+    min-height: 0;
+  }
+}
