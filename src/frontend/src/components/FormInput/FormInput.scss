@@ -1,0 +1,38 @@
+@import "../../styles/variables";
+
+.FormInput {
+  box-sizing: border-box;
+  padding: 20px 0;
+
+  &__group {
+    display: flex;
+    justify-content: space-between;
+    @include borderAppearsOnHover();
+
+    &:focus-within {
+      border: 1px solid $BORDER_COLOR;
+    }
+
+    &:first-of-type {
+      margin-right: 15px;
+    }
+  }
+
+  &__control {
+    text-align: right;
+    align-self: center;
+    font-size: 13px;
+    font-family: $FONT_FAM;
+    border: 0;
+    outline: none;
+
+    &[placeholder] {
+      color: $FONT_COLOR;
+    }
+  }
+
+  &__group_color &__control {
+    width: 50%;
+    max-width: 50%;
+  }
+}
