@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Login/> should match its snapshot 1`] = `
+<form
+  className="Login"
+>
+  <input
+    id="Login__username"
+    placeholder="login"
+    required={true}
+    type="text"
+  />
+  <input
+    id="Login__password"
+    placeholder="password"
+    required={true}
+    type="password"
+  />
+  <button
+    className="Login__submit-btn"
+  >
+    Proceed
+  </button>
+</form>
+`;

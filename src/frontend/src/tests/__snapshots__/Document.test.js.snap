@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Document/> should match its snapshot 1`] = `
+<div
+  className="Document"
+>
+  <div
+    className="Document__title"
+  >
+    TestDocument
+  </div>
+  <div
+    className="Document__side-info"
+  >
+    <small>
+      less than a minute
+       ago
+    </small>
+    <div
+      className="Document__more-btn"
+      onClick={[Function]}
+    />
+  </div>
+</div>
+`;

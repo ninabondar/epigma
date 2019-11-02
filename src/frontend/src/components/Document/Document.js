@@ -15,4 +15,8 @@ const Document = ({ createdAt, title, clickHandler }) => (
   </div>
 )
 
+Document.defaultProps = {
+  clickHandler: () => {}
+}
+
 export default Document
