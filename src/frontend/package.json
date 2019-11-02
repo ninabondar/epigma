@@ -6,7 +6,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "jest",
+    "test": "react-scripts test",
+    "test:coverage": "yarn test --coverage --watchAll=false",
     "flow": "flow",
     "eject": "react-scripts eject"
   },
@@ -14,8 +15,11 @@
   "license": "ISC",
   "devDependencies": {
     "@babel/preset-flow": "^7.0.0",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.15.1",
+    "enzyme-to-json": "^3.4.3",
     "flow-bin": "latest",
-    "jest": "^24.8.0",
+    "identity-obj-proxy": "^3.0.0",
     "node-sass": "^4.11.0",
     "react-redux": "^7.1.0-alpha.1",
     "react-scripts": "latest",
@@ -44,5 +48,16 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "jest": {
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
+    "collectCoverageFrom": [
+      "<rootDir>/src/**/*.js"
+    ],
+    "moduleNameMapper": {
+      "^.+\\.(css|scss)$": "identity-obj-proxy"
+    }
+  }
 }

@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Vertex/> should match its snapshot 1`] = `
+<circle
+  className="Vertex"
+  cx={0}
+  cy={0}
+  onMouseDown={[Function]}
+  r={4}
+/>
+`;
