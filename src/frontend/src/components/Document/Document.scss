@@ -6,8 +6,9 @@
   border-radius: 2px;
   padding: 20px 16px;
   width: calc(100vw / 5 - (3 * 0.5em));
+  min-width: 200px;
+  max-width: 300px;
   height: 88px;
-  float: left;
   margin: 0.5em;
   position: relative;
 
