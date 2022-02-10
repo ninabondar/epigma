@@ -16,7 +16,7 @@
     "@babel/preset-flow": "^7.0.0",
     "flow-bin": "latest",
     "jest": "^24.8.0",
-    "node-sass": "^4.11.0",
+    "node-sass": "^7.0.0",
     "react-redux": "^7.1.0-alpha.1",
     "react-scripts": "latest",
     "redux": "^4.0.1",
