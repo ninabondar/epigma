@@ -23,7 +23,7 @@
     "@babel/preset-flow": "^7.0.0",
     "babel-cli": "^6.26.0",
     "concurrently": "^4.1.0",
-    "node-sass": "^4.11.0"
+    "node-sass": "^7.0.0"
   },
   "workspaces": [
     "src/backend",
